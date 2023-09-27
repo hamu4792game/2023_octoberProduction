@@ -63,7 +63,7 @@ void GameScene::Update()
 	}
 
 	if (KeyInput::PushKey(DIK_SPACE)) {
-		hud->SetAnchorPoint(Texture2D::AnchorPoint::RightBottom);
+		hud->SetAnchorPoint(Texture2D::AnchorPoint::LeftTop);
 	}
 
 
