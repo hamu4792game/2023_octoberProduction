@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "externals/imgui/imgui.h"
+#include "Engine/Input/KeyInput/KeyInput.h"
 
 GameScene* GameScene::GetInstance()
 {
@@ -20,13 +21,9 @@ void GameScene::Initialize()
 	scene = Scene::TITLE;
 	oldscene = Scene::RESULT;
 
-	ground = std::make_unique<Ground>();
-	ground->Initialize();
-	ground->ModelLoad();
+	hud = std::make_unique<Texture2D>();
+	hud->Texture("Resources/hud/titleText.png", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl");
 
-	skydome = std::make_unique<Skydome>();
-	skydome->Initialize();
-	skydome->ModelLoad();
 
 }
 
@@ -34,7 +31,8 @@ void GameScene::Update()
 {
 #ifdef _DEBUG
 	ImGui::Begin("camera");
-	ImGui::DragFloat3("rotate", &camera->transform.rotation_.x, 0.1f);
+	ImGui::DragFloat3("translate", &hudTrans.translation_.x, 1.0f);
+	ImGui::DragFloat3("scale", &hudTrans.scale_.x, 0.1f);
 	ImGui::End();
 #endif // _DEBUG
 
@@ -64,6 +62,12 @@ void GameScene::Update()
 		break;
 	}
 
+	if (KeyInput::PushKey(DIK_SPACE)) {
+		hud->SetAnchorPoint(Texture2D::AnchorPoint::RightBottom);
+	}
+
+
+	hudTrans.UpdateMatrix();
 	
 	//	カメラ行列の更新
 	viewProjectionMatrix = camera->GetViewProMat();
@@ -74,8 +78,6 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 
-	skydome->Draw(viewProjectionMatrix);
-	ground->Draw(viewProjectionMatrix);
 	//	3D描画
 	switch (scene)
 	{
@@ -97,6 +99,8 @@ void GameScene::Draw()
 	case GameScene::Scene::RESULT:
 		break;
 	}
+
+	Texture2D::TextureDraw(hudTrans, viewProjectionMatrix2d, 0xffffffff, hud.get());
 
 }
 

@@ -22,14 +22,13 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR lpCmdLine, _In
 	//	ウィンドウの×ボタンが押されるまでループ
 	while (!WinApp::ProcessMessage()) {
 		//	フレームの開始
-		TimeBaseLoopExecuter fpsManager;
+		TimeBaseLoopExecuter fpsManager(60);
 		
 		Engine::BeginFrame();
 #ifdef _DEBUG
 		//	ImGui のフレームに一つ目の ImGui のウィンドウを描く
 		ImGui::Begin("Control panel");
 		ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
-		//ImGui::Text("Frame rate2: %6.2f fps", fpsManager);
 		ImGui::End();
 #endif FrameRate
 

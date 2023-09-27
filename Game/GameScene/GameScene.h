@@ -5,8 +5,7 @@
 #include "Engine/Texture/Texture2D.h"
 #include "Engine/Input/AudioInput/AudioInput.h"
 
-#include "Game/Ground/Ground.h"
-#include "Game/Skydome/Skydome.h"
+#include "Engine/WorldTransform/WorldTransform.h"
 
 class GameScene
 {
@@ -38,9 +37,9 @@ private:
 
 	//	シーン用インスタンス
 
+	std::unique_ptr<Texture2D> hud;
+	WorldTransform hudTrans;
 
-	std::unique_ptr<Ground> ground;
-	std::unique_ptr<Skydome> skydome;
 public:
 
 	void Initialize();

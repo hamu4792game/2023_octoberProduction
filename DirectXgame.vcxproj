@@ -46,10 +46,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <IncludePath>$(IncludePath)</IncludePath>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <IncludePath>$(IncludePath)</IncludePath>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -124,7 +126,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameScene\GameScene.cpp" />
     <ClCompile Include="Game\Ground\Ground.cpp" />
     <ClCompile Include="Game\Skydome\Skydome.cpp" />
-    <ClCompile Include="GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\Matrix4x4.cpp" />
     <ClCompile Include="math\Vector2.cpp" />
@@ -162,7 +163,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameScene\GameScene.h" />
     <ClInclude Include="Game\Ground\Ground.h" />
     <ClInclude Include="Game\Skydome\Skydome.h" />
-    <ClInclude Include="GlobalVariables\GlobalVariables.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />

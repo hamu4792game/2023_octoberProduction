@@ -86,9 +86,6 @@
     <ClCompile Include="Engine\Easing\Ease.cpp">
       <Filter>Engine\Easing</Filter>
     </ClCompile>
-    <ClCompile Include="GlobalVariables\GlobalVariables.cpp">
-      <Filter>GlobalVariables</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Skydome\Skydome.cpp">
       <Filter>Game\Skydome</Filter>
     </ClCompile>
@@ -193,9 +190,6 @@
     <ClInclude Include="Engine\Easing\Ease.h">
       <Filter>Engine\Easing</Filter>
     </ClInclude>
-    <ClInclude Include="GlobalVariables\GlobalVariables.h">
-      <Filter>GlobalVariables</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Skydome\Skydome.h">
       <Filter>Game\Skydome</Filter>
     </ClInclude>
@@ -270,9 +264,6 @@
     </Filter>
     <Filter Include="Game\Ground">
       <UniqueIdentifier>{cc10d3d5-f517-46c1-8689-f9886c7bf5d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GlobalVariables">
-      <UniqueIdentifier>{5db6066b-e521-4852-be15-c042cb93042a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Skydome">
       <UniqueIdentifier>{98e905e7-226c-42f7-8f4f-b6dfa157f94f}</UniqueIdentifier>

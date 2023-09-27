@@ -32,7 +32,7 @@ void Texture2D::Texture(const std::string& filePath, const std::string& vsFileNa
 	//pixelShader = GraphicsPipeline::GetInstance()->CreatePSShader(psFileName);
 	GraphicsPipeline::GetInstance()->pixelShader = pixelShader;
 
-	CreateVertexResource();
+	CreateVertexResource(AnchorPoint::Center);
 
 
 	D3D12_DESCRIPTOR_RANGE range[1] = {};
@@ -66,6 +66,11 @@ void Texture2D::Texture(const std::string& filePath, const std::string& vsFileNa
 	graphicsPipelineState = GraphicsPipeline::GetInstance()->CreateGraphicsPipeline();
 }
 
+void Texture2D::SetAnchorPoint(AnchorPoint anchor)
+{
+	CreateVertexResource(anchor);
+}
+
 void Texture2D::CreateDescriptor(const std::string& filePath)
 {
 	DirectX::ScratchImage mipImages = TextureManager::LoadTexture(filePath);
@@ -91,15 +96,51 @@ void Texture2D::CreateDescriptor(const std::string& filePath)
 	Engine::GetDevice()->CreateShaderResourceView(resource[0], &srvDesc, SRVHeap->GetCPUDescriptorHandleForHeapStart());
 }
 
-void Texture2D::CreateVertexResource()
+void Texture2D::CreateVertexResource(AnchorPoint anchor)
 {
 	//	頂点データ
+
 	VertexData vertex[4] = {
 		{{-0.5f,0.5f,0.1f,1.0f},{0.0f,0.0f}},
 		{{0.5f,0.5f,0.1f,1.0f},{1.0f,0.0f}},
 		{{0.5f,-0.5f,0.1f,1.0f},{1.0f,1.0f}},
 		{{-0.5f,-0.5f,0.1f,1.0f},{0.0f,1.0f}},
 	};
+
+	switch (anchor)
+	{
+	case AnchorPoint::Center:
+		vertex[0] = { {-0.5f,0.5f,0.1f,1.0f},{0.0f,0.0f} };
+		vertex[1] = { {0.5f,0.5f,0.1f,1.0f},{1.0f,0.0f} };
+		vertex[2] = { {0.5f,-0.5f,0.1f,1.0f},{1.0f,1.0f} };
+		vertex[3] = { {-0.5f,-0.5f,0.1f,1.0f},{0.0f,1.0f} };
+		break;
+	case AnchorPoint::LeftTop:
+		vertex[0] = { {-0.0f,0.0f,0.1f,1.0f},{0.0f,0.0f} };
+		vertex[1] = { {1.0f,0.0f,0.1f,1.0f},{1.0f,0.0f} };
+		vertex[2] = { {1.0f,-1.0f,0.1f,1.0f},{1.0f,1.0f} };
+		vertex[3] = { {-0.0f,-1.0f,0.1f,1.0f},{0.0f,1.0f} };
+		break;
+	case AnchorPoint::RightTop:
+		vertex[0] = { {-1.0f,0.0f,0.1f,1.0f},{0.0f,0.0f} };
+		vertex[1] = { {0.0f,0.0f,0.1f,1.0f},{1.0f,0.0f} };
+		vertex[2] = { {0.0f,-1.0f,0.1f,1.0f},{1.0f,1.0f} };
+		vertex[3] = { {-1.0f,-1.0f,0.1f,1.0f},{0.0f,1.0f} };
+		break;
+	case AnchorPoint::LeftBottom:
+		vertex[0] = { {-0.0f,1.0f,0.1f,1.0f},{0.0f,0.0f} };
+		vertex[1] = { {1.0f,1.0f,0.1f,1.0f},{1.0f,0.0f} };
+		vertex[2] = { {1.0f,-0.0f,0.1f,1.0f},{1.0f,1.0f} };
+		vertex[3] = { {-0.0f,-0.0f,0.1f,1.0f},{0.0f,1.0f} };
+		break;
+	case AnchorPoint::RightBottom:
+		vertex[0] = { {-1.0f,1.0f,0.1f,1.0f},{0.0f,0.0f} };
+		vertex[1] = { {0.0f,1.0f,0.1f,1.0f},{1.0f,0.0f} };
+		vertex[2] = { {0.0f,-0.0f,0.1f,1.0f},{1.0f,1.0f} };
+		vertex[3] = { {-1.0f,-0.0f,0.1f,1.0f},{0.0f,1.0f} };
+		break;
+	}
+
 	vertexResource = Engine::CreateBufferResource(Engine::GetDevice(), sizeof(vertex));
 
 	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();

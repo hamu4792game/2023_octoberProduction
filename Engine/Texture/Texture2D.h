@@ -55,13 +55,31 @@ public:
 	uint32_t textureHeight = 0;
 
 public:
+	enum class AnchorPoint {
+		Center,		// 中央
+		LeftTop,	// 左上
+		RightTop,	// 右上
+		LeftBottom,	// 左下
+		RightBottom,// 右下
+	};
 
+public:
+
+	/// <summary>
+	/// textureの読み込みと生成
+	/// </summary>
+	/// <param name="filePath">Resourceのパス</param>
+	/// <param name="vsFileName">頂点シェーダーのパス</param>
+	/// <param name="psFileName">ピクセルシェーダーのパス</param>
 	void Texture(const std::string& filePath, const std::string& vsFileName, const std::string& psFileName);
+
+
+	void SetAnchorPoint(AnchorPoint anchor);
 
 private:
 	void CreateDescriptor(const std::string& filePath);
 
-	void CreateVertexResource();
+	void CreateVertexResource(AnchorPoint anchor);
 
 public:
 	//void Draw(Matrix4x4 worldMat, Matrix4x4 viewProjectionMat, uint32_t color);
@@ -73,6 +91,7 @@ public:
 	void SetBlend(BlendMode blend_);
 	
 
-private:
+
+
 };
 
