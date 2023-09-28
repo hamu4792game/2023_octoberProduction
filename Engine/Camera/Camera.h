@@ -32,5 +32,7 @@ public:
 
 	Vector3 position;	//カメラの座標
 
+	//送信確認
+
 };
 
