@@ -12,7 +12,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR lpCmdLine, _In
 	static D3DResourceLeakChecker leak;
 	//OutputDebugStringA("Hello,DirectX!\n");
 	int32_t windowWidth = 1280; int32_t windowHeight = 720;
-	Engine::Initialize("2004_閉店一分前", windowWidth, windowHeight);
+	Engine::Initialize("えとせとら", windowWidth, windowHeight);
 	
 	// グローバル変数の読み込み
 	//GlobalVariables::GetInstance()->LoadFiles();
