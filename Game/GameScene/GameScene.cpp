@@ -34,7 +34,7 @@ void GameScene::Initialize()
 	battle->Initialize();
 
 	//	変数の初期化
-	scene = Scene::TITLE;
+	scene = Scene::BATTLE;
 	oldscene = Scene::RESULT;
 
 }
