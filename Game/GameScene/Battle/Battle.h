@@ -11,7 +11,8 @@ public:
 	//	更新処理
 	void Update();
 	//	描画処理
-	void Draw(const Matrix4x4& viewProjection);
+	void Draw3D(const Matrix4x4& viewProjection);
+	void Draw2D(const Matrix4x4& viewProjection);
 
 private:
 

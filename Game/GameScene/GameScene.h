@@ -6,6 +6,7 @@
 #include "Engine/Input/AudioInput/AudioInput.h"
 
 #include "Engine/WorldTransform/WorldTransform.h"
+#include "Game/GameScene/Battle/Battle.h"
 
 class GameScene
 {
@@ -36,9 +37,7 @@ private:
 	Matrix4x4 viewProjectionMatrix2d{};
 
 	//	シーン用インスタンス
-
-	std::unique_ptr<Texture2D> hud;
-	WorldTransform hudTrans;
+	std::unique_ptr<Battle> battle;
 
 public:
 
