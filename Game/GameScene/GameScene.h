@@ -53,6 +53,14 @@ private: // メンバ関数
 	//	モデルのロード
 	void ModelLoad();
 
+	//	シーンチェンジ用
+	std::shared_ptr<Texture2D> box;
+	WorldTransform boxtransform;
+	float boxScale = 0.0f;
+	float easeNum = 0.0f;
+	bool flag = false;
+	void SceneChange();
+
 private: // モデル変数
 	std::shared_ptr<Model> model_;
 	std::shared_ptr<Texture2D> hud_;

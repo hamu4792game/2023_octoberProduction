@@ -22,7 +22,7 @@ void Texture2D::Finalize()
 
 void Texture2D::Texture(const std::string& filePath, const std::string& vsFileName, const std::string& psFileName)
 {
-	blend = BlendMode::Normal;
+	//blend = BlendMode::Normal;
 
 	CreateDescriptor(filePath);
 
