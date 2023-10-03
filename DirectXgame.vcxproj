@@ -131,6 +131,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="math\Vector2.cpp" />
     <ClCompile Include="math\Vector3.cpp" />
     <ClCompile Include="math\Vector4.cpp" />
+    <ClCompile Include="Notes.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Base\CommandDirectX.h" />
@@ -167,6 +169,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />
+    <ClInclude Include="Notes.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

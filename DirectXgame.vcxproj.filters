@@ -92,6 +92,8 @@
     <ClCompile Include="Engine\TimeBaseLoopExecuter\TimeBaseLoopExecuter.cpp">
       <Filter>Engine\TimeBaseLoopExecuter</Filter>
     </ClCompile>
+    <ClCompile Include="Notes.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h">
@@ -197,6 +199,8 @@
       <Filter>Engine\TimeBaseLoopExecuter</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Notes.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
