@@ -1,6 +1,8 @@
 #include "GameScene.h"
 #include "externals/imgui/imgui.h"
 #include "Engine/Input/KeyInput/KeyInput.h"
+#include "Engine/Easing/Ease.h"
+#include <algorithm>
 
 GameScene* GameScene::GetInstance()
 {
@@ -21,6 +23,8 @@ void GameScene::Initialize()
 	//	モデルの生成
 	model_ = std::make_shared<Model>();
 	hud_ = std::make_shared<Texture2D>();
+
+	box = std::make_shared<Texture2D>();
 
 	ModelLoad();
 	
@@ -79,6 +83,15 @@ void GameScene::Update()
 		break;
 	}
 
+	if (KeyInput::PushKey(DIK_S)) {
+		sceneChangeFlag = true;
+	}
+
+	//	シーンチェンジの処理
+	if (sceneChangeFlag) {
+		SceneChange();
+	}
+
 	//	カメラ行列の更新
 	viewProjectionMatrix = camera->GetViewProMat();
 	viewProjectionMatrix2d = camera2d->GetViewProMat();
@@ -114,6 +127,10 @@ void GameScene::Draw()
 		break;
 	}
 
+	if (sceneChangeFlag) {
+		Texture2D::TextureDraw(boxtransform, viewProjectionMatrix2d, 0x000000ff, box.get());
+	}
+
 }
 
 
@@ -121,4 +138,53 @@ void GameScene::ModelLoad()
 {
 	model_->Texture("Resources/eatRamen/eatRamen.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl");
 	hud_->Texture("Resources/uvChecker.png", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl");
+
+
+	box->Texture("Resources/block.png", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl");
+
+}
+
+
+void GameScene::SceneChange()
+{
+	//80
+	boxtransform.rotation_.z += AngleToRadian(15.0f);
+	easeNum += 0.02f;
+	easeNum = std::clamp(easeNum, 0.0f, 1.0f);
+	if (!flag) {
+		boxScale = Ease::UseEase(0.0f, 100.0f, easeNum, 1.0f, Ease::EaseType::EaseOutCirc);
+
+		if (easeNum == 1.0f) {
+			flag = true;
+			easeNum = 0.0f;
+			boxScale = 100.0f;
+			//	あくまでもここはシーン切り替え処理のみ
+			switch (scene)
+			{
+			case GameScene::Scene::TITLE:
+				scene = GameScene::Scene::BATTLE;
+				break;
+			case GameScene::Scene::BATTLE:
+				scene = GameScene::Scene::RESULT;
+				break;
+			case GameScene::Scene::RESULT:
+				scene = GameScene::Scene::TITLE;
+				break;
+			}
+		}
+	}
+	else if (flag) {
+		boxScale = Ease::UseEase(100.0f, 0.0f, easeNum, 1.0f, Ease::EaseType::EaseOutCirc);
+		if (easeNum == 1.0f) {
+			flag = false;
+			sceneChangeFlag = false;
+			easeNum = 0.0f;
+			boxScale = 0.0f;
+			boxtransform.rotation_.z = 0.0f;
+		}
+	}
+
+	boxtransform.scale_ = Vector3(boxScale, boxScale, 1.0f);
+
+	boxtransform.UpdateMatrix();
 }
