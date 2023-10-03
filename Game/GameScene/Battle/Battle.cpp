@@ -6,6 +6,9 @@ Battle::Battle()
 	player_ = std::make_unique<Player>();
 	player_->LoadModel();
 
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->ModelLoad();
+
 	for (int i = 0; i < 5; i++) {
 		Notes* note = new Notes();
 		note->LoadModel();
@@ -42,6 +45,8 @@ void Battle::Update()
 
 void Battle::Draw3D(const Matrix4x4& viewProjection)
 {
+
+	skydome_->Draw(viewProjection);
 
 	player_->Draw(viewProjection);
 

@@ -3,6 +3,7 @@
 Skydome::Skydome()
 {
 	skydome = std::make_unique<Model>();
+	Initialize();
 }
 
 void Skydome::SetParent(const WorldTransform& world)

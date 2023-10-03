@@ -4,6 +4,7 @@
 #include "Player.h"
 #include <memory>
 #include <list>
+#include "Game/Skydome/Skydome.h"
 
 class Battle {
 public:
@@ -24,5 +25,6 @@ private:
 
 	std::list<Notes*> notes_;
 
+	std::unique_ptr<Skydome> skydome_;
 
 };
