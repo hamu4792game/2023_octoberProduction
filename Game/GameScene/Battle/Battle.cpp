@@ -2,6 +2,18 @@
 
 Battle::Battle()
 {
+
+	player_ = std::make_unique<Player>();
+	player_->LoadModel();
+
+	for (int i = 0; i < 5; i++) {
+		Notes* note = new Notes();
+		note->LoadModel();
+		note->SetPosition({ 0.0f,0.0f,i * 10.0f });
+		notes_.push_back(note);
+
+	}
+
 }
 
 Battle::~Battle() {
@@ -14,17 +26,6 @@ Battle::~Battle() {
 
 void Battle::Initialize()
 {
-
-	player_ = std::make_unique<Player>();
-	player_->LoadModel();
-
-	for (int i = 0; i < 5; i++) {
-		Notes* note = new Notes();
-		note->LoadModel();
-		note->SetPosition({ 0.0f,0.0f,i * 10.0f });
-		notes_.push_back(note);
-
-	}
 
 }
 
