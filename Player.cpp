@@ -1,10 +1,16 @@
 #include "Player.h"
 
+Player::Player() {
+	model_ = std::make_unique<Model>();
+}
+
 void Player::Initialize() {
 
 }
 
 void Player::Update() {
+
+	worldTransform_.UpdateMatrix();
 
 }
 

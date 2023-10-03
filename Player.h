@@ -9,6 +9,9 @@ class Player
 {
 public:
 
+	Player();
+	~Player() = default;
+
 	void Initialize();
 
 	void Update();

@@ -8,6 +8,9 @@ class Notes
 {
 public:
 
+	Notes();
+	~Notes() = default;
+
 	void Initialize();
 
 	void Update();
@@ -15,6 +18,11 @@ public:
 	void Draw(const Matrix4x4& viewProjection);
 
 	void LoadModel();
+
+	void SetPosition(const Vector3& position) { 
+		worldTransform_.translation_ = position;
+		worldTransform_.UpdateMatrix();
+	}
 
 private:
 

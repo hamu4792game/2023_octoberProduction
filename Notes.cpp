@@ -1,10 +1,18 @@
 #include "Notes.h"
 
+Notes::Notes() {
+	model_ = std::make_unique<Model>();
+}
+
 void Notes::Initialize() {
+
+	
 
 }
 
 void Notes::Update() {
+
+	worldTransform_.UpdateMatrix();
 
 }
 

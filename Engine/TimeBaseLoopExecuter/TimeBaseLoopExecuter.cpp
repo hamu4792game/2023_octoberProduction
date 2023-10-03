@@ -19,20 +19,6 @@ double TimeBaseLoopExecuter::TimeAdjustment()
 	}
 	fps = 1 / frameTime;
 
-	//FPSを出力窓に出す
-#ifdef _DEBUG
-#ifdef UNICODE
-		std::wstringstream stream;
-#else
-		std::stringstream stream;
-#endif
-		mFrameCount++;
-		if (mFrameCount % mDebugCount == 0)
-		{
-			stream << std::to_string(fps).c_str() << " FPS" << std::endl;
-			OutputDebugString(stream.str().c_str());
-		}
-#endif // _DEBUG
 	mTimeStart = mTimeEnd;
 	return fps;
 }
