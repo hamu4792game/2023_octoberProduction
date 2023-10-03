@@ -17,13 +17,24 @@ void GameScene::Initialize()
 	//	カメラ行列の更新
 	viewProjectionMatrix = camera->GetViewProMat();
 	viewProjectionMatrix2d = camera2d->GetViewProMat();
+
+	//	モデルの生成
+	model_ = std::make_shared<Model>();
+	hud_ = std::make_shared<Texture2D>();
+
+	ModelLoad();
 	
 	//	シーンの生成と初期化
+	title = std::make_unique<Title>();
+	title->Initialize();
+	title->SetModels(model_);
+	title->SetHud(hud_);
+
 	battle = std::make_unique<Battle>();
 	battle->Initialize();
 
 	//	変数の初期化
-	scene = Scene::BATTLE;
+	scene = Scene::TITLE;
 	oldscene = Scene::RESULT;
 
 }
@@ -45,6 +56,7 @@ void GameScene::Update()
 		switch (scene)
 		{
 		case GameScene::Scene::TITLE:
+			title->Initialize();
 			break;
 		case GameScene::Scene::BATTLE:
 			battle->Initialize();
@@ -58,6 +70,7 @@ void GameScene::Update()
 	switch (scene)
 	{
 	case GameScene::Scene::TITLE:
+		title->Update();
 		break;
 	case GameScene::Scene::BATTLE:
 		battle->Update();
@@ -79,6 +92,7 @@ void GameScene::Draw()
 	switch (scene)
 	{
 	case GameScene::Scene::TITLE:
+		title->Draw3D(viewProjectionMatrix);
 		break;
 	case GameScene::Scene::BATTLE:
 		battle->Draw3D(viewProjectionMatrix);
@@ -91,6 +105,7 @@ void GameScene::Draw()
 	switch (scene)
 	{
 	case GameScene::Scene::TITLE:
+		title->Draw2D(viewProjectionMatrix2d);
 		break;
 	case GameScene::Scene::BATTLE:
 		battle->Draw2D(viewProjectionMatrix2d);
@@ -104,5 +119,6 @@ void GameScene::Draw()
 
 void GameScene::ModelLoad()
 {
-	
+	model_->Texture("Resources/eatRamen/eatRamen.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl");
+	hud_->Texture("Resources/uvChecker.png", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl");
 }

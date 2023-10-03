@@ -6,6 +6,7 @@
 #include "Engine/Input/AudioInput/AudioInput.h"
 
 #include "Engine/WorldTransform/WorldTransform.h"
+#include "Game/GameScene/Title/Title.h"
 #include "Game/GameScene/Battle/Battle.h"
 
 class GameScene
@@ -37,12 +38,12 @@ private:
 	Matrix4x4 viewProjectionMatrix2d{};
 
 	//	シーン用インスタンス
+	std::unique_ptr<Title> title;
 	std::unique_ptr<Battle> battle;
 
-public:
+public: // 基本処理関数
 
 	void Initialize();
-
 
 	void Update();
 	
@@ -51,5 +52,9 @@ public:
 private: // メンバ関数
 	//	モデルのロード
 	void ModelLoad();
+
+private: // モデル変数
+	std::shared_ptr<Model> model_;
+	std::shared_ptr<Texture2D> hud_;
 
 };

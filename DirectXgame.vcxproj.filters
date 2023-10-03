@@ -95,6 +95,9 @@
     <ClCompile Include="Game\GameScene\Battle\Battle.cpp">
       <Filter>Game\GameScene\Battle</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GameScene\Title\Title.cpp">
+      <Filter>Game\GameScene\Title</Filter>
+    </ClCompile>
     <ClCompile Include="Notes.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
@@ -202,6 +205,9 @@
       <Filter>Engine\TimeBaseLoopExecuter</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Game\GameScene\Battle\Battle.h">
+      <Filter>Game\GameScene\Battle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -278,6 +284,9 @@
     </Filter>
     <Filter Include="Game\GameScene\Battle">
       <UniqueIdentifier>{823b8708-ef7f-4cbe-b47c-77839b2ba995}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameScene\Title">
+      <UniqueIdentifier>{7fbb76bc-017e-4cf5-a1bf-15851da03dc8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
