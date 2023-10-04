@@ -3,6 +3,8 @@
 #include "Engine/Texture/Model.h"
 #include <memory>
 #include "math/Matrix4x4.h"
+#include "Player.h"
+#include "math/Vector3.h"
 
 class Notes
 {
@@ -24,16 +26,26 @@ public:
 		worldTransform_.UpdateMatrix();
 	}
 
+	void SetPlayer(Player* player) { player_ = player; }
+
+	Vector3 GetPosition() { return worldTransform_.translation_; }
+
+	bool GetIsHit() { return isHit_; }
+
 private:
 
 	std::unique_ptr<Model> model_;
 
 	WorldTransform worldTransform_;
 
+	Player* player_;
+
+	//ノーツを叩いたかどうか
 	bool isHit_ = false;
 
-	bool isTouch_ = false;
+	/*bool isTouch_ = false;*/
 
+	//ノーツをスルー、または反応がずれすぎた場合ミス
 	bool isMiss_ = false;
 
 };

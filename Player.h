@@ -12,6 +12,12 @@ public:
 	Player();
 	~Player() = default;
 
+	enum MoveVec
+	{
+		Forward,
+		Back
+	};
+
 	void Initialize();
 
 	void Update();
@@ -20,13 +26,21 @@ public:
 
 	void LoadModel();
 
+	Vector3 GetPosition() { return worldTransform_.translation_; }
+
+	bool GetIsTouch() { return isTouch_; }
+
 private:
+
+	MoveVec moveVec_ = Forward;
+
+	Vector3 velocity_{};
 
 	std::unique_ptr<Model> model_;
 
 	WorldTransform worldTransform_;
 
-
+	bool isTouch_ = false;
 
 };
 

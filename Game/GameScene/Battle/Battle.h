@@ -1,10 +1,10 @@
 #pragma once
 #include "Engine/WorldTransform/WorldTransform.h"
-#include "Notes.h"
 #include "Player.h"
 #include <memory>
 #include <list>
 #include "Game/Skydome/Skydome.h"
+#include "MusicScore.h"
 
 class Battle {
 public:
@@ -23,7 +23,7 @@ private:
 
 	std::unique_ptr<Player> player_;
 
-	std::list<Notes*> notes_;
+	std::unique_ptr<MusicScore> musicScore_;
 
 	std::unique_ptr<Skydome> skydome_;
 

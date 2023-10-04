@@ -120,4 +120,31 @@ Vector3 FindVector(const Vector3& vec1, const Vector3& vec2)
 	return vec2 - vec1;
 }
 
+// 長さ(ノルム)
+float Length(const Vector3& v) {
 
+	float length;
+
+	length = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+
+	return length;
+}
+
+// 内積
+float Dot(const Vector3& v1, const Vector3& v2) {
+
+	float x;
+
+	x = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+
+	return x;
+}
+
+// 2点間の距離を求める
+float Distance(const Vector3& v1, const Vector3& v2) {
+
+	Vector3 v = v2 - v1;
+	float result = Dot(v, v);
+
+	return result;
+}

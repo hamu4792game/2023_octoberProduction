@@ -14,7 +14,9 @@ void GameScene::Initialize()
 {
 	//	カメラの読み込みと生成
 	camera = std::make_shared<Camera>(2000.0f, true);
-	camera->transform.translation_.z = -10.0f;
+	camera->transform.translation_.y = 60.0f;
+	camera->transform.translation_.z = -100.0f;
+	camera->transform.rotation_.x = 0.5f;
 	camera2d = std::make_shared<Camera>();
 	//	カメラ行列の更新
 	viewProjectionMatrix = camera->GetViewProMat();

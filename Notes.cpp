@@ -12,6 +12,10 @@ void Notes::Initialize() {
 
 void Notes::Update() {
 
+	if (player_->GetIsTouch() && Distance(worldTransform_.translation_, player_->GetPosition()) <= 10.0f) {
+		isHit_ = true;
+	}
+
 	worldTransform_.UpdateMatrix();
 
 }

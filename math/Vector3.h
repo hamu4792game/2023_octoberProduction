@@ -47,3 +47,12 @@ float RadianToAngle(float radian);
 /// <param name="vec2">引かれるベクトル</param>
 /// <returns>正規化されていないベクトル</returns>
 Vector3 FindVector(const Vector3& vec1, const Vector3& vec2);
+
+//長さ
+float Length(const Vector3& v);
+
+//内積
+float Dot(const Vector3& v1, const Vector3& v2);
+
+// 2点間の距離を求める関数
+float Distance(const Vector3& v1, const Vector3& v2);

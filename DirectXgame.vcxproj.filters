@@ -100,6 +100,7 @@
     </ClCompile>
     <ClCompile Include="Notes.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="MusicScore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h">
@@ -208,6 +209,10 @@
     <ClInclude Include="Game\GameScene\Battle\Battle.h">
       <Filter>Game\GameScene\Battle</Filter>
     </ClInclude>
+    <ClInclude Include="Game\GameScene\Title\Title.h" />
+    <ClInclude Include="Notes.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="MusicScore.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
