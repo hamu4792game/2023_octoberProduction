@@ -4,7 +4,7 @@ Battle::Battle()
 {
 
 	player_ = std::make_unique<Player>();
-	player_->LoadModel();
+	player_->ModelLoad();
 	player_->Initialize();
 
 	skydome_ = std::make_unique<Skydome>();
@@ -51,4 +51,10 @@ void Battle::Draw3D(const Matrix4x4& viewProjection)
 void Battle::Draw2D(const Matrix4x4& viewProjection)
 {
 
+}
+
+void Battle::ModelLoad(std::vector<Model*> models) {
+
+	notesModels_ = models;
+	musicScore_->ModelLoad(notesModels_);
 }

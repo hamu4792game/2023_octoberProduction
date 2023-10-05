@@ -2,7 +2,7 @@
 #include "Engine/WorldTransform/WorldTransform.h"
 #include "Player.h"
 #include <memory>
-#include <list>
+#include <vector>
 #include "Game/Skydome/Skydome.h"
 #include "MusicScore.h"
 
@@ -19,6 +19,8 @@ public:
 	void Draw3D(const Matrix4x4& viewProjection);
 	void Draw2D(const Matrix4x4& viewProjection);
 
+	void ModelLoad(std::vector<Model*> models);
+
 private:
 
 	std::unique_ptr<Player> player_;
@@ -26,5 +28,7 @@ private:
 	std::unique_ptr<MusicScore> musicScore_;
 
 	std::unique_ptr<Skydome> skydome_;
+
+	std::vector<Model*> notesModels_;
 
 };

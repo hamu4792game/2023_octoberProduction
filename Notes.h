@@ -13,13 +13,20 @@ public:
 	Notes();
 	~Notes() = default;
 
-	void Initialize();
+	enum NoteType {
+		Normal, //通常ノーツ
+		Long, //長押し
+		Damage //敵の妨害ノーツ
 
-	void Update();
+	};
 
-	void Draw(const Matrix4x4& viewProjection);
+	virtual void Initialize();
 
-	void LoadModel();
+	virtual void Update();
+
+	virtual void Draw(const Matrix4x4& viewProjection);
+
+	virtual void ModelLoad(Model* model);
 
 	void SetPosition(const Vector3& position) { 
 		worldTransform_.translation_ = position;
@@ -28,25 +35,72 @@ public:
 
 	void SetPlayer(Player* player) { player_ = player; }
 
+	void SetNoteType(NoteType type) { type_ = type; }
+
 	Vector3 GetPosition() { return worldTransform_.translation_; }
 
 	bool GetIsHit() { return isHit_; }
 
-private:
+	bool GetIsMiss() { return isMiss_; }
 
-	std::unique_ptr<Model> model_;
+protected:
+
+	NoteType type_ = Normal;
+
+	Model* model_ = nullptr;
 
 	WorldTransform worldTransform_;
 
 	Player* player_;
 
+	//速度
+	Vector3 velocity_;
+
 	//ノーツを叩いたかどうか
 	bool isHit_ = false;
 
-	/*bool isTouch_ = false;*/
+	//プレイヤーがノーツに触れたか
+	bool isTouch_ = false;
 
 	//ノーツをスルー、または反応がずれすぎた場合ミス
 	bool isMiss_ = false;
 
 };
+
+class NoteNormal : public Notes
+{
+public:
+	NoteNormal();
+	~NoteNormal() = default;
+
+	void Initialize() override;
+
+private:
+
+};
+
+class NoteLong : public Notes
+{
+public:
+	NoteLong();
+	~NoteLong() = default;
+
+	void Initialize() override;
+
+private:
+
+};
+
+class NoteDamage : public Notes
+{
+public:
+	NoteDamage();
+	~NoteDamage() = default;
+
+	void Initialize() override;
+
+private:
+
+};
+
 

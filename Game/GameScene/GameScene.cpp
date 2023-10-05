@@ -14,9 +14,9 @@ void GameScene::Initialize()
 {
 	//	カメラの読み込みと生成
 	camera = std::make_shared<Camera>(2000.0f, true);
-	camera->transform.translation_.y = 60.0f;
+	camera->transform.translation_.y = 15.0f;
 	camera->transform.translation_.z = -100.0f;
-	camera->transform.rotation_.x = 0.5f;
+	camera->transform.rotation_.x = 0.0f;
 	camera2d = std::make_shared<Camera>();
 	//	カメラ行列の更新
 	viewProjectionMatrix = camera->GetViewProMat();
@@ -24,6 +24,9 @@ void GameScene::Initialize()
 
 	//	モデルの生成
 	model_ = std::make_shared<Model>();
+	notesModelNormal_ = std::make_unique<Model>();
+	notesModelLong_ = std::make_unique<Model>();
+	notesModelDamage_ = std::make_unique<Model>();
 	hud_ = std::make_shared<Texture2D>();
 
 	box = std::make_shared<Texture2D>();
@@ -37,6 +40,9 @@ void GameScene::Initialize()
 	title->SetHud(hud_);
 
 	battle = std::make_unique<Battle>();
+	std::vector<Model*> noteModels{ notesModelNormal_.get(), notesModelLong_.get(), notesModelDamage_.get() };
+
+	battle->ModelLoad(noteModels);
 	battle->Initialize();
 
 	//	変数の初期化
@@ -143,6 +149,10 @@ void GameScene::ModelLoad()
 
 
 	box->Texture("Resources/block.png", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl");
+
+	notesModelNormal_->Texture("Resources/notes/notes.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl", "notes/normal.png");
+	notesModelLong_->Texture("Resources/notes/notes.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl", "notes/long.png");
+	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl", "notes/damage.png");
 
 }
 

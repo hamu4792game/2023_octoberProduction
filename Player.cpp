@@ -7,43 +7,53 @@ Player::Player() {
 
 void Player::Initialize() {
 
-	isTouch_ = false;
+	isTap_ = false;
 	velocity_ = { 0.0f,0.0f,0.0f };
 
 }
 
 void Player::Update() {
 
-	if (isTouch_) {
-		isTouch_ = false;
+	if (isTap_) {
+		isTap_ = false;
 	}
 
 	if (KeyInput::PushKey(DIK_SPACE)) {
-		isTouch_ = true;
+		isTap_ = true;
 	}
 
 	switch (moveVec_)
 	{
-	case Forward:
-		velocity_ = { 0.0f,0.0f,1.0f };
+	case Up:
+		velocity_ = { 0.0f,kSpeed,0.0f };
 		break;
-	case Back:
-		velocity_ = { 0.0f,0.0f,-1.0f };
+	case Down:
+		velocity_ = { 0.0f,-kSpeed,0.0f };
+		break;
+	case Left:
+		velocity_ = { -kSpeed,0.0f,0.0f };
+		break;
+	case Right:
+		velocity_ = { kSpeed,0.0f,0.0f };
 		break;
 	default:
 		velocity_ = { 0.0f,0.0f,0.0f };
 		break;
 	}
 
+	float deltaTime = 1.0f / 60.0f;
+
+	velocity_ *= deltaTime;
+
 	worldTransform_.translation_ += velocity_;
 
-	if (worldTransform_.translation_.z >= 100.0f) {
-		worldTransform_.translation_.z = 100.0f;
-		moveVec_ = Back;
+	if (worldTransform_.translation_.x >= 40.0f) {
+		worldTransform_.translation_.x = 40.0f;
+		moveVec_ = Left;
 	}
-	else if (worldTransform_.translation_.z <= 0.0f) {
-		worldTransform_.translation_.z = 0.0f;
-		moveVec_ = Forward;
+	else if (worldTransform_.translation_.x <= -40.0f) {
+		worldTransform_.translation_.x = -40.0f;
+		moveVec_ = Right;
 	}
 
 	worldTransform_.UpdateMatrix();
@@ -56,7 +66,7 @@ void Player::Draw(const Matrix4x4& viewProjection) {
 
 }
 
-void Player::LoadModel() {
+void Player::ModelLoad() {
 
 	model_->Texture("Resources/player/player.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl", "player/player.png");
 

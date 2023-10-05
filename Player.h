@@ -14,8 +14,10 @@ public:
 
 	enum MoveVec
 	{
-		Forward,
-		Back
+		Up,
+		Down,
+		Left,
+		Right
 	};
 
 	void Initialize();
@@ -24,15 +26,19 @@ public:
 
 	void Draw(const Matrix4x4& viewProjection);
 
-	void LoadModel();
+	void ModelLoad();
 
 	Vector3 GetPosition() { return worldTransform_.translation_; }
 
-	bool GetIsTouch() { return isTouch_; }
+	bool GetIsTap() { return isTap_; }
+
+	MoveVec GetMoveVec() { return moveVec_; }
 
 private:
 
-	MoveVec moveVec_ = Forward;
+	const float kSpeed = 10.0f;
+
+	MoveVec moveVec_ = Right;
 
 	Vector3 velocity_{};
 
@@ -40,7 +46,7 @@ private:
 
 	WorldTransform worldTransform_;
 
-	bool isTouch_ = false;
+	bool isTap_ = false;
 
 };
 

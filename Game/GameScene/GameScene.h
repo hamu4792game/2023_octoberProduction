@@ -9,6 +9,8 @@
 #include "Game/GameScene/Title/Title.h"
 #include "Game/GameScene/Battle/Battle.h"
 
+#include<vector>
+
 class GameScene
 {
 public:
@@ -63,6 +65,9 @@ private: // メンバ関数
 
 private: // モデル変数
 	std::shared_ptr<Model> model_;
+	std::unique_ptr<Model> notesModelNormal_;
+	std::unique_ptr<Model> notesModelLong_;
+	std::unique_ptr<Model> notesModelDamage_;
 	std::shared_ptr<Texture2D> hud_;
 
 };
