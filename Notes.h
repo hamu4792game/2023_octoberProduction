@@ -85,9 +85,30 @@ public:
 	NoteLong();
 	~NoteLong() = default;
 
+	static void StaticInitialize();
+
+	enum LongNoteType {
+		Start,
+		Middle,
+		End
+	};
+
+	void Update() override;
+
 	void Initialize() override;
 
+	void SetLongNoteType(LongNoteType type) { longNoteType_ = type; }
+
 private:
+
+	//始点、中点、終点のいずれか
+	LongNoteType longNoteType_ = Start;
+
+	//始点をタップしたかどうか
+	static bool isHitStart_;
+
+	//終点用のフラグ
+	bool onHoldNote_ = false;
 
 };
 
@@ -96,6 +117,8 @@ class NoteDamage : public Notes
 public:
 	NoteDamage();
 	~NoteDamage() = default;
+
+	void Update() override;
 
 	void Initialize() override;
 

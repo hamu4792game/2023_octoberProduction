@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Engine/Input/KeyInput/KeyInput.h"
+#include "externals/imgui/imgui.h"
 
 Player::Player() {
 	model_ = std::make_unique<Model>();
@@ -9,17 +10,47 @@ void Player::Initialize() {
 
 	isTap_ = false;
 	velocity_ = { 0.0f,0.0f,0.0f };
+	SetPosition({ -40.0f,0.0f,0.0f });
 
 }
 
 void Player::Update() {
 
-	if (isTap_) {
+#ifdef _DEBUG
+
+	ImGui::Begin("player flag");
+	ImGui::Text("isTrigger : %d", isTap_);
+	ImGui::Text("isHold : %d", isHold_);
+	ImGui::Text("isRelease : %d", isRelease_);
+	ImGui::Text("isHit : %d", isHit_);
+	ImGui::Text("isMiss : %d", isMiss_);
+	ImGui::End();
+
+#endif // _DEBUG
+
+
+	//キーを押した瞬間の判定
+	if (KeyInput::PushKey(DIK_SPACE)) {
+		isTap_ = true;
+	}
+	else {
 		isTap_ = false;
 	}
 
-	if (KeyInput::PushKey(DIK_SPACE)) {
-		isTap_ = true;
+	//キーを押している最中の判定
+	if (KeyInput::GetKey(DIK_SPACE)) {
+		isHold_ = true;
+	}
+	else {
+		isHold_ = false;
+	}
+
+	//キーを離した瞬間の判定
+	if (KeyInput::ReleaseKey(DIK_SPACE)) {
+		isRelease_ = true;
+	}
+	else {
+		isRelease_ = false;
 	}
 
 	switch (moveVec_)
@@ -48,13 +79,9 @@ void Player::Update() {
 	worldTransform_.translation_ += velocity_;
 
 	if (worldTransform_.translation_.x >= 40.0f) {
-		worldTransform_.translation_.x = 40.0f;
-		moveVec_ = Left;
-	}
-	else if (worldTransform_.translation_.x <= -40.0f) {
 		worldTransform_.translation_.x = -40.0f;
-		moveVec_ = Right;
 	}
+
 
 	worldTransform_.UpdateMatrix();
 

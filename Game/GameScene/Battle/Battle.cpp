@@ -5,14 +5,12 @@ Battle::Battle()
 
 	player_ = std::make_unique<Player>();
 	player_->ModelLoad();
-	player_->Initialize();
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->ModelLoad();
 
 	musicScore_ = std::make_unique<MusicScore>();
 	musicScore_->SetPlayer(player_.get());
-	musicScore_->Initialize();
 	
 
 }
@@ -25,6 +23,9 @@ Battle::~Battle() {
 
 void Battle::Initialize()
 {
+
+	player_->Initialize();
+	musicScore_->Initialize();
 
 }
 

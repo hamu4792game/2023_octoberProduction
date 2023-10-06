@@ -32,7 +32,13 @@ public:
 
 	bool GetIsTap() { return isTap_; }
 
+	bool GetIsHold() { return isHold_; }
+
+	bool GetIsRelease() { return isRelease_; }
+
 	MoveVec GetMoveVec() { return moveVec_; }
+
+	void SetPosition(Vector3 position) { worldTransform_.translation_ = position; }
 
 private:
 
@@ -46,7 +52,30 @@ private:
 
 	WorldTransform worldTransform_;
 
+	//キーを押した瞬間
 	bool isTap_ = false;
+
+	//キーを長押ししている時
+	bool isHold_ = false;
+
+	//キーを離した瞬間
+	bool isRelease_ = false;
+
+public:
+
+	//デバッグ用の一時変数
+	bool isHit_ = false;
+	bool isMiss_ = false;
+
+	void IsHit() {
+		isHit_ = true;
+		isMiss_ = false;
+	}
+
+	void IsMiss() {
+		isHit_ = false;
+		isMiss_ = true;
+	}
 
 };
 
