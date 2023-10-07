@@ -51,6 +51,8 @@ public: // 基本処理関数
 	
 	void Draw();
 
+	void Finalize();
+
 private: // メンバ関数
 	//	モデルのロード
 	void ModelLoad();

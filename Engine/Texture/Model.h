@@ -22,6 +22,7 @@ public:
 	Model() = default;
 	~Model();
 
+	static void Finalize();
 public:
 	//	モデルデータ構造体
 	ModelData modelData;

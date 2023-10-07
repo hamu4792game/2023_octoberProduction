@@ -14,19 +14,26 @@ decltype(Texture2D::vertexShader) Texture2D::vertexShader;
 decltype(Texture2D::pixelShader) Texture2D::pixelShader;
 
 
-void Texture2D::Finalize()
+
+Texture2D::~Texture2D()
 {
 	indexResource->Release();
 	vertexResource->Release();
 	SRVHeap->Release();
 	resource[0]->Release();
+}
 
+void Texture2D::Finalize()
+{
 	if (rootSignature) {
 		rootSignature->Release();
 		rootSignature.Reset();
 	}
-	if (graphicsPipelineState) {
-		graphicsPipelineState->Reset();
+	for (uint16_t i = 0; i < static_cast<uint16_t>(BlendMode::BlendCount); i++) {
+		if (graphicsPipelineState[i]) {
+			graphicsPipelineState[i]->Release();
+			graphicsPipelineState[i].Reset();
+		}
 	}
 	if (vertexShader) {
 		vertexShader->Release();
@@ -77,11 +84,15 @@ void Texture2D::Texture(const std::string& filePath, const std::string& vsFileNa
 	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[3].Descriptor.ShaderRegister = 2;
 
-
-	rootSignature = GraphicsPipeline::GetInstance()->CreateRootSignature(rootParameter, 4);
-	for (uint16_t i = 0; i < static_cast<uint16_t>(BlendMode::BlendCount); i++) {
-		graphicsPipelineState[i] = GraphicsPipeline::GetInstance()->CreateGraphicsPipeline(rootSignature.Get(), vertexShader.Get(), pixelShader.Get(), static_cast<BlendMode>(i));
+	if (!rootSignature)	{
+		rootSignature = GraphicsPipeline::GetInstance()->CreateRootSignature(rootParameter, 4);
 	}
+	for (uint16_t i = 0; i < static_cast<uint16_t>(BlendMode::BlendCount); i++) {
+		if (!graphicsPipelineState[i]) {
+			graphicsPipelineState[i] = GraphicsPipeline::GetInstance()->CreateGraphicsPipeline(rootSignature.Get(), vertexShader.Get(), pixelShader.Get(), static_cast<BlendMode>(i));
+		}
+	}
+	
 }
 
 void Texture2D::SetAnchorPoint(AnchorPoint anchor)

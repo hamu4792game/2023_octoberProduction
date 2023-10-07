@@ -17,9 +17,9 @@ class Texture2D
 {
 public:
 	Texture2D() = default;
-	~Texture2D() = default;
+	~Texture2D();
 
-	void Finalize();
+	static void Finalize();
 
 private:
 	//	ブレンドモード用タイプ変数

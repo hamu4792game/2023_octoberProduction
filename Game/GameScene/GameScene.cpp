@@ -141,6 +141,13 @@ void GameScene::Draw()
 
 }
 
+void GameScene::Finalize()
+{
+	Line::Finalize();
+	Model::Finalize();
+	Texture2D::Finalize();
+}
+
 
 void GameScene::ModelLoad()
 {

@@ -178,9 +178,10 @@ void CommandDirectX::Finalize()
 	dsvDescriptorHeap->Release();
 	srvDescriptorHeap->Release();
 	rtvDescriptorHeap->Release();
-	//swapChainResources[1]->Release();
-	//swapChainResources[0]->Release();
-	swapChainResources->Reset();
+	swapChainResources[1]->Release();
+	swapChainResources[1].Reset();
+	swapChainResources[0]->Release();
+	swapChainResources[0].Reset();
 	swapChain->Release();
 	commandList->Release();
 	commandAllocator->Release();

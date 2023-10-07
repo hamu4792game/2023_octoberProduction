@@ -34,6 +34,10 @@ Line::~Line()
 		vertexResource->Release();
 		vertexResource.Reset();
 	}
+}
+
+void Line::Finalize()
+{
 	if (graphicsPipelineState) {
 		graphicsPipelineState->Release();
 		graphicsPipelineState.Reset();
@@ -43,7 +47,6 @@ Line::~Line()
 		rootSignature.Reset();
 	}
 }
-
 void Line::CreateVertexResource(Vector3 start, Vector3 end)
 {
 	// 頂点データ

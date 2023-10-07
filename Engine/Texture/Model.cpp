@@ -28,13 +28,19 @@ Model::~Model() {
 		resource[0]->Release();
 		resource[0].Reset();
 	}
+}
 
+void Model::Finalize()
+{
 	if (rootSignature) {
 		rootSignature->Release();
 		rootSignature.Reset();
 	}
-	if (graphicsPipelineState) {
-		graphicsPipelineState->Reset();
+	for (uint16_t i = 0; i < static_cast<uint16_t>(BlendMode::BlendCount); i++) {
+		if (graphicsPipelineState[i]) {
+			graphicsPipelineState[i]->Release();
+			graphicsPipelineState[i].Reset();
+		}
 	}
 	if (vertexShader) {
 		vertexShader->Release();
@@ -44,7 +50,6 @@ Model::~Model() {
 		pixelShader->Release();
 		pixelShader.Reset();
 	}
-
 }
 
 void Model::Texture(const std::string& filePath, const std::string& vsFileName, const std::string& psFileName)
@@ -87,9 +92,13 @@ void Model::Texture(const std::string& filePath, const std::string& vsFileName, 
 	rootParameter[3].Descriptor.ShaderRegister = 2;
 
 
-	rootSignature = GraphicsPipeline::GetInstance()->CreateRootSignature(rootParameter, 4);
+	if (!rootSignature) {
+		rootSignature = GraphicsPipeline::GetInstance()->CreateRootSignature(rootParameter, 4);
+	}
 	for (uint16_t i = 0; i < static_cast<uint16_t>(BlendMode::BlendCount); i++) {
-		graphicsPipelineState[i] = GraphicsPipeline::GetInstance()->CreateGraphicsPipeline(rootSignature.Get(), vertexShader.Get(), pixelShader.Get(), static_cast<BlendMode>(i));
+		if (!graphicsPipelineState[i]) {
+			graphicsPipelineState[i] = GraphicsPipeline::GetInstance()->CreateGraphicsPipeline(rootSignature.Get(), vertexShader.Get(), pixelShader.Get(), static_cast<BlendMode>(i));
+		}
 	}
 }
 
@@ -134,9 +143,13 @@ void Model::Texture(const std::string& filePath, const std::string& vsFileName, 
 	rootParameter[3].Descriptor.ShaderRegister = 2;
 
 
-	rootSignature = GraphicsPipeline::GetInstance()->CreateRootSignature(rootParameter, 4);
+	if (!rootSignature) {
+		rootSignature = GraphicsPipeline::GetInstance()->CreateRootSignature(rootParameter, 4);
+	}
 	for (uint16_t i = 0; i < static_cast<uint16_t>(BlendMode::BlendCount); i++) {
-		graphicsPipelineState[i] = GraphicsPipeline::GetInstance()->CreateGraphicsPipeline(rootSignature.Get(), vertexShader.Get(), pixelShader.Get(), static_cast<BlendMode>(i));
+		if (!graphicsPipelineState[i]) {
+			graphicsPipelineState[i] = GraphicsPipeline::GetInstance()->CreateGraphicsPipeline(rootSignature.Get(), vertexShader.Get(), pixelShader.Get(), static_cast<BlendMode>(i));
+		}
 	}
 
 }
