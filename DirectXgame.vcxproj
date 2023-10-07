@@ -130,6 +130,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Ground\Ground.cpp" />
     <ClCompile Include="Game\Skydome\Skydome.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MakeCatmull.cpp" />
     <ClCompile Include="math\Matrix4x4.cpp" />
     <ClCompile Include="math\Vector2.cpp" />
     <ClCompile Include="math\Vector3.cpp" />
@@ -172,6 +173,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameScene\Title\Title.h" />
     <ClInclude Include="Game\Ground\Ground.h" />
     <ClInclude Include="Game\Skydome\Skydome.h" />
+    <ClInclude Include="MakeCatmull.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />

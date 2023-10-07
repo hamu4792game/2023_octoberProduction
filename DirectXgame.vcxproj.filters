@@ -104,6 +104,7 @@
     <ClCompile Include="Engine\Texture\Line\Line.cpp">
       <Filter>Engine\Resources\Line</Filter>
     </ClCompile>
+    <ClCompile Include="MakeCatmull.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h">
@@ -219,6 +220,7 @@
     <ClInclude Include="Engine\Texture\Line\Line.h">
       <Filter>Engine\Resources\Line</Filter>
     </ClInclude>
+    <ClInclude Include="MakeCatmull.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

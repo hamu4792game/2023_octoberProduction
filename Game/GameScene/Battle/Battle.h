@@ -8,6 +8,10 @@
 
 #include "Engine/Texture/Line/Line.h"
 
+#include "MakeCatmull.h"
+
+
+
 
 class Battle {
 public:
@@ -34,7 +38,20 @@ private:
 
 	std::vector<Model*> notesModels_;
 
+	
+
 
 private:
 	std::unique_ptr<Line> line_;
+
+	std::unique_ptr<MakeCatmull> makeCatmull_;
+
+	Vector3 StartPos;
+
+	Vector3 EndPos;
+
+
+	Vector3 StartPos2;
+
+	Vector3 EndPos2;
 };

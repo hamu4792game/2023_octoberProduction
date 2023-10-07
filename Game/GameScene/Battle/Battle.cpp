@@ -13,6 +13,10 @@ Battle::Battle()
 	musicScore_->SetPlayer(player_.get());
 	
 	line_ = std::make_unique<Line>();
+
+	makeCatmull_ = std::make_unique<MakeCatmull>();
+
+	makeCatmull_->Initialize();
 }
 
 Battle::~Battle() {
@@ -23,9 +27,18 @@ Battle::~Battle() {
 
 void Battle::Initialize()
 {
+	StartPos = { 0.0f,0.0f,0.0f };
+
+	EndPos = { 100.0f,0.0f,0.0f };
+
+	StartPos2 = { 0.0f,0.0f,0.0f };
+
+	EndPos2 = { 0.0f,100.0f,0.0f };
 
 	player_->Initialize();
 	musicScore_->Initialize();
+
+	
 
 }
 
@@ -35,6 +48,8 @@ void Battle::Update()
 	player_->Update();
 
 	musicScore_->Update();
+
+	//makeCatmull_->Update();
 
 }
 
@@ -47,7 +62,11 @@ void Battle::Draw3D(const Matrix4x4& viewProjection)
 
 	musicScore_->Draw(viewProjection);
 
-	line_->DrawLine(Vector3(1.0f, 1.0f, 0.0f), Vector3(-1.0f, -1.0f, 0.0f), viewProjection, 0xff0000ff);
+	makeCatmull_->Draw(viewProjection);
+
+	line_->DrawLine(StartPos, EndPos, viewProjection, 0xff0000ff);
+
+	line_->DrawLine(StartPos2, EndPos2, viewProjection, 0x00ff00ff);
 
 }
 
