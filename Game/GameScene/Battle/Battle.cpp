@@ -12,7 +12,7 @@ Battle::Battle()
 	musicScore_ = std::make_unique<MusicScore>();
 	musicScore_->SetPlayer(player_.get());
 	
-
+	line_ = std::make_unique<Line>();
 }
 
 Battle::~Battle() {
@@ -46,6 +46,8 @@ void Battle::Draw3D(const Matrix4x4& viewProjection)
 	player_->Draw(viewProjection);
 
 	musicScore_->Draw(viewProjection);
+
+	line_->DrawLine(Vector3(1.0f, 1.0f, 0.0f), Vector3(-1.0f, -1.0f, 0.0f), viewProjection, 0xff0000ff);
 
 }
 

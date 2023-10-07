@@ -7,17 +7,35 @@
 
 #include "Engine/Base/GraphicsPipeline/GraphicsPipeline.h"
 
+//	便利なtmpみたいなやつ
+decltype(Texture2D::rootSignature) Texture2D::rootSignature;
+decltype(Texture2D::graphicsPipelineState) Texture2D::graphicsPipelineState;
+decltype(Texture2D::vertexShader) Texture2D::vertexShader;
+decltype(Texture2D::pixelShader) Texture2D::pixelShader;
+
 
 void Texture2D::Finalize()
 {
-	graphicsPipelineState->Release();
-	rootSignature->Release();
 	indexResource->Release();
-	vertexShader->Release();
 	vertexResource->Release();
 	SRVHeap->Release();
-	pixelShader->Release();
 	resource[0]->Release();
+
+	if (rootSignature) {
+		rootSignature->Release();
+		rootSignature.Reset();
+	}
+	if (graphicsPipelineState) {
+		graphicsPipelineState->Reset();
+	}
+	if (vertexShader) {
+		vertexShader->Release();
+		vertexShader.Reset();
+	}
+	if (pixelShader) {
+		pixelShader->Release();
+		pixelShader.Reset();
+	}
 }
 
 void Texture2D::Texture(const std::string& filePath, const std::string& vsFileName, const std::string& psFileName)
@@ -27,10 +45,8 @@ void Texture2D::Texture(const std::string& filePath, const std::string& vsFileNa
 	CreateDescriptor(filePath);
 
 	vertexShader = GraphicsPipeline::GetInstance()->CreateVSShader(vsFileName);
-	//	ピクセルシェーダーのコンパイルがなぜかできないため、緊急措置を行っている
-	pixelShader = ShaderManager::GetInstance()->CompileShader(ConvertString(psFileName), L"ps_6_0");
-	//pixelShader = GraphicsPipeline::GetInstance()->CreatePSShader(psFileName);
-	GraphicsPipeline::GetInstance()->pixelShader = pixelShader;
+	//pixelShader = ShaderManager::GetInstance()->CompileShader(ConvertString(psFileName), L"ps_6_0");
+	pixelShader = GraphicsPipeline::GetInstance()->CreatePSShader(psFileName);
 
 	CreateVertexResource(AnchorPoint::Center);
 
@@ -63,7 +79,9 @@ void Texture2D::Texture(const std::string& filePath, const std::string& vsFileNa
 
 
 	rootSignature = GraphicsPipeline::GetInstance()->CreateRootSignature(rootParameter, 4);
-	graphicsPipelineState = GraphicsPipeline::GetInstance()->CreateGraphicsPipeline();
+	for (uint16_t i = 0; i < static_cast<uint16_t>(BlendMode::BlendCount); i++) {
+		graphicsPipelineState[i] = GraphicsPipeline::GetInstance()->CreateGraphicsPipeline(rootSignature.Get(), vertexShader.Get(), pixelShader.Get(), static_cast<BlendMode>(i));
+	}
 }
 
 void Texture2D::SetAnchorPoint(AnchorPoint anchor)
@@ -184,7 +202,7 @@ void Texture2D::CreateVertexResource(AnchorPoint anchor)
 }
 
 void Texture2D::Draw(Vector2 pos, Vector2 scale, float rotate, Matrix4x4 viewProjectionMat, uint32_t color)
-{	
+{
 	/*ImGui::Begin("a");
 	ImGui::DragFloat2("%0.2f", &cBuffer->pibot.x, 1.0f);
 	ImGui::End();*/
@@ -221,7 +239,7 @@ void Texture2D::TextureDraw(WorldTransform& worldTransform, const Matrix4x4& vie
 	*worldTransform.cColor = ChangeColor(color);
 
 	Engine::GetList()->SetGraphicsRootSignature(texture->rootSignature.Get());
-	Engine::GetList()->SetPipelineState(texture->graphicsPipelineState.Get());
+	Engine::GetList()->SetPipelineState(texture->graphicsPipelineState[static_cast<int>(texture->blendType)].Get());
 	// インデックスを使わずに四角形以上を書くときは
 	// 個々の設定はD3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP
 	// インデックスを使うときは D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST
@@ -240,9 +258,9 @@ void Texture2D::TextureDraw(WorldTransform& worldTransform, const Matrix4x4& vie
 	Engine::GetList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
-void Texture2D::SetBlend(BlendMode blend_)
-{
-	blend = blend_;
-	//CreateGraphicsPipeline();
-}
+//void Texture2D::SetBlend(BlendMode blend_)
+//{
+//	blend = blend_;
+//	//CreateGraphicsPipeline();
+//}
 

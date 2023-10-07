@@ -6,6 +6,9 @@
 #include "Game/Skydome/Skydome.h"
 #include "MusicScore.h"
 
+#include "Engine/Texture/Line/Line.h"
+
+
 class Battle {
 public:
 	Battle();
@@ -31,4 +34,7 @@ private:
 
 	std::vector<Model*> notesModels_;
 
+
+private:
+	std::unique_ptr<Line> line_;
 };

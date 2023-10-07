@@ -144,15 +144,15 @@ void GameScene::Draw()
 
 void GameScene::ModelLoad()
 {
-	model_->Texture("Resources/eatRamen/eatRamen.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl");
-	hud_->Texture("Resources/uvChecker.png", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl");
+	model_->Texture("Resources/eatRamen/eatRamen.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	hud_->Texture("Resources/uvChecker.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
 
-	box->Texture("Resources/block.png", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl");
+	box->Texture("Resources/block.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
-	notesModelNormal_->Texture("Resources/notes/notes.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl", "notes/normal.png");
-	notesModelLong_->Texture("Resources/notes/notes.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl", "notes/long.png");
-	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl", "notes/damage.png");
+	notesModelNormal_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/normal.png");
+	notesModelLong_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/long.png");
+	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/damage.png");
 
 }
 

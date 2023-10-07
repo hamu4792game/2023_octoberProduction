@@ -95,6 +95,6 @@ void Player::Draw(const Matrix4x4& viewProjection) {
 
 void Player::ModelLoad() {
 
-	model_->Texture("Resources/player/player.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl", "player/player.png");
+	model_->Texture("Resources/player/player.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "player/player.png");
 
 }
