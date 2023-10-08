@@ -33,7 +33,7 @@ public:
 
 	std::vector<Vector3> GetControlPoints() { return ControlPoints; }
 
-	
+	Vector3 GetFirstControlPoint() { return ControlPoints[0]; }
 
 private:
 

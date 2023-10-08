@@ -35,7 +35,7 @@ void Battle::Initialize()
 
 	EndPos2 = { 0.0f,100.0f,0.0f };
 
-	player_->Initialize();
+	player_->Initialize(makeCatmull_->GetFirstControlPoint());
 	musicScore_->Initialize();
 
 	

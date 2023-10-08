@@ -6,11 +6,11 @@ Player::Player() {
 	model_ = std::make_unique<Model>();
 }
 
-void Player::Initialize() {
+void Player::Initialize(Vector3 pos) {
 
 	isTap_ = false;
 	velocity_ = { 0.0f,0.0f,0.0f };
-	SetPosition({ -40.0f,0.0f,0.0f });
+	SetPosition(pos);
 
 }
 

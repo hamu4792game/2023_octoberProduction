@@ -20,7 +20,7 @@ public:
 		Right
 	};
 
-	void Initialize();
+	void Initialize(Vector3 pos);
 
 	void Update();
 
