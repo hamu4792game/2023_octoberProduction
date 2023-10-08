@@ -31,6 +31,8 @@ public:
 	// 描画
 	void Draw(const Matrix4x4& viewProjectionMatrix);
 
+	std::vector<Vector3> GetControlPoints() { return ControlPoints; }
+
 	
 
 private:
