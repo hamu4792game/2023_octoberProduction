@@ -49,7 +49,7 @@ void Battle::Update()
 		musicScore_->SetNotes(MusicScore::Easy_01, makeCatmull_->GetControlPoints());
 	}
 
-	player_->Update();
+	player_->Update(makeCatmull_->GetControlPoints(),makeCatmull_->GetLastLinePass());
 
 	musicScore_->Update();
 

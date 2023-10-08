@@ -22,7 +22,7 @@ public:
 
 	void Initialize(Vector3 pos);
 
-	void Update();
+	void Update(std::vector<Vector3> ControlPoints, int lastLinePass);
 
 	void Draw(const Matrix4x4& viewProjection);
 
@@ -60,6 +60,18 @@ private:
 
 	//キーを離した瞬間
 	bool isRelease_ = false;
+
+	//線上移動用変数群
+	const uint32_t divisionNumber = 8;
+	float point = 0.0f;
+	float t = 0.0f;
+
+	int linePass = 0;
+
+	const int firstLinePass = 0;
+	int LastLinePass = 2;
+
+	bool isMove = false;
 
 public:
 

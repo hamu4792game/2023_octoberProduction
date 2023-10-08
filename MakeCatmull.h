@@ -35,6 +35,8 @@ public:
 
 	Vector3 GetFirstControlPoint() { return ControlPoints[0]; }
 
+	int GetLastLinePass() { return LastLinePass; }
+
 private:
 
 	std::vector<std::unique_ptr<Line>> lines_;	

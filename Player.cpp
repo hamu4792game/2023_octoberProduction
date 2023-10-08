@@ -14,11 +14,12 @@ void Player::Initialize(Vector3 pos) {
 
 }
 
-void Player::Update() {
+void Player::Update(std::vector<Vector3> ControlPoints, int lastLinePass) {
 
 #ifdef _DEBUG
 
 	ImGui::Begin("player flag");
+	ImGui::Checkbox("StartMove", &isMove);
 	ImGui::Text("isTrigger : %d", isTap_);
 	ImGui::Text("isHold : %d", isHold_);
 	ImGui::Text("isRelease : %d", isRelease_);
@@ -81,6 +82,35 @@ void Player::Update() {
 	if (worldTransform_.translation_.x >= 40.0f) {
 		worldTransform_.translation_.x = -40.0f;
 	}*/
+
+	if (isMove) {
+		point += 0.1f;
+	}
+	if (point > static_cast<float>(divisionNumber) - 0.1f) {
+		point = 0.0f;
+		linePass += 1;
+		if (linePass > lastLinePass) {
+			linePass = firstLinePass;
+		}
+	}
+
+	t = point / static_cast<float>(divisionNumber);
+
+
+
+	if (linePass == 0) {
+		Vector3 p = makeCatmullRom(ControlPoints[0], ControlPoints[0], ControlPoints[1], ControlPoints[2], t);
+		worldTransform_.translation_ = p;
+	}
+	if (linePass >= 1 && linePass != lastLinePass) {
+		Vector3 p = makeCatmullRom(ControlPoints[linePass - 1], ControlPoints[linePass], ControlPoints[linePass + 1], ControlPoints[linePass + 2], t);
+		worldTransform_.translation_ = p;
+	}
+	if (linePass == lastLinePass) {
+		Vector3 p = makeCatmullRom(ControlPoints[lastLinePass - 1], ControlPoints[lastLinePass], ControlPoints[lastLinePass + 1], ControlPoints[lastLinePass + 1], t);
+		worldTransform_.translation_ = p;
+	}
+
 
 
 	worldTransform_.UpdateMatrix();
