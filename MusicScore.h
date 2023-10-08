@@ -28,11 +28,19 @@ public:
 
 	void SetPlayer(Player* player) { player_ = player; }
 
-	void SetNotes(ScoreType type);
+	void SetNotes(ScoreType type, std::vector<Vector3> position);
 
 	bool IsEmpty() { return notes_.empty(); }
 
 	void ModelLoad(std::vector<Model*> models);
+
+	void SetNoteNormal(const Vector3& position);
+
+	void SetNoteLStart(const Vector3& position);
+
+	void SetNoteLEnd(const Vector3& position);
+
+	void SetNoteDamage(const Vector3& position);
 
 private:
 

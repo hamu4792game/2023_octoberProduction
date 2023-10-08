@@ -72,7 +72,7 @@ void Player::Update() {
 		break;
 	}
 
-	float deltaTime = 1.0f / 60.0f;
+	/*float deltaTime = 1.0f / 60.0f;
 
 	velocity_ *= deltaTime;
 
@@ -80,7 +80,7 @@ void Player::Update() {
 
 	if (worldTransform_.translation_.x >= 40.0f) {
 		worldTransform_.translation_.x = -40.0f;
-	}
+	}*/
 
 
 	worldTransform_.UpdateMatrix();

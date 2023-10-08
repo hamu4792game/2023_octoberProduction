@@ -45,6 +45,10 @@ void Battle::Initialize()
 void Battle::Update()
 {
 
+	if (musicScore_->IsEmpty()) {
+		musicScore_->SetNotes(MusicScore::Easy_01, makeCatmull_->GetControlPoints());
+	}
+
 	player_->Update();
 
 	musicScore_->Update();
@@ -64,9 +68,9 @@ void Battle::Draw3D(const Matrix4x4& viewProjection)
 
 	makeCatmull_->Draw(viewProjection);
 
-	line_->DrawLine(StartPos, EndPos, viewProjection, 0xff0000ff);
+	/*line_->DrawLine(StartPos, EndPos, viewProjection, 0xff0000ff);
 
-	line_->DrawLine(StartPos2, EndPos2, viewProjection, 0x00ff00ff);
+	line_->DrawLine(StartPos2, EndPos2, viewProjection, 0x00ff00ff);*/
 
 }
 

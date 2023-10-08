@@ -15,14 +15,14 @@ MusicScore::~MusicScore() {
 }
 
 void MusicScore::Initialize() {
-	SetNotes(Easy_01);
+	/*SetNotes(Easy_01);*/
 }
 
 void MusicScore::Update() {
 
-	if (player_->GetPosition().x >= 39.5f) {
+	/*if (player_->GetPosition().x >= 39.5f) {
 		SetNotes(Easy_01);
-	}
+	}*/
 
 	notes_.remove_if([](Notes* note) {
 
@@ -49,7 +49,7 @@ void MusicScore::Draw(const Matrix4x4& viewProjection) {
 
 }
 
-void MusicScore::SetNotes(ScoreType type) {
+void MusicScore::SetNotes(ScoreType type, std::vector<Vector3> position) {
 
 	notes_.remove_if([](Notes* note) {
 
@@ -66,66 +66,32 @@ void MusicScore::SetNotes(ScoreType type) {
 
 			if (i >= 1 && i <= 3 && i != 2) {
 
-				NoteNormal* newNote = new NoteNormal();
-				newNote->ModelLoad(notesModels_[0]);
-				newNote->Initialize();
-				newNote->SetPlayer(player_);
-				newNote->SetPosition({ i * 5.0f - 40.0f,0.0f, 0.0f });
-				notes_.push_back(newNote);
+				SetNoteNormal(position[i]);
 
 			}
 			else if (i == 4) {
 
-				NoteLong* newNote = new NoteLong();
-				newNote->ModelLoad(notesModels_[1]);
-				newNote->Initialize();
-				newNote->SetLongNoteType(NoteLong::Start);
-				newNote->SetPlayer(player_);
-				newNote->SetPosition({ i * 5.0f - 40.0f,0.0f, 0.0f });
-				notes_.push_back(newNote);
+				SetNoteLStart(position[i]);
 
 			}
 			else if (i == 8) {
 
-				NoteLong* newNote = new NoteLong();
-				newNote->ModelLoad(notesModels_[1]);
-				newNote->Initialize();
-				newNote->SetLongNoteType(NoteLong::End);
-				newNote->SetPlayer(player_);
-				newNote->SetPosition({ i * 5.0f - 40.0f,0.0f, 0.0f });
-				notes_.push_back(newNote);
+				SetNoteLEnd(position[i]);
 
 			}
 			else if(i == 10) {
 
-				NoteLong* newNote = new NoteLong();
-				newNote->ModelLoad(notesModels_[1]);
-				newNote->Initialize();
-				newNote->SetLongNoteType(NoteLong::Start);
-				newNote->SetPlayer(player_);
-				newNote->SetPosition({ i * 5.0f - 40.0f,0.0f, 0.0f });
-				notes_.push_back(newNote);
+				SetNoteLStart(position[i]);
 			
 			}
 			else if (i == 12) {
 
-				NoteLong* newNote = new NoteLong();
-				newNote->ModelLoad(notesModels_[1]);
-				newNote->Initialize();
-				newNote->SetLongNoteType(NoteLong::End);
-				newNote->SetPlayer(player_);
-				newNote->SetPosition({ i * 5.0f - 40.0f,0.0f, 0.0f });
-				notes_.push_back(newNote);
+				SetNoteLEnd(position[i]);
 
 			}
 			else if (i == 14) {
 
-				NoteDamage* newNote = new NoteDamage();
-				newNote->ModelLoad(notesModels_[2]);
-				newNote->Initialize();
-				newNote->SetPlayer(player_);
-				newNote->SetPosition({ i * 5.0f - 40.0f,0.0f, 0.0f });
-				notes_.push_back(newNote);
+				SetNoteDamage(position[i]);
 
 			}
 			
@@ -142,5 +108,51 @@ void MusicScore::SetNotes(ScoreType type) {
 void MusicScore::ModelLoad(std::vector<Model*> models) {
 
 	notesModels_ = models;
+
+}
+
+void MusicScore::SetNoteNormal(const Vector3& position) {
+
+	NoteNormal* newNote = new NoteNormal();
+	newNote->ModelLoad(notesModels_[0]);
+	newNote->Initialize();
+	newNote->SetPlayer(player_);
+	newNote->SetPosition(position);
+	notes_.push_back(newNote);
+
+}
+
+void MusicScore::SetNoteLStart(const Vector3& position) {
+
+	NoteLong* newNote = new NoteLong();
+	newNote->ModelLoad(notesModels_[1]);
+	newNote->Initialize();
+	newNote->SetLongNoteType(NoteLong::Start);
+	newNote->SetPlayer(player_);
+	newNote->SetPosition(position);
+	notes_.push_back(newNote);
+
+}
+
+void MusicScore::SetNoteLEnd(const Vector3& position) {
+
+	NoteLong* newNote = new NoteLong();
+	newNote->ModelLoad(notesModels_[1]);
+	newNote->Initialize();
+	newNote->SetLongNoteType(NoteLong::End);
+	newNote->SetPlayer(player_);
+	newNote->SetPosition(position);
+	notes_.push_back(newNote);
+
+}
+
+void MusicScore::SetNoteDamage(const Vector3& position) {
+
+	NoteDamage* newNote = new NoteDamage();
+	newNote->ModelLoad(notesModels_[2]);
+	newNote->Initialize();
+	newNote->SetPlayer(player_);
+	newNote->SetPosition(position);
+	notes_.push_back(newNote);
 
 }
