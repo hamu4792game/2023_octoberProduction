@@ -40,8 +40,6 @@ bool MakeCatmull::LoadChackItem(const std::string& directoryPath, const std::str
 
 void MakeCatmull::Initialize() {
 
-	line_ = std::make_unique<Line>();
-
 	if (LoadChackItem(kDirectoryPath, kItemName)) {
 		chackOnlyNumber = 1;
 
@@ -60,6 +58,9 @@ void MakeCatmull::Initialize() {
 			spheres.push_back(sphere[i]);
 		}*/
 
+	}
+	for (size_t i = 0; i < (ControlPoints.size() - 1) * 8; i++) {
+		lines_.push_back(std::make_unique<Line>());
 	}
 
 	LastLinePass = static_cast<int>(ControlPoints.size()) - 2;
@@ -103,7 +104,7 @@ void MakeCatmull::Update() {
 }
 
 void MakeCatmull::Draw(const Matrix4x4& viewProjectionMatrix) {
-	DrawImgui();
+	drawCount = 0;
 
 	DrawCatmullRom(ControlPoints[0], ControlPoints[0], ControlPoints[1], ControlPoints[2],
 		viewProjectionMatrix, Linecolor);
@@ -119,21 +120,25 @@ void MakeCatmull::Draw(const Matrix4x4& viewProjectionMatrix) {
 		DrawSphere(spheres[i], viewProjectionMatrix);
 	}*/
 
-	DrawSphere(PLsphere, viewProjectionMatrix);
+	//DrawSphere(PLsphere, viewProjectionMatrix);
+
+	DrawImgui();
 
 }
 
 void MakeCatmull::DrawImgui() {
-	ImGui::Begin("PL");
-	ImGui::DragFloat("point", &point, 0.01f);
-	ImGui::Checkbox("StartMove", &isMove);
-	ImGui::Text("Size = %d", ControlPoints.size());
-	ImGui::Text("Number = %d", chackOnlyNumber);
+	ImGui::Begin("Line");
+	//ImGui::DragFloat("point", &point, 0.01f);
+	//ImGui::Checkbox("StartMove", &isMove);
+	ImGui::Text("ControlPointsTotal = %d", ControlPoints.size());
+	ImGui::Text("linesTotal = %d", lines_.size());
+	ImGui::Text("LimitSize = %d", (ControlPoints.size() - 1) * 8);
+	ImGui::Text("FailLoadOK = %d", chackOnlyNumber);
 	ImGui::End();
 
 	ImGui::Begin("Catmull-Rom");
 	for (size_t i = 0; i < ControlPoints.size(); ++i) {
-		ImGui::DragFloat3(("Points" + std::to_string(i)).c_str(), &ControlPoints[i].x, 0.01f);
+		ImGui::DragFloat3(("Points" + std::to_string(i)).c_str(), &ControlPoints[i].x, 0.1f);
 	}
 	ImGui::End();
 
@@ -149,6 +154,13 @@ void MakeCatmull::DrawImgui() {
 		LastLinePass++;
 
 		ControlPoints.push_back(newPoint);
+		if ((ControlPoints.size() - 1) * 8 > lines_.size()){
+			for (int i = 0; i < 8; i++) {
+				lines_.push_back(std::make_unique<Line>());
+			}
+		}
+		
+
 		//spheres.push_back(newSphere);
 	}
 	if (ImGui::Button("Delete Element")) {
@@ -156,6 +168,7 @@ void MakeCatmull::DrawImgui() {
 			LastLinePass--;
 
 			ControlPoints.erase(ControlPoints.begin());
+			
 			//spheres.erase(spheres.begin());
 		}
 	}
@@ -304,8 +317,8 @@ void MakeCatmull::DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjecti
 			//b = TransScreen(b, viewProjectionMatrix);
 			//c = TransScreen(c, viewProjectionMatrix);
 			//ab,acで線を引く
-			line_->DrawLine(a, b, viewProjectionMatrix, sphere.color);
-			line_->DrawLine(a, c, viewProjectionMatrix, sphere.color);
+			/*line_->DrawLine(a, b, viewProjectionMatrix, sphere.color);
+			line_->DrawLine(a, c, viewProjectionMatrix, sphere.color);*/
 			/*Novice::DrawLine(static_cast<int>(a.x), static_cast<int>(a.y), static_cast<int>(b.x), static_cast<int>(b.y), sphere.color);
 			Novice::DrawLine(static_cast<int>(a.x), static_cast<int>(a.y), static_cast<int>(c.x), static_cast<int>(c.y), sphere.color);*/
 		}
@@ -320,7 +333,7 @@ void MakeCatmull::DrawCatmullRom(const Vector3& controlPoint0, const Vector3& co
 	Vector3 CatmullRom[divisionNumber + 1] = {};
 	float t = 0.0f;
 
-
+	
 
 	for (uint32_t i = 0; i < divisionNumber + 1; i++) {
 		t = i / static_cast<float>(divisionNumber);
@@ -335,10 +348,14 @@ void MakeCatmull::DrawCatmullRom(const Vector3& controlPoint0, const Vector3& co
 		Vector3 first_ = CatmullRom[i];
 		Vector3 second_ = CatmullRom[i + 1];
 
-		line_->DrawLine(first_, second_, viewProjectionMatrix, color);
+		if (i + drawCount * 8 < lines_.size()) {
+			lines_[i + drawCount * 8]->DrawLine(first_, second_, viewProjectionMatrix, Linecolor);
+		}
+		
 		/*Novice::DrawLine(static_cast<int>(CatmullRom[i].x), static_cast<int>(CatmullRom[i].y),
 			static_cast<int>(CatmullRom[i + 1].x), static_cast<int>(CatmullRom[i + 1].y), color);*/
 	}
+	drawCount++;
 }
 
 //Vector3 MakeCatmull::TransScreen(const Vector3& transform, const Matrix4x4& viewProjectionMatrix) {

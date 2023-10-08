@@ -16,7 +16,7 @@ Battle::Battle()
 
 	makeCatmull_ = std::make_unique<MakeCatmull>();
 
-	//makeCatmull_->Initialize();
+	makeCatmull_->Initialize();
 }
 
 Battle::~Battle() {
@@ -62,7 +62,7 @@ void Battle::Draw3D(const Matrix4x4& viewProjection)
 
 	musicScore_->Draw(viewProjection);
 
-	//makeCatmull_->Draw(viewProjection);
+	makeCatmull_->Draw(viewProjection);
 
 	line_->DrawLine(StartPos, EndPos, viewProjection, 0xff0000ff);
 

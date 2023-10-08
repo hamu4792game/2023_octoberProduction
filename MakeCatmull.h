@@ -35,7 +35,7 @@ public:
 
 private:
 
-	std::unique_ptr<Line> line_;
+	std::vector<std::unique_ptr<Line>> lines_;	
 
 	Vector3 controlPoint[4] = {
 		{-8.0f,5.8f,10.0f},
@@ -85,6 +85,8 @@ private:
 	const std::string kDirectoryName = "Resources/Elements";
 
 	const std::string kItemName = "Points";
+
+	int drawCount = 0;
 
 	//Vector3 TransScreen(const Vector3& transform, const Matrix4x4& viewProjectionMatrix);
 
