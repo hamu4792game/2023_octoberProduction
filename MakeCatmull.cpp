@@ -143,13 +143,10 @@ void MakeCatmull::DrawImgui() {
 	ImGui::End();
 
 	ImGui::Begin("MakeCatmull-Rom");
+
+
 	if (ImGui::Button("Add Element")) {
-		Vector3 newPoint = { 0.0f,0.0f,0.0f };
-		/*Sphere newSphere = {
-			.center = newPoint,
-			.radius = 0.01f,
-			.color = 0x000000ff
-		};*/
+		Vector3 newPoint = { 0.0f,0.0f,0.0f };		
 
 		LastLinePass++;
 
@@ -159,17 +156,45 @@ void MakeCatmull::DrawImgui() {
 				lines_.push_back(std::make_unique<Line>());
 			}
 		}
-		
-
-		//spheres.push_back(newSphere);
 	}
-	if (ImGui::Button("Delete Element")) {
+
+	ImGui::InputInt("addElementsNum", &addElementsNum);
+
+	if (addElementsNum < 2) {
+		addElementsNum = 2;
+	}
+
+	if (ImGui::Button("Add Elements")) {
+		for (int i = 0; i < addElementsNum; i++) {
+			Vector3 newPoint = { 0.0f,0.0f,0.0f };
+
+			LastLinePass++;
+
+			ControlPoints.push_back(newPoint);
+			if ((ControlPoints.size() - 1) * 8 > lines_.size()) {
+				for (int i = 0; i < 8; i++) {
+					lines_.push_back(std::make_unique<Line>());
+				}
+			}
+		}
+	}
+
+	
+	if (ImGui::Button("Delete StartElement")) {
 		if (!ControlPoints.empty()/* && !spheres.empty()*/) {
 			LastLinePass--;
 
 			ControlPoints.erase(ControlPoints.begin());
 			
-			//spheres.erase(spheres.begin());
+		}
+	}
+	
+	if (ImGui::Button("Delete EndElement")){
+		if (!ControlPoints.empty()/* && !spheres.empty()*/) {
+			LastLinePass--;
+
+			ControlPoints.pop_back();
+
 		}
 	}
 	if (ImGui::Button("Save Element")) {

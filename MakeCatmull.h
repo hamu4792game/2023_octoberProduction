@@ -92,6 +92,8 @@ private:
 
 	int drawCount = 0;
 
+	int addElementsNum = 2;
+
 	//Vector3 TransScreen(const Vector3& transform, const Matrix4x4& viewProjectionMatrix);
 
 	void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix);
