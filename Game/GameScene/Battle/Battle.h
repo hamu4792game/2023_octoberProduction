@@ -28,6 +28,8 @@ public:
 
 	void ModelLoad(std::vector<Model*> models);
 
+	Player* GetPlayer() { return player_.get(); }
+
 private:
 
 	std::unique_ptr<Player> player_;

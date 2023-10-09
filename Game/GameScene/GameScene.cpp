@@ -14,9 +14,9 @@ void GameScene::Initialize()
 {
 	//	カメラの読み込みと生成
 	camera = std::make_shared<Camera>(2000.0f, true);
-	camera->transform.translation_.y = 15.0f;
-	camera->transform.translation_.z = -100.0f;
-	camera->transform.rotation_.x = 0.0f;
+	camera->transform.translation_.y = 70.0f;
+	camera->transform.translation_.z = -40.0f;
+	camera->transform.rotation_ = { 1.0f,0.0f,0.0f };
 	camera2d = std::make_shared<Camera>();
 	//	カメラ行列の更新
 	viewProjectionMatrix = camera->GetViewProMat();
@@ -69,9 +69,17 @@ void GameScene::Update()
 		{
 		case GameScene::Scene::TITLE:
 			title->Initialize();
+			camera->transform.translation_.y = 15.0f;
+			camera->transform.translation_.z = -100.0f;
+			camera->transform.rotation_ = { 0.0f,0.0f,0.0f };
+			camera->SetParent(nullptr);
 			break;
 		case GameScene::Scene::BATTLE:
 			battle->Initialize();
+			camera->transform.translation_.y = 70.0f;
+			camera->transform.translation_.z = -40.0f;
+			camera->transform.rotation_ = { 1.0f,0.0f,0.0f };
+			camera->SetParent(battle->GetPlayer()->GetWorldTransformPtr());
 			break;
 		case GameScene::Scene::RESULT:
 			break;
@@ -206,4 +214,10 @@ void GameScene::SceneChange()
 	boxtransform.scale_ = Vector3(boxScale, boxScale, 1.0f);
 
 	boxtransform.UpdateMatrix();
+}
+
+void GameScene::CameraUpdate() {
+
+
+
 }

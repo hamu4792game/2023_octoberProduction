@@ -57,6 +57,9 @@ private: // メンバ関数
 	//	モデルのロード
 	void ModelLoad();
 
+	//カメラ更新
+	void CameraUpdate();
+
 	//	シーンチェンジ用
 	std::shared_ptr<Texture2D> box;
 	WorldTransform boxtransform;

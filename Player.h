@@ -40,6 +40,11 @@ public:
 
 	void SetPosition(Vector3 position) { worldTransform_.translation_ = position; }
 
+	WorldTransform* GetWorldTransformPtr() { return &worldTransform_; }
+
+	//移動方向から向きを計算する
+	void SetRotate(Vector3 velocity);
+
 private:
 
 	const float kSpeed = 10.0f;
@@ -48,9 +53,14 @@ private:
 
 	Vector3 velocity_{};
 
+	//一フレーム前の位置
+	Vector3 prePosition_{};
+
 	std::unique_ptr<Model> model_;
+	std::unique_ptr<Model> arrowModel_;
 
 	WorldTransform worldTransform_;
+	WorldTransform worldTransformArrow_;
 
 	//キーを押した瞬間
 	bool isTap_ = false;
