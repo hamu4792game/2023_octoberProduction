@@ -17,6 +17,16 @@ Battle::Battle()
 	makeCatmull_ = std::make_unique<MakeCatmull>();
 
 	makeCatmull_->Initialize();
+
+	drumLoop_ = std::make_unique<AudioInput>();
+
+	//	ロード
+	drumLoop_->SoundLoadWave("./Resources/loopBGM/drumloop1.wav");
+	//	音の再生
+	drumLoop_->SoundPlayWave(true);
+	//	音量の設定
+	drumLoop_->SetVolume(0.2f);
+
 }
 
 Battle::~Battle() {

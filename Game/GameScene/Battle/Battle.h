@@ -9,7 +9,7 @@
 #include "Engine/Texture/Line/Line.h"
 
 #include "MakeCatmull.h"
-
+#include "Engine/Input/AudioInput/AudioInput.h"
 
 
 
@@ -47,6 +47,8 @@ private:
 	std::unique_ptr<Line> line_;
 
 	std::unique_ptr<MakeCatmull> makeCatmull_;
+
+	std::unique_ptr<AudioInput> drumLoop_;
 
 	Vector3 StartPos;
 

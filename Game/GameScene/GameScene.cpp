@@ -35,12 +35,12 @@ void GameScene::Initialize()
 
 	//	音源の生成とセット
 	bgm_ = std::make_unique<AudioInput>();
-	//	ロード
-	bgm_->SoundLoadWave("./Resources/loopBGM/drumloop1.wav");
-	//	音の再生
-	bgm_->SoundPlayWave();
-	//	音量の設定
-	bgm_->SetVolume(0.2f);
+	////	ロード
+	//bgm_->SoundLoadWave("./Resources/loopBGM/drumloop1.wav");
+	////	音の再生
+	//bgm_->SoundPlayWave();
+	////	音量の設定
+	//bgm_->SetVolume(0.2f);
 	
 	//	シーンの生成と初期化
 	title = std::make_unique<Title>();
