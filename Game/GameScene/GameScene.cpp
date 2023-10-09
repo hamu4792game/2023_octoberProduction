@@ -36,7 +36,7 @@ void GameScene::Initialize()
 	//	音源の生成とセット
 	bgm_ = std::make_unique<AudioInput>();
 	//	ロード
-	bgm_->SoundLoadWave("./Resources/sound/tekito.wav");
+	bgm_->SoundLoadWave("./Resources/loopBGM/drumloop1.wav");
 	//	音の再生
 	bgm_->SoundPlayWave();
 	//	音量の設定
