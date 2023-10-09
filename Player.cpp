@@ -140,10 +140,17 @@ void Player::ModelLoad() {
 void Player::SetRotate(Vector3 velocity) {
 
 	//正規化
-	velocity = Normalize(velocity);
+	Vector3 tmpVel = Normalize(velocity);
 
-	/*worldTransform_.rotation_.x = float(std::atan2(double(velocity.z), double(velocity.y)));*/
-	worldTransform_.rotation_.y = float(std::atan2(double(velocity.x), double(velocity.z)));
+	
+	worldTransform_.rotation_.y = float(std::atan2(double(tmpVel.x), double(tmpVel.z)));
+
+	Matrix4x4 rotateYMatrix = MakeRotateYMatrix(-worldTransform_.rotation_.y);
+
+	tmpVel = TransformNormal(tmpVel, rotateYMatrix);
+
+	worldTransform_.rotation_.x = float(std::atan2(double(-tmpVel.y), double(tmpVel.z)));
+
 	/*worldTransform_.rotation_.z = float(std::atan2(double(velocity.y), double(velocity.x)));*/
 
 }
