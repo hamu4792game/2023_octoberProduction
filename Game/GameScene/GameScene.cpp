@@ -32,6 +32,15 @@ void GameScene::Initialize()
 	box = std::make_shared<Texture2D>();
 
 	ModelLoad();
+
+	//	音源の生成とセット
+	bgm_ = std::make_unique<AudioInput>();
+	//	ロード
+	bgm_->SoundLoadWave("./Resources/sound/tekito.wav");
+	//	音の再生
+	bgm_->SoundPlayWave();
+	//	音量の設定
+	bgm_->SetVolume(0.2f);
 	
 	//	シーンの生成と初期化
 	title = std::make_unique<Title>();
