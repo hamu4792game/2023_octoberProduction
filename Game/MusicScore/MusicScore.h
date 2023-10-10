@@ -22,7 +22,7 @@ public:
 
 	void Initialize();
 
-	void Update();
+	void Update(std::vector<Vector3> position);
 
 	void Draw(const Matrix4x4& viewProjection);
 
@@ -34,13 +34,13 @@ public:
 
 	void ModelLoad(std::vector<Model*> models);
 
-	void SetNoteNormal(const Vector3& position);
+	void SetNoteNormal(const Vector3& position, uint32_t num);
 
-	void SetNoteLStart(const Vector3& position);
+	void SetNoteLStart(const Vector3& position, uint32_t num);
 
-	void SetNoteLEnd(const Vector3& position);
+	void SetNoteLEnd(const Vector3& position, uint32_t num);
 
-	void SetNoteDamage(const Vector3& position);
+	void SetNoteDamage(const Vector3& position, uint32_t num);
 
 	void SetBPM(uint32_t tempo) { BPM_ = tempo; }
 
