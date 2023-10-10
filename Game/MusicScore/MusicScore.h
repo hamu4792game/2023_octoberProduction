@@ -1,8 +1,8 @@
 #pragma once
-#include "Notes.h"
+#include "Game/Notes/Notes.h"
 #include "Engine/WorldTransform/WorldTransform.h"
 #include <list>
-#include "Player.h"
+#include "Game/Player/Player.h"
 #include <memory>
 
 class MusicScore

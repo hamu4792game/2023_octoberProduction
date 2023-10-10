@@ -3,7 +3,7 @@
 #include "Engine/Texture/Model.h"
 #include <memory>
 #include "math/Matrix4x4.h"
-#include "Player.h"
+#include "Game/Player/Player.h"
 #include "math/Vector3.h"
 
 class Notes

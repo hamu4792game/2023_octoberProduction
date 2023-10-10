@@ -98,13 +98,21 @@
     <ClCompile Include="Game\GameScene\Title\Title.cpp">
       <Filter>Game\GameScene\Title</Filter>
     </ClCompile>
-    <ClCompile Include="Notes.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="MusicScore.cpp" />
     <ClCompile Include="Engine\Texture\Line\Line.cpp">
       <Filter>Engine\Resources\Line</Filter>
     </ClCompile>
-    <ClCompile Include="MakeCatmull.cpp" />
+    <ClCompile Include="Game\Player\Player.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MakeCatmull\MakeCatmull.cpp">
+      <Filter>Game\MakeCatmull</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MusicScore\MusicScore.cpp">
+      <Filter>Game\MusicScore</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Notes\Notes.cpp">
+      <Filter>Game\Notes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h">
@@ -213,14 +221,24 @@
     <ClInclude Include="Game\GameScene\Battle\Battle.h">
       <Filter>Game\GameScene\Battle</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameScene\Title\Title.h" />
-    <ClInclude Include="Notes.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="MusicScore.h" />
     <ClInclude Include="Engine\Texture\Line\Line.h">
       <Filter>Engine\Resources\Line</Filter>
     </ClInclude>
-    <ClInclude Include="MakeCatmull.h" />
+    <ClInclude Include="Game\GameScene\Title\Title.h">
+      <Filter>Game\GameScene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Player.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MakeCatmull\MakeCatmull.h">
+      <Filter>Game\MakeCatmull</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MusicScore\MusicScore.h">
+      <Filter>Game\MusicScore</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Notes\Notes.h">
+      <Filter>Game\Notes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -306,6 +324,18 @@
     </Filter>
     <Filter Include="Engine\Resources\Line">
       <UniqueIdentifier>{cbf83273-a812-4432-88e9-84e4b6075c48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\MakeCatmull">
+      <UniqueIdentifier>{548c4c15-d9b2-4da6-bbe1-0f3a5e470985}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\MusicScore">
+      <UniqueIdentifier>{bfa741fe-2be9-4cf4-a576-3d094bcc42e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{360244a4-fbbe-423f-801b-0e25f52e0423}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Notes">
+      <UniqueIdentifier>{bb9e414e-3cb0-4b4f-ae0e-f535a10a4854}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

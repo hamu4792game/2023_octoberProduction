@@ -1,14 +1,14 @@
 #pragma once
 #include "Engine/WorldTransform/WorldTransform.h"
-#include "Player.h"
+#include "Game/Player/Player.h"
 #include <memory>
 #include <vector>
 #include "Game/Skydome/Skydome.h"
-#include "MusicScore.h"
+#include "Game/MusicScore/MusicScore.h"
 
 #include "Engine/Texture/Line/Line.h"
 
-#include "MakeCatmull.h"
+#include "Game/MakeCatmull/MakeCatmull.h"
 #include "Engine/Input/AudioInput/AudioInput.h"
 
 
