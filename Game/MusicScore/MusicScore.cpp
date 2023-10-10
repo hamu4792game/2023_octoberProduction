@@ -35,6 +35,16 @@ void MusicScore::Update(std::vector<Vector3> position) {
 
 	});
 
+	if (++countHalfBPM_ >= halfBPM_) {
+
+		for (Notes* note : notes_) {
+			note->SetSize(1.5f);
+		}
+
+		countHalfBPM_ = 0;
+
+	}
+
 	for (Notes* note : notes_) {
 
 		if (&position[note->GetNumber()]) {

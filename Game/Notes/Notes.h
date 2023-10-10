@@ -77,6 +77,9 @@ protected:
 	//ノーツをスルー、または反応がずれすぎた場合ミス
 	bool isMiss_ = false;
 
+	//サイズを戻す演出
+	void RestoreSize();
+
 };
 
 class NoteNormal : public Notes
