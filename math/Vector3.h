@@ -56,3 +56,9 @@ float Dot(const Vector3& v1, const Vector3& v2);
 
 // 2点間の距離を求める関数
 float Distance(const Vector3& v1, const Vector3& v2);
+
+// スカラー倍
+//makeCatmullにて使用しているため追加
+Vector3 Multiply(float scalar, const Vector3& Vec);
+
+Vector3 makeCatmullRom(const Vector3& controlPoint0, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& controlPoint3, float t);

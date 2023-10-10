@@ -51,9 +51,14 @@ public: // 基本処理関数
 	
 	void Draw();
 
+	void Finalize();
+
 private: // メンバ関数
 	//	モデルのロード
 	void ModelLoad();
+
+	//カメラ更新
+	void CameraUpdate();
 
 	//	シーンチェンジ用
 	std::shared_ptr<Texture2D> box;
@@ -69,5 +74,8 @@ private: // モデル変数
 	std::unique_ptr<Model> notesModelLong_;
 	std::unique_ptr<Model> notesModelDamage_;
 	std::shared_ptr<Texture2D> hud_;
+
+private: // 音源
+	std::unique_ptr<AudioInput> bgm_;
 
 };

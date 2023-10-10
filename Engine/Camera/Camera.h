@@ -13,6 +13,9 @@ public:
 	Camera(float farClip_ = 1000.0f, bool proType = false);
 	~Camera() = default;
 
+	//ワールドトランスフォームの親ポインタのセット
+	void SetParent(WorldTransform* parent) { transform.parent_ = parent; }
+
 private:
 	//	深度値
 	float farZ;

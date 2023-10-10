@@ -14,9 +14,9 @@ void GameScene::Initialize()
 {
 	//	カメラの読み込みと生成
 	camera = std::make_shared<Camera>(2000.0f, true);
-	camera->transform.translation_.y = 15.0f;
-	camera->transform.translation_.z = -100.0f;
-	camera->transform.rotation_.x = 0.0f;
+	camera->transform.translation_.y = 70.0f;
+	camera->transform.translation_.z = -40.0f;
+	camera->transform.rotation_ = { 1.0f,0.0f,0.0f };
 	camera2d = std::make_shared<Camera>();
 	//	カメラ行列の更新
 	viewProjectionMatrix = camera->GetViewProMat();
@@ -32,6 +32,15 @@ void GameScene::Initialize()
 	box = std::make_shared<Texture2D>();
 
 	ModelLoad();
+
+	//	音源の生成とセット
+	bgm_ = std::make_unique<AudioInput>();
+	////	ロード
+	//bgm_->SoundLoadWave("./Resources/loopBGM/drumloop1.wav");
+	////	音の再生
+	//bgm_->SoundPlayWave();
+	////	音量の設定
+	//bgm_->SetVolume(0.2f);
 	
 	//	シーンの生成と初期化
 	title = std::make_unique<Title>();
@@ -69,9 +78,21 @@ void GameScene::Update()
 		{
 		case GameScene::Scene::TITLE:
 			title->Initialize();
+			camera->transform.translation_.y = 15.0f;
+			camera->transform.translation_.z = -100.0f;
+			camera->transform.rotation_ = { 0.0f,0.0f,0.0f };
+			camera->SetParent(nullptr);
 			break;
 		case GameScene::Scene::BATTLE:
 			battle->Initialize();
+			camera->transform.translation_.y = 70.0f;
+			camera->transform.translation_.z = -40.0f;
+			camera->transform.rotation_ = { 1.0f,0.0f,0.0f };
+			camera->SetParent(battle->GetPlayer()->GetWorldTransformPtr());
+			camera->transform.translation_.y = 15.0f;
+			camera->transform.translation_.z = -100.0f;
+			camera->transform.rotation_ = { 0.0f,0.0f,0.0f };
+			camera->SetParent(nullptr);
 			break;
 		case GameScene::Scene::RESULT:
 			break;
@@ -141,18 +162,25 @@ void GameScene::Draw()
 
 }
 
+void GameScene::Finalize()
+{
+	Line::Finalize();
+	Model::Finalize();
+	Texture2D::Finalize();
+}
+
 
 void GameScene::ModelLoad()
 {
-	model_->Texture("Resources/eatRamen/eatRamen.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl");
-	hud_->Texture("Resources/uvChecker.png", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl");
+	model_->Texture("Resources/eatRamen/eatRamen.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	hud_->Texture("Resources/uvChecker.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
 
-	box->Texture("Resources/block.png", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl");
+	box->Texture("Resources/block.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
-	notesModelNormal_->Texture("Resources/notes/notes.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl", "notes/normal.png");
-	notesModelLong_->Texture("Resources/notes/notes.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl", "notes/long.png");
-	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Shader/Texture2D.VS.hlsl", "./Shader/Texture2D.PS.hlsl", "notes/damage.png");
+	notesModelNormal_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/normal.png");
+	notesModelLong_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/long.png");
+	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/damage.png");
 
 }
 
@@ -199,4 +227,10 @@ void GameScene::SceneChange()
 	boxtransform.scale_ = Vector3(boxScale, boxScale, 1.0f);
 
 	boxtransform.UpdateMatrix();
+}
+
+void GameScene::CameraUpdate() {
+
+
+
 }
