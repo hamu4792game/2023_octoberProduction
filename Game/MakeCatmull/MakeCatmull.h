@@ -50,21 +50,6 @@ private:
 	
 	std::vector<Vector3> ControlPoints;
 
-	Sphere PLsphere{
-		.center = controlPoint[0],
-		.radius = 50.0f,
-		.color = 0xff0000ff
-	};
-
-	/*Sphere sphere[4]{
-		{{0.0f,0.0f,0.0f},0.02f,0x000000ff},
-		{{0.0f,0.0f,0.0f},0.02f,0x000000ff},
-		{{0.0f,0.0f,0.0f},0.02f,0x000000ff},
-		{{0.0f,0.0f,0.0f},0.02f,0x000000ff}
-	};
-
-	std::vector<Sphere> spheres;*/
-
 	//キャトムル-ロム移動用
 	//分割数
 	uint32_t Linecolor = 0xffffffff;
@@ -94,7 +79,11 @@ private:
 
 	int addElementsNum = 2;
 
-	//Vector3 TransScreen(const Vector3& transform, const Matrix4x4& viewProjectionMatrix);
+	//曲線一本の長さを調べるための変数群
+	std::vector<float> catMullLength;
+
+	float length;
+
 
 	void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix);
 

@@ -587,38 +587,6 @@ void MakeCatmull::Initialize() {
 }
 
 void MakeCatmull::Update() {
-	/*for (size_t i = 0; i < ControlPoints.size(); ++i) {
-		spheres[i].center = ControlPoints[i];
-	}*/
-
-	if (isMove) {
-		point += 0.1f;
-	}
-	if (point > static_cast<float>(divisionNumber) - 0.1f) {
-		point = 0.0f;
-		linePass += 1;
-		if (linePass > LastLinePass) {
-			linePass = firstLinePass;
-		}
-	}
-
-	t = point / static_cast<float>(divisionNumber);
-
-
-
-	if (linePass == 0) {
-		Vector3 p = makeCatmullRom(ControlPoints[0], ControlPoints[0], ControlPoints[1], ControlPoints[2], t);
-		PLsphere.center = p;
-	}
-	if (linePass >= 1 && linePass != LastLinePass) {
-		Vector3 p = makeCatmullRom(ControlPoints[linePass - 1], ControlPoints[linePass], ControlPoints[linePass + 1], ControlPoints[linePass + 2], t);
-		PLsphere.center = p;
-	}
-	if (linePass == LastLinePass) {
-		Vector3 p = makeCatmullRom(ControlPoints[LastLinePass - 1], ControlPoints[LastLinePass], ControlPoints[LastLinePass + 1], ControlPoints[LastLinePass + 1], t);
-		PLsphere.center = p;
-	}
-
 
 }
 
@@ -649,15 +617,21 @@ void MakeCatmull::DrawImgui() {
 	ImGui::Begin("Line");
 	//ImGui::DragFloat("point", &point, 0.01f);
 	//ImGui::Checkbox("StartMove", &isMove);
-	ImGui::Text("ControlPointsTotal = %d", ControlPoints.size());
-	ImGui::Text("linesTotal = %d", lines_.size());
-	ImGui::Text("LimitSize = %d", (ControlPoints.size() - 1) * 8);
-	ImGui::Text("FailLoadOK = %d", chackOnlyNumber);
+	ImGui::Text("ControlPointsの数 = %d", ControlPoints.size());
+	ImGui::Text("今の最大サイズ = %d", lines_.size());
+	ImGui::Text("線の合計本数 = %d", (ControlPoints.size() - 1) * 8);
+	ImGui::Text("ファイル読み込み出来たかどうか = %d", chackOnlyNumber);
 	ImGui::End();
 
-	ImGui::Begin("Catmull-Rom");
+	ImGui::Begin("点の位置");
 	for (size_t i = 0; i < ControlPoints.size(); ++i) {
 		ImGui::DragFloat3(("Points" + std::to_string(i)).c_str(), &ControlPoints[i].x, 0.1f);
+	}
+	ImGui::End();
+
+	ImGui::Begin("線の長さ");
+	for (size_t i = 0; i < catMullLength.size(); ++i) {
+		ImGui::DragFloat(("lines" + std::to_string(i) + "&" + std::to_string(i + 1)).c_str(), &catMullLength[i], 0.1f);
 	}
 	ImGui::End();
 
@@ -677,13 +651,13 @@ void MakeCatmull::DrawImgui() {
 		}
 	}
 
-	ImGui::InputInt("addElementsNum", &addElementsNum);
+	ImGui::InputInt("何個追加するか", &addElementsNum);
 
 	if (addElementsNum < 2) {
 		addElementsNum = 2;
 	}
 
-	if (ImGui::Button("Add Elements")) {
+	if (ImGui::Button("線の追加(複数)")) {
 		for (int i = 0; i < addElementsNum; i++) {
 			Vector3 newPoint = { 0.0f,0.0f,0.0f };
 
@@ -697,9 +671,8 @@ void MakeCatmull::DrawImgui() {
 			}
 		}
 	}
-
 	
-	if (ImGui::Button("Delete StartElement")) {
+	if (ImGui::Button("最初の線を削除")) {
 		if (!ControlPoints.empty()/* && !spheres.empty()*/) {
 			LastLinePass--;
 
@@ -708,7 +681,7 @@ void MakeCatmull::DrawImgui() {
 		}
 	}
 	
-	if (ImGui::Button("Delete EndElement")){
+	if (ImGui::Button("最後の線を削除")){
 		if (!ControlPoints.empty()/* && !spheres.empty()*/) {
 			LastLinePass--;
 
@@ -716,7 +689,8 @@ void MakeCatmull::DrawImgui() {
 
 		}
 	}
-	if (ImGui::Button("Save Element")) {
+
+	if (ImGui::Button("保存")) {
 		//曲線保存用
 		json root;
 
@@ -752,9 +726,7 @@ void MakeCatmull::DrawImgui() {
 		MessageBoxA(nullptr, message.c_str(), "Element", 0);
 
 	}
-	/*if (ImGui::Button("Load Element")){
-		LoadFiles();
-	}*/
+	
 
 	ImGui::End();
 }
@@ -876,6 +848,7 @@ void MakeCatmull::DrawCatmullRom(const Vector3& controlPoint0, const Vector3& co
 	//曲線の変数
 	Vector3 CatmullRom[divisionNumber + 1] = {};
 	float t = 0.0f;
+	float lengthNum = 0.0f;
 
 	
 
@@ -892,6 +865,8 @@ void MakeCatmull::DrawCatmullRom(const Vector3& controlPoint0, const Vector3& co
 		Vector3 first_ = CatmullRom[i];
 		Vector3 second_ = CatmullRom[i + 1];
 
+		length = Length(second_ - first_);
+		lengthNum += length;
 		if (i + drawCount * 8 < lines_.size()) {
 			lines_[i + drawCount * 8]->DrawLine(first_, second_, viewProjectionMatrix, Linecolor);
 		}
@@ -899,6 +874,13 @@ void MakeCatmull::DrawCatmullRom(const Vector3& controlPoint0, const Vector3& co
 		/*Novice::DrawLine(static_cast<int>(CatmullRom[i].x), static_cast<int>(CatmullRom[i].y),
 			static_cast<int>(CatmullRom[i + 1].x), static_cast<int>(CatmullRom[i + 1].y), color);*/
 	}
+	if (catMullLength.size() < ControlPoints.size() - 1) {
+		catMullLength.push_back(lengthNum);
+	}
+	else {
+		catMullLength[drawCount] = lengthNum;
+	}
+	
 	drawCount++;
 }
 
