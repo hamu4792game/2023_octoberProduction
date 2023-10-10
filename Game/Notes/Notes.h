@@ -45,6 +45,10 @@ public:
 
 	void SetSize(float size) { worldTransform_.scale_ = { size, size, size }; }
 
+	void SetNumber(uint32_t num) { number_ = num; }
+
+	uint32_t GetNumber() { return number_; }
+
 protected:
 
 	NoteType type_ = Normal;
@@ -58,6 +62,9 @@ protected:
 	//元のサイズ
 	const float kNormalSize = 1.0f;
 
+	//ノーツの配置番号
+	uint32_t number_ = 0;
+
 	//速度
 	Vector3 velocity_;
 
@@ -69,6 +76,9 @@ protected:
 
 	//ノーツをスルー、または反応がずれすぎた場合ミス
 	bool isMiss_ = false;
+
+	//サイズを戻す演出
+	void RestoreSize();
 
 };
 

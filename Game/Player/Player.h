@@ -72,7 +72,7 @@ private:
 	bool isRelease_ = false;
 
 	//線上移動用変数群
-	const uint32_t divisionNumber = 8;
+	const uint32_t divisionNumber = 2;
 	float point = 0.0f;
 	float t = 0.0f;
 

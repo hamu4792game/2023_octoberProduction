@@ -22,7 +22,7 @@ public:
 
 	void Initialize();
 
-	void Update();
+	void Update(std::vector<Vector3> position);
 
 	void Draw(const Matrix4x4& viewProjection);
 
@@ -34,15 +34,18 @@ public:
 
 	void ModelLoad(std::vector<Model*> models);
 
-	void SetNoteNormal(const Vector3& position);
+	void SetNoteNormal(const Vector3& position, uint32_t num);
 
-	void SetNoteLStart(const Vector3& position);
+	void SetNoteLStart(const Vector3& position, uint32_t num);
 
-	void SetNoteLEnd(const Vector3& position);
+	void SetNoteLEnd(const Vector3& position, uint32_t num);
 
-	void SetNoteDamage(const Vector3& position);
+	void SetNoteDamage(const Vector3& position, uint32_t num);
 
-	void SetBPM(uint32_t tempo) { BPM_ = tempo; }
+	void SetBPM(float tempo) { 
+		BPM_ = tempo;
+		halfBPM_ = int(BPM_ / 2);
+	}
 
 private:
 
@@ -53,7 +56,11 @@ private:
 	std::vector<Model*> notesModels_;
 
 	//曲のテンポの速さ
-	uint32_t BPM_;
+	float BPM_ = 120.0f;
+
+	int halfBPM_ = int(BPM_ / 2);
+
+	int countHalfBPM_ = 0;
 
 };
 
