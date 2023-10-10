@@ -61,7 +61,7 @@ void Battle::Update()
 
 	player_->Update(makeCatmull_->GetControlPoints(),makeCatmull_->GetLastLinePass());
 
-	musicScore_->Update();
+	musicScore_->Update(makeCatmull_->GetControlPoints());
 
 	//makeCatmull_->Update();
 

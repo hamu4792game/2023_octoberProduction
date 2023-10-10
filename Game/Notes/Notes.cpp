@@ -13,17 +13,7 @@ void Notes::Initialize() {
 
 void Notes::Update() {
 
-	if (worldTransform_.scale_.x >= kNormalSize) {
-		worldTransform_.scale_.x -= 0.1f;
-	}
-
-	if (worldTransform_.scale_.y >= kNormalSize) {
-		worldTransform_.scale_.y -= 0.1f;
-	}
-
-	if (worldTransform_.scale_.z >= kNormalSize) {
-		worldTransform_.scale_.z -= 0.1f;
-	}
+	RestoreSize();
 
 	//プレイヤーに当たってから、キーを押す、又はスルーするまで処理
 	if (!isHit_ || !isMiss_) {
@@ -50,6 +40,34 @@ void Notes::Update() {
 	
 
 	worldTransform_.UpdateMatrix();
+
+}
+
+void Notes::RestoreSize() {
+
+	if (worldTransform_.scale_.x >= kNormalSize) {
+		worldTransform_.scale_.x -= 0.1f;
+	}
+
+	if (worldTransform_.scale_.y >= kNormalSize) {
+		worldTransform_.scale_.y -= 0.1f;
+	}
+
+	if (worldTransform_.scale_.z >= kNormalSize) {
+		worldTransform_.scale_.z -= 0.1f;
+	}
+
+	if (worldTransform_.scale_.x < kNormalSize) {
+		worldTransform_.scale_.x = kNormalSize;
+	}
+
+	if (worldTransform_.scale_.y < kNormalSize) {
+		worldTransform_.scale_.y = kNormalSize;
+	}
+
+	if (worldTransform_.scale_.z < kNormalSize) {
+		worldTransform_.scale_.z = kNormalSize;
+	}
 
 }
 
@@ -91,6 +109,8 @@ void NoteLong::Initialize() {
 }
 
 void NoteLong::Update() {
+
+	RestoreSize();
 
 	//プレイヤーに当たってから、キーを押す、又はスルーするまで処理
 	if (!isHit_ || !isMiss_) {
@@ -159,6 +179,8 @@ void NoteDamage::Initialize() {
 }
 
 void NoteDamage::Update() {
+
+	RestoreSize();
 
 	//プレイヤーに当たってから、キーを押す、又はスルーするまで処理
 	if (!isHit_ || !isMiss_) {

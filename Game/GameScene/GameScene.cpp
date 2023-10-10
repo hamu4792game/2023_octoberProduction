@@ -84,10 +84,10 @@ void GameScene::Update()
 			camera->SetParent(nullptr);
 			break;
 		case GameScene::Scene::BATTLE:
-			battle->Initialize();
+			/*battle->Initialize();
 			camera->transform.translation_.y = 70.0f;
 			camera->transform.translation_.z = -40.0f;
-			camera->transform.rotation_ = { 1.0f,0.0f,0.0f };
+			camera->transform.rotation_ = { 1.0f,0.0f,0.0f };*/
 			camera->SetParent(battle->GetPlayer()->GetWorldTransformPtr());
 			camera->transform.translation_.y = 15.0f;
 			camera->transform.translation_.z = -100.0f;
