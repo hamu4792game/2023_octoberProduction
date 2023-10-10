@@ -42,6 +42,8 @@ public:
 
 	void SetNoteDamage(const Vector3& position);
 
+	void SetBPM(uint32_t tempo) { BPM_ = tempo; }
+
 private:
 
 	Player* player_;
@@ -49,6 +51,9 @@ private:
 	std::list<Notes*> notes_;
 
 	std::vector<Model*> notesModels_;
+
+	//曲のテンポの速さ
+	uint32_t BPM_;
 
 };
 

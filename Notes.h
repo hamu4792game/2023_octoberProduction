@@ -43,6 +43,8 @@ public:
 
 	bool GetIsMiss() { return isMiss_; }
 
+	void SetSize(float size) { worldTransform_.scale_ = { size, size, size }; }
+
 protected:
 
 	NoteType type_ = Normal;
@@ -52,6 +54,9 @@ protected:
 	WorldTransform worldTransform_;
 
 	Player* player_;
+
+	//元のサイズ
+	const float kNormalSize = 1.0f;
 
 	//速度
 	Vector3 velocity_;

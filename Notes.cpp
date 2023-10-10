@@ -13,6 +13,18 @@ void Notes::Initialize() {
 
 void Notes::Update() {
 
+	if (worldTransform_.scale_.x >= kNormalSize) {
+		worldTransform_.scale_.x -= 0.1f;
+	}
+
+	if (worldTransform_.scale_.y >= kNormalSize) {
+		worldTransform_.scale_.y -= 0.1f;
+	}
+
+	if (worldTransform_.scale_.z >= kNormalSize) {
+		worldTransform_.scale_.z -= 0.1f;
+	}
+
 	//プレイヤーに当たってから、キーを押す、又はスルーするまで処理
 	if (!isHit_ || !isMiss_) {
 
