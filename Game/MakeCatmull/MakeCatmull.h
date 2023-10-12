@@ -31,6 +31,8 @@ public:
 	// 描画
 	void Draw(const Matrix4x4& viewProjectionMatrix);
 
+	int GetControlPointsNum() { return static_cast<int>(ControlPoints.size()); }
+
 	std::vector<Vector3> GetControlPoints() { return ControlPoints; }
 
 	Vector3 GetFirstControlPoint() { return ControlPoints[0]; }
@@ -54,7 +56,7 @@ private:
 	//分割数
 	uint32_t Linecolor = 0xffffffff;
 
-	const uint32_t divisionNumber = 8;
+	const int divisionNumber = 8;
 	float point = 0.0f;
 	float t = 0.0f;
 
@@ -77,18 +79,31 @@ private:
 
 	int drawCount = 0;
 
-	int addElementsNum = 2;
+	int addElementsNum = 1;
+
+	int subtractionElementsNum = 1;
+
+	int mode = 0;
+
+	enum {
+		First,
+		Last,
+	};
 
 	//曲線一本の長さを調べるための変数群
 	std::vector<float> catMullLength;
 
 	float length;
 
+	//1区間ごとの分割数を格納
+	std::vector<int> dividingNumber;
 
 	void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix);
 
 	void DrawCatmullRom(const Vector3& controlPoint0, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& controlPoint3,
 		const Matrix4x4& viewProjectionMatrix, uint32_t color);
+
+	void DrawControlPoints();
 
 	void LoadFiles();
 

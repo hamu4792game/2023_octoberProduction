@@ -44,18 +44,13 @@ private:
 
 
 private:
-	std::unique_ptr<Line> line_;
+	std::vector<std::unique_ptr<Line>> lines_;
+
+	std::vector<Vector3> ControlPoints_;
 
 	std::unique_ptr<MakeCatmull> makeCatmull_;
 
 	std::unique_ptr<AudioInput> drumLoop_;
 
-	Vector3 StartPos;
-
 	Vector3 EndPos;
-
-
-	Vector3 StartPos2;
-
-	Vector3 EndPos2;
 };
