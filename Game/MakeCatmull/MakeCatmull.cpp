@@ -581,6 +581,12 @@ void MakeCatmull::Initialize() {
 	for (size_t i = 0; i < (ControlPoints.size() - 1) * divisionNumber; i++) {
 		lines_.push_back(std::make_unique<Line>());
 	}
+	for (size_t i = 0; i < (ControlPoints.size() - 1); i++) {
+		dividingNumber.push_back(8);
+	}
+	for (size_t i = 0; i < (ControlPoints.size() - 1); i++) {
+		dividingMode.push_back(CUT8);
+	}
 	
 	LastLinePass = static_cast<int>(ControlPoints.size()) - 2;
 
@@ -630,6 +636,33 @@ void MakeCatmull::DrawImgui() {
 		ImGui::DragFloat(("lines" + std::to_string(i) + "&" + std::to_string(i + 1)).c_str(), &catMullLength[i], 0.1f);
 	}
 	ImGui::End();
+	
+	ImGui::Begin("線の分割数");
+	for (size_t i = 0; i < dividingNumber.size(); ++i) {
+		
+		if (ImGui::RadioButton((std::to_string(i+1) + "小節目の数 " + "8").c_str(), &dividingMode[i], CUT8)) {
+			dividingNumber[i] = dividingMode[i];
+		} 
+		ImGui::SameLine();
+		if(ImGui::RadioButton((std::to_string(i + 1) + "小節目の数 " + "12").c_str(), &dividingMode[i], CUT12)) {
+			dividingNumber[i] = dividingMode[i];
+		}
+		ImGui::SameLine();
+		if (ImGui::RadioButton((std::to_string(i + 1) + "小節目の数 " + "16").c_str(), &dividingMode[i], CUT16)) {
+			dividingNumber[i] = dividingMode[i];
+		}
+		ImGui::SameLine();
+		if(ImGui::RadioButton((std::to_string(i + 1) + "小節目の数 " + "24").c_str(), &dividingMode[i], CUT24)) {
+			dividingNumber[i] = dividingMode[i];
+		}
+		ImGui::SameLine();
+		if (ImGui::RadioButton((std::to_string(i + 1) + "小節目の数 " + "48").c_str(), &dividingMode[i], CUT48)) {
+			dividingNumber[i] = dividingMode[i];
+		}
+		ImGui::Text(("線の分割数 = %d"), dividingNumber[i]);
+	}
+
+	ImGui::End();
 
 	ImGui::Begin("MakeCatmull-Rom");
 
@@ -665,6 +698,8 @@ void MakeCatmull::DrawImgui() {
 					lines_.push_back(std::make_unique<Line>());
 				}
 			}
+			dividingNumber.push_back(8);
+			dividingMode.push_back(CUT8);
 		}
 	}
 
@@ -687,7 +722,8 @@ void MakeCatmull::DrawImgui() {
 					LastLinePass--;
 
 					ControlPoints.erase(ControlPoints.begin());
-
+					dividingNumber.erase(dividingNumber.begin());
+					dividingMode.erase(dividingMode.begin());
 				}
 			}
 		}
@@ -697,7 +733,8 @@ void MakeCatmull::DrawImgui() {
 					LastLinePass--;
 
 					ControlPoints.pop_back();
-
+					dividingNumber.pop_back();
+					dividingMode.pop_back();
 				}
 			}
 		}	

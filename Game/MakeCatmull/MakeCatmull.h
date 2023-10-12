@@ -52,6 +52,14 @@ private:
 	
 	std::vector<Vector3> ControlPoints;
 
+	enum Division{
+		CUT8 = 8,
+		CUT12 = 12,
+		CUT16 = 16,
+		CUT24 = 24,
+		CUT48 = 48,
+	};
+
 	//キャトムル-ロム移動用
 	//分割数
 	uint32_t Linecolor = 0xffffffff;
@@ -97,6 +105,10 @@ private:
 
 	//1区間ごとの分割数を格納
 	std::vector<int> dividingNumber;
+
+	std::vector<int> dividingMode;
+
+	//int dividingMode;
 
 	void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix);
 
