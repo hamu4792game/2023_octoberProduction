@@ -640,24 +640,26 @@ void MakeCatmull::DrawImgui() {
 	ImGui::Begin("線の分割数");
 	for (size_t i = 0; i < dividingNumber.size(); ++i) {
 		
-		if (ImGui::RadioButton((std::to_string(i) + "番目の数 " + "8").c_str(), &dividingMode[i], CUT8)) {
+		if (ImGui::RadioButton((std::to_string(i+1) + "小節目の数 " + "8").c_str(), &dividingMode[i], CUT8)) {
 			dividingNumber[i] = dividingMode[i];
 		} 
 		ImGui::SameLine();
-		if(ImGui::RadioButton((std::to_string(i) + "番目の数 " + "12").c_str(), &dividingMode[i], CUT12)) {
+		if(ImGui::RadioButton((std::to_string(i + 1) + "小節目の数 " + "12").c_str(), &dividingMode[i], CUT12)) {
 			dividingNumber[i] = dividingMode[i];
 		}
 		ImGui::SameLine();
-		if(ImGui::RadioButton((std::to_string(i) + "番目の数 " + "24").c_str(), &dividingMode[i], CUT24)) {
+		if (ImGui::RadioButton((std::to_string(i + 1) + "小節目の数 " + "16").c_str(), &dividingMode[i], CUT16)) {
 			dividingNumber[i] = dividingMode[i];
 		}
 		ImGui::SameLine();
-		if (ImGui::RadioButton((std::to_string(i) + "番目の数 " + "48").c_str(), &dividingMode[i], CUT48)) {
+		if(ImGui::RadioButton((std::to_string(i + 1) + "小節目の数 " + "24").c_str(), &dividingMode[i], CUT24)) {
+			dividingNumber[i] = dividingMode[i];
+		}
+		ImGui::SameLine();
+		if (ImGui::RadioButton((std::to_string(i + 1) + "小節目の数 " + "48").c_str(), &dividingMode[i], CUT48)) {
 			dividingNumber[i] = dividingMode[i];
 		}
 		ImGui::Text(("線の分割数 = %d"), dividingNumber[i]);
-		//ImGui::SliderInt(("線の分割数"+ std::to_string(i) + " & " + std::to_string(i + 1)).c_str(), &dividingNumber[i], 8, 48);
-		//ImGui::DragInt(("線の分割数" + std::to_string(i) + " & " + std::to_string(i + 1)).c_str(), &dividingNumber[i], 1.0f, 8, 48);
 	}
 
 	ImGui::End();

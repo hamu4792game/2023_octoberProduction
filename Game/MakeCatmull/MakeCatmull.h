@@ -55,6 +55,7 @@ private:
 	enum Division{
 		CUT8 = 8,
 		CUT12 = 12,
+		CUT16 = 16,
 		CUT24 = 24,
 		CUT48 = 48,
 	};
