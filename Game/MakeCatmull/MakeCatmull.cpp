@@ -578,7 +578,7 @@ void MakeCatmull::Initialize() {
 		}*/
 
 	}
-	for (size_t i = 0; i < (ControlPoints.size() - 1) * 8; i++) {
+	for (size_t i = 0; i < (ControlPoints.size() - 1) * divisionNumber; i++) {
 		lines_.push_back(std::make_unique<Line>());
 	}
 	
@@ -660,8 +660,8 @@ void MakeCatmull::DrawImgui() {
 			LastLinePass++;
 
 			ControlPoints.push_back(newPoint);
-			if ((ControlPoints.size() - 1) * 8 > lines_.size()) {
-				for (int i = 0; i < 8; i++) {
+			if ((ControlPoints.size() - 1) * divisionNumber > lines_.size()) {
+				for (int i = 0; i < divisionNumber; i++) {
 					lines_.push_back(std::make_unique<Line>());
 				}
 			}
@@ -896,8 +896,8 @@ void MakeCatmull::DrawCatmullRom(const Vector3& controlPoint0, const Vector3& co
 
 		length = Length(second_ - first_);
 		lengthNum += length;
-		if (i + drawCount * 8 < lines_.size()) {
-			lines_[i + drawCount * 8]->DrawLine(first_, second_, viewProjectionMatrix, Linecolor);
+		if (i + drawCount * divisionNumber < lines_.size()) {
+			lines_[i + drawCount * divisionNumber]->DrawLine(first_, second_, viewProjectionMatrix, Linecolor);
 		}
 		
 		/*Novice::DrawLine(static_cast<int>(CatmullRom[i].x), static_cast<int>(CatmullRom[i].y),

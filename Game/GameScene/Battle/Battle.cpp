@@ -19,9 +19,7 @@ Battle::Battle()
 
 	makeCatmull_->Initialize();
 
-	for (int i = 0; i < makeCatmull_->GetControlPointsNum(); i++) {
-		lines_.push_back(std::make_unique<Line>());
-	}
+	
 
 
 	
@@ -67,6 +65,13 @@ void Battle::Update()
 
 	ControlPoints_ = makeCatmull_->GetControlPoints();
 
+	if (lines_.size() < makeCatmull_->GetControlPoints().size()) {
+		lines_.push_back(std::make_unique<Line>());
+	}
+	else if (lines_.size() > makeCatmull_->GetControlPoints().size()){
+		lines_.pop_back();
+	}
+
 	//makeCatmull_->Update();
 
 }
@@ -88,8 +93,7 @@ void Battle::Draw3D(const Matrix4x4& viewProjection)
 
 }
 
-void Battle::Draw2D(const Matrix4x4& viewProjection)
-{
+void Battle::Draw2D(const Matrix4x4& viewProjection){
 
 }
 

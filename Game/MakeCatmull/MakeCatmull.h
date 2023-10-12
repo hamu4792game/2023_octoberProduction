@@ -56,7 +56,7 @@ private:
 	//分割数
 	uint32_t Linecolor = 0xffffffff;
 
-	const uint32_t divisionNumber = 8;
+	const int divisionNumber = 8;
 	float point = 0.0f;
 	float t = 0.0f;
 
@@ -95,6 +95,8 @@ private:
 
 	float length;
 
+	//1区間ごとの分割数を格納
+	std::vector<int> dividingNumber;
 
 	void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix);
 
