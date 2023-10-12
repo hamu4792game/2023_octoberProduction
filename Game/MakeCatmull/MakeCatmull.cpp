@@ -584,6 +584,8 @@ void MakeCatmull::Initialize() {
 	
 	LastLinePass = static_cast<int>(ControlPoints.size()) - 2;
 
+	mode = First;
+
 }
 
 void MakeCatmull::Update() {
@@ -614,14 +616,7 @@ void MakeCatmull::Draw(const Matrix4x4& viewProjectionMatrix) {
 }
 
 void MakeCatmull::DrawImgui() {
-	ImGui::Begin("Line");
-	//ImGui::DragFloat("point", &point, 0.01f);
-	//ImGui::Checkbox("StartMove", &isMove);
-	ImGui::Text("ControlPointsの数 = %d", ControlPoints.size());
-	ImGui::Text("今の最大サイズ = %d", lines_.size());
-	ImGui::Text("線の合計本数 = %d", (ControlPoints.size() - 1) * 8);
-	ImGui::Text("ファイル読み込み出来たかどうか = %d", chackOnlyNumber);
-	ImGui::End();
+#ifdef _DEBUG
 
 	ImGui::Begin("点の位置");
 	for (size_t i = 0; i < ControlPoints.size(); ++i) {
@@ -630,6 +625,7 @@ void MakeCatmull::DrawImgui() {
 	ImGui::End();
 
 	ImGui::Begin("線の長さ");
+	
 	for (size_t i = 0; i < catMullLength.size(); ++i) {
 		ImGui::DragFloat(("lines" + std::to_string(i) + "&" + std::to_string(i + 1)).c_str(), &catMullLength[i], 0.1f);
 	}
@@ -638,26 +634,26 @@ void MakeCatmull::DrawImgui() {
 	ImGui::Begin("MakeCatmull-Rom");
 
 
-	if (ImGui::Button("線の追加")) {
-		Vector3 newPoint = { 0.0f,0.0f,0.0f };		
+	//if (ImGui::Button("線の追加")) {
+	//	Vector3 newPoint = { 0.0f,0.0f,0.0f };		
 
-		LastLinePass++;
+	//	LastLinePass++;
 
-		ControlPoints.push_back(newPoint);
-		if ((ControlPoints.size() - 1) * 8 > lines_.size()){
-			for (int i = 0; i < 8; i++) {
-				lines_.push_back(std::make_unique<Line>());
-			}
-		}
-	}
+	//	ControlPoints.push_back(newPoint);
+	//	if ((ControlPoints.size() - 1) * 8 > lines_.size()){
+	//		for (int i = 0; i < 8; i++) {
+	//			lines_.push_back(std::make_unique<Line>());
+	//		}
+	//	}
+	//}
 
 	ImGui::InputInt("何個追加するか", &addElementsNum);
 
-	if (addElementsNum < 2) {
-		addElementsNum = 2;
+	if (addElementsNum < 1) {
+		addElementsNum = 1;
 	}
 
-	if (ImGui::Button("線の追加(複数)")) {
+	if (ImGui::Button("線の追加")) {
 		for (int i = 0; i < addElementsNum; i++) {
 			Vector3 newPoint = { 0.0f,0.0f,0.0f };
 
@@ -671,24 +667,47 @@ void MakeCatmull::DrawImgui() {
 			}
 		}
 	}
-	
-	if (ImGui::Button("最初の線を削除")) {
-		if (!ControlPoints.empty()/* && !spheres.empty()*/) {
-			LastLinePass--;
 
-			ControlPoints.erase(ControlPoints.begin());
-			
-		}
+	ImGui::InputInt("何個削除するか", &subtractionElementsNum);
+
+	if (subtractionElementsNum < 1) {
+		subtractionElementsNum = 1;
 	}
 	
-	if (ImGui::Button("最後の線を削除")){
-		if (!ControlPoints.empty()/* && !spheres.empty()*/) {
+	ImGui::RadioButton("一番前から", &mode, First); 
+	ImGui::SameLine();
+	ImGui::RadioButton("一番後ろから", &mode, Last);
+
+
+
+	if (ImGui::Button("線の削除")) {
+		if (mode == First) {
+			if (!ControlPoints.empty()) {
+				LastLinePass--;
+
+				ControlPoints.erase(ControlPoints.begin());
+
+			}
+		}
+		else if (mode == Last){
+			if (!ControlPoints.empty()) {
+				LastLinePass--;
+
+				ControlPoints.pop_back();
+
+			}
+		}	
+		
+	}
+	
+	/*if (ImGui::Button("最後の線を削除")){
+		if (!ControlPoints.empty()) {
 			LastLinePass--;
 
 			ControlPoints.pop_back();
 
 		}
-	}
+	}*/
 
 	if (ImGui::Button("保存")) {
 		//曲線保存用
@@ -727,8 +746,14 @@ void MakeCatmull::DrawImgui() {
 
 	}
 	
+	ImGui::Text("ControlPointsの数 = %d", ControlPoints.size());
+	ImGui::Text("今の最大サイズ = %d", lines_.size());
+	ImGui::Text("線の合計本数 = %d", (ControlPoints.size() - 1) * 8);
+	ImGui::Text("ファイル読み込み出来たかどうか = %d", chackOnlyNumber);
 
 	ImGui::End();
+#endif // _DEBUG
+
 }
 
 void MakeCatmull::LoadFiles() {
@@ -882,6 +907,10 @@ void MakeCatmull::DrawCatmullRom(const Vector3& controlPoint0, const Vector3& co
 	}
 	
 	drawCount++;
+}
+
+void MakeCatmull::DrawControlPoints(){
+
 }
 
 //Vector3 MakeCatmull::TransScreen(const Vector3& transform, const Matrix4x4& viewProjectionMatrix) {
