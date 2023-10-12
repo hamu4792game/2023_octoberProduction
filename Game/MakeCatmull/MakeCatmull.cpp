@@ -682,19 +682,23 @@ void MakeCatmull::DrawImgui() {
 
 	if (ImGui::Button("線の削除")) {
 		if (mode == First) {
-			if (!ControlPoints.empty()) {
-				LastLinePass--;
+			for (int i = 0; i < subtractionElementsNum; i++){
+				if (!ControlPoints.empty()) {
+					LastLinePass--;
 
-				ControlPoints.erase(ControlPoints.begin());
+					ControlPoints.erase(ControlPoints.begin());
 
+				}
 			}
 		}
 		else if (mode == Last){
-			if (!ControlPoints.empty()) {
-				LastLinePass--;
+			for (int i = 0; i < subtractionElementsNum; i++) {
+				if (!ControlPoints.empty()) {
+					LastLinePass--;
 
-				ControlPoints.pop_back();
+					ControlPoints.pop_back();
 
+				}
 			}
 		}	
 		

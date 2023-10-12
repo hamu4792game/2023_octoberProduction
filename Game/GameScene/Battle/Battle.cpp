@@ -24,7 +24,7 @@ Battle::Battle()
 	}
 
 
-	ControlPoints_ = makeCatmull_->GetControlPoints();
+	
 
 	drumLoop_ = std::make_unique<AudioInput>();
 
@@ -45,7 +45,7 @@ Battle::~Battle() {
 
 void Battle::Initialize()
 {
-	EndPos = { 0.0f,5.0f,0.0f };
+	EndPos = { 0.0f,2.0f,0.0f };
 
 	player_->Initialize(makeCatmull_->GetFirstControlPoint());
 	musicScore_->Initialize();
@@ -65,6 +65,8 @@ void Battle::Update()
 
 	musicScore_->Update(makeCatmull_->GetControlPoints());
 
+	ControlPoints_ = makeCatmull_->GetControlPoints();
+
 	//makeCatmull_->Update();
 
 }
@@ -81,7 +83,7 @@ void Battle::Draw3D(const Matrix4x4& viewProjection)
 	makeCatmull_->Draw(viewProjection);
 
 	for (size_t i = 0; i < lines_.size(); i++){
-		lines_[i]->DrawLine(ControlPoints_[i], ControlPoints_[i] + EndPos, viewProjection, 0xff0000ff);
+		lines_[i]->DrawLine(ControlPoints_[i] - EndPos, ControlPoints_[i] + EndPos, viewProjection, 0xff0000ff);
 	}
 
 }
