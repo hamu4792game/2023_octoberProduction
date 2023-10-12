@@ -11,12 +11,16 @@ void Notes::Initialize() {
 
 }
 
-void Notes::Update() {
-
-	RestoreSize();
+void Notes::UpdateFlag() {
 
 	//プレイヤーに当たってから、キーを押す、又はスルーするまで処理
 	if (!isHit_ || !isMiss_) {
+
+		//ノーツに触れる前に早めに押してしまったらミス
+		if (Distance(worldTransform_.translation_, player_->GetPosition()) <= 15.0f && !isTouch_ && player_->GetIsTap()) {
+			isMiss_ = true;
+			player_->IsMiss();
+		}
 
 		//プレイヤーが触れた瞬間にフラグを立たせる
 		if (Distance(worldTransform_.translation_, player_->GetPosition()) <= 10.0f && !isTouch_) {
@@ -29,15 +33,19 @@ void Notes::Update() {
 			player_->IsHit();
 		}
 
-		//プレイヤーがノーツをスルーしたらミス
-		if (isTouch_ && Distance(worldTransform_.translation_, player_->GetPosition()) >= 10.0f) {
-			isMiss_ = true;
-			player_->IsMiss();
-		}
-
 	}
 
-	
+}
+
+void Notes::Update() {
+
+	RestoreSize();
+
+	//プレイヤーがノーツをスルーしたらミス
+	if (isTouch_ && Distance(worldTransform_.translation_, player_->GetPosition()) >= 10.0f) {
+		isMiss_ = true;
+		player_->IsMiss();
+	}
 
 	worldTransform_.UpdateMatrix();
 
@@ -108,12 +116,16 @@ void NoteLong::Initialize() {
 
 }
 
-void NoteLong::Update() {
-
-	RestoreSize();
+void NoteLong::UpdateFlag() {
 
 	//プレイヤーに当たってから、キーを押す、又はスルーするまで処理
 	if (!isHit_ || !isMiss_) {
+
+		//ノーツに触れる前に早めに押してしまったらミス
+		if (Distance(worldTransform_.translation_, player_->GetPosition()) <= 15.0f && !isTouch_ && player_->GetIsTap()) {
+			isMiss_ = true;
+			player_->IsMiss();
+		}
 
 		//プレイヤーが触れた瞬間にフラグを立たせる
 		if (Distance(worldTransform_.translation_, player_->GetPosition()) <= 10.0f && !isTouch_) {
@@ -154,15 +166,19 @@ void NoteLong::Update() {
 			player_->IsHit();
 		}
 
-		//プレイヤーがノーツをスルーしたらミス
-		if (isTouch_ && Distance(worldTransform_.translation_, player_->GetPosition()) >= 10.0f) {
-			isMiss_ = true;
-			player_->IsMiss();
-		}
-
 	}
 
+}
 
+void NoteLong::Update() {
+
+	RestoreSize();
+
+	//プレイヤーがノーツをスルーしたらミス
+	if (isTouch_ && Distance(worldTransform_.translation_, player_->GetPosition()) >= 10.0f) {
+		isMiss_ = true;
+		player_->IsMiss();
+	}
 
 	worldTransform_.UpdateMatrix();
 
@@ -178,9 +194,7 @@ void NoteDamage::Initialize() {
 
 }
 
-void NoteDamage::Update() {
-
-	RestoreSize();
+void NoteDamage::UpdateFlag() {
 
 	//プレイヤーに当たってから、キーを押す、又はスルーするまで処理
 	if (!isHit_ || !isMiss_) {
@@ -196,12 +210,20 @@ void NoteDamage::Update() {
 			player_->IsMiss();
 		}
 
-		//プレイヤーがノーツをスルーしたらヒット判定(暫定。今後変更する可能性あり)
-		if (isTouch_ && Distance(worldTransform_.translation_, player_->GetPosition()) >= 10.0f) {
-			isHit_ = true;
-			player_->IsHit();
-		}
-
 	}
+
+}
+
+void NoteDamage::Update() {
+
+	RestoreSize();
+
+	//プレイヤーがノーツをスルーしたらヒット判定(暫定。今後変更する可能性あり)
+	if (isTouch_ && Distance(worldTransform_.translation_, player_->GetPosition()) >= 10.0f) {
+		isHit_ = true;
+		player_->IsHit();
+	}
+
+	worldTransform_.UpdateMatrix();
 
 }

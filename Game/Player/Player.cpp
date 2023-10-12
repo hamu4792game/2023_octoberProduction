@@ -58,35 +58,6 @@ void Player::Update(std::vector<Vector3> ControlPoints, int lastLinePass) {
 		isRelease_ = false;
 	}
 
-	switch (moveVec_)
-	{
-	case Up:
-		velocity_ = { 0.0f,kSpeed,0.0f };
-		break;
-	case Down:
-		velocity_ = { 0.0f,-kSpeed,0.0f };
-		break;
-	case Left:
-		velocity_ = { -kSpeed,0.0f,0.0f };
-		break;
-	case Right:
-		velocity_ = { kSpeed,0.0f,0.0f };
-		break;
-	default:
-		velocity_ = { 0.0f,0.0f,0.0f };
-		break;
-	}
-
-	/*float deltaTime = 1.0f / 60.0f;
-
-	velocity_ *= deltaTime;
-
-	worldTransform_.translation_ += velocity_;
-
-	if (worldTransform_.translation_.x >= 40.0f) {
-		worldTransform_.translation_.x = -40.0f;
-	}*/
-
 	if (isMove) {
 		point += 0.1f;
 	}

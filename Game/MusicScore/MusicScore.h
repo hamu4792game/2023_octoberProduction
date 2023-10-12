@@ -44,7 +44,7 @@ public:
 
 	void SetBPM(float tempo) { 
 		BPM_ = tempo;
-		halfBPM_ = int(BPM_ / 2);
+		beat_ = int(7200 / BPM_);
 	}
 
 private:
@@ -58,9 +58,9 @@ private:
 	//曲のテンポの速さ
 	float BPM_ = 120.0f;
 
-	int halfBPM_ = int(BPM_ / 2);
+	int beat_ = int(7200 / BPM_);
 
-	int countHalfBPM_ = 0;
+	int countBeat_ = 0;
 
 };
 

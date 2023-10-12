@@ -24,6 +24,9 @@ public:
 
 	virtual void Update();
 
+	//判定の更新
+	virtual void UpdateFlag();
+
 	virtual void Draw(const Matrix4x4& viewProjection);
 
 	virtual void ModelLoad(Model* model);
@@ -110,6 +113,8 @@ public:
 
 	void Update() override;
 
+	void UpdateFlag() override;
+
 	void Initialize() override;
 
 	void SetLongNoteType(LongNoteType type) { longNoteType_ = type; }
@@ -134,6 +139,8 @@ public:
 	~NoteDamage() = default;
 
 	void Update() override;
+
+	void UpdateFlag() override;
 
 	void Initialize() override;
 

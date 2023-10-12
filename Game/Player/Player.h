@@ -12,14 +12,6 @@ public:
 	Player();
 	~Player() = default;
 
-	enum MoveVec
-	{
-		Up,
-		Down,
-		Left,
-		Right
-	};
-
 	void Initialize(Vector3 pos);
 
 	void Update(std::vector<Vector3> ControlPoints, int lastLinePass);
@@ -36,8 +28,6 @@ public:
 
 	bool GetIsRelease() { return isRelease_; }
 
-	MoveVec GetMoveVec() { return moveVec_; }
-
 	void SetPosition(Vector3 position) { worldTransform_.translation_ = position; }
 
 	WorldTransform* GetWorldTransformPtr() { return &worldTransform_; }
@@ -49,9 +39,10 @@ private:
 
 	const float kSpeed = 10.0f;
 
-	MoveVec moveVec_ = Right;
-
 	Vector3 velocity_{};
+
+	//内部判定の位置
+	Vector3 insidePos_{};
 
 	//一フレーム前の位置
 	Vector3 prePosition_{};

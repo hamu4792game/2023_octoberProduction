@@ -35,24 +35,50 @@ void MusicScore::Update(std::vector<Vector3> position) {
 
 	});
 
-	if (++countHalfBPM_ >= halfBPM_) {
+	if (++countBeat_ >= beat_) {
 
 		for (Notes* note : notes_) {
 			note->SetSize(1.5f);
 		}
 
-		countHalfBPM_ = 0;
+		countBeat_ = 0;
 
 	}
 
-	for (Notes* note : notes_) {
+	//判定更新
+	{
 
-		if (&position[note->GetNumber()]) {
-			note->SetPosition(position[note->GetNumber()]);
+		//全てのノーツの最小距離
+		float minDistance = 30.0f;
+
+		//どのノーツと当たり判定を取るのか管理する変数
+		uint32_t updateNumber = -1;
+
+		for (Notes* note : notes_) {
+
+			if (Distance(note->GetPosition(), player_->GetPosition()) < minDistance) {
+				updateNumber = note->GetNumber();
+				minDistance = Distance(note->GetPosition(), player_->GetPosition());
+			}
+
 		}
 
-		note->Update();
+		for (Notes* note : notes_) {
+
+			if (&position[note->GetNumber()]) {
+				note->SetPosition(position[note->GetNumber()]);
+			}
+
+			if (note->GetNumber() == updateNumber) {
+				note->UpdateFlag();
+			}
+
+			note->Update();
+		}
+
 	}
+
+	
 
 }
 
