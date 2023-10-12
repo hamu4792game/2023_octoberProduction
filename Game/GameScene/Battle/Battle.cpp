@@ -55,8 +55,10 @@ void Battle::Initialize()
 void Battle::Update()
 {
 
-	if (musicScore_->IsEmpty()) {
+	if (--countMeasure_ <= 0) {
 		musicScore_->SetNotes(MusicScore::Easy_01, makeCatmull_->GetControlPoints());
+		player_->SetDivisionNumber(float(maxCountMeasure_ / float(makeCatmull_->GetControlPoints().size()) / 10.0f));
+		countMeasure_ = maxCountMeasure_;
 	}
 
 	player_->Update(makeCatmull_->GetControlPoints(),makeCatmull_->GetLastLinePass());

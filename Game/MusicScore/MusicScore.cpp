@@ -48,24 +48,24 @@ void MusicScore::Update(std::vector<Vector3> position) {
 	//判定更新
 	{
 
-		//全てのノーツの最小距離
-		float minDistance = 30.0f;
+		//
+		float nearFrame = 20.0f;
 
 		//どのノーツと当たり判定を取るのか管理する変数
 		uint32_t updateNumber = -1;
 
 		for (Notes* note : notes_) {
 
-			if (Distance(note->GetPosition(), player_->GetPosition()) < minDistance) {
+			if (fabsf(note->GetJudgeFrame()) < nearFrame) {
 				updateNumber = note->GetNumber();
-				minDistance = Distance(note->GetPosition(), player_->GetPosition());
+				nearFrame = fabsf(note->GetJudgeFrame());
 			}
 
 		}
 
 		for (Notes* note : notes_) {
 
-			if (&position[note->GetNumber()]) {
+			if (position.size() > note->GetNumber()) {
 				note->SetPosition(position[note->GetNumber()]);
 			}
 
@@ -99,45 +99,56 @@ void MusicScore::SetNotes(ScoreType type, std::vector<Vector3> position) {
 
 	});
 
+	float judgeLine;
+
+	if (position.size() != 0) {
+		judgeLine = float(maxCountMeasure_ / float(position.size()));
+	}
+	else {
+		judgeLine = float(maxCountMeasure_);
+	}
+
+	
+
 	switch (type)
 	{
 	case MusicScore::Easy_01:
 
-		for (int i = 0; i < kMaxNotes; i++) {
+		for (int i = 0; i < position.size(); i++) {
 
 			//要素がある場合に処理
 			if (&position[i]) {
 
-				if (i >= 1 && i <= 3 && i != 2) {
+				if (i != 0 && i % 4 == 0 && i != 8) {
 
-					SetNoteNormal(position[i], i);
+					SetNoteNormal(position[i], i, judgeLine * i);
 
 				}
-				else if (i == 4) {
+				/*else if (i == 4) {
 
-					SetNoteLStart(position[i], i);
+					SetNoteLStart(position[i], i, judgeLine * i);
 
 				}
 				else if (i == 8) {
 
-					SetNoteLEnd(position[i], i);
+					SetNoteLEnd(position[i], i, judgeLine * i);
 
 				}
 				else if (i == 10) {
 
-					SetNoteLStart(position[i], i);
+					SetNoteLStart(position[i], i, judgeLine * i);
 
 				}
 				else if (i == 12) {
 
-					SetNoteLEnd(position[i], i);
+					SetNoteLEnd(position[i], i, judgeLine * i);
 
 				}
 				else if (i == 14) {
 
-					SetNoteDamage(position[i], i);
+					SetNoteDamage(position[i], i, judgeLine * i);
 
-				}
+				}*/
 
 			}
 
@@ -156,7 +167,7 @@ void MusicScore::ModelLoad(std::vector<Model*> models) {
 
 }
 
-void MusicScore::SetNoteNormal(const Vector3& position, uint32_t num) {
+void MusicScore::SetNoteNormal(const Vector3& position, uint32_t num, float judgeline) {
 
 	NoteNormal* newNote = new NoteNormal();
 	newNote->ModelLoad(notesModels_[0]);
@@ -164,11 +175,12 @@ void MusicScore::SetNoteNormal(const Vector3& position, uint32_t num) {
 	newNote->SetPlayer(player_);
 	newNote->SetPosition(position);
 	newNote->SetNumber(num);
+	newNote->SetJudgeFrame(judgeline);
 	notes_.push_back(newNote);
 
 }
 
-void MusicScore::SetNoteLStart(const Vector3& position, uint32_t num) {
+void MusicScore::SetNoteLStart(const Vector3& position, uint32_t num, float judgeline) {
 
 	NoteLong* newNote = new NoteLong();
 	newNote->ModelLoad(notesModels_[1]);
@@ -177,11 +189,12 @@ void MusicScore::SetNoteLStart(const Vector3& position, uint32_t num) {
 	newNote->SetPlayer(player_);
 	newNote->SetPosition(position);
 	newNote->SetNumber(num);
+	newNote->SetJudgeFrame(judgeline);
 	notes_.push_back(newNote);
 
 }
 
-void MusicScore::SetNoteLEnd(const Vector3& position, uint32_t num) {
+void MusicScore::SetNoteLEnd(const Vector3& position, uint32_t num, float judgeline) {
 
 	NoteLong* newNote = new NoteLong();
 	newNote->ModelLoad(notesModels_[1]);
@@ -190,11 +203,12 @@ void MusicScore::SetNoteLEnd(const Vector3& position, uint32_t num) {
 	newNote->SetPlayer(player_);
 	newNote->SetPosition(position);
 	newNote->SetNumber(num);
+	newNote->SetJudgeFrame(judgeline);
 	notes_.push_back(newNote);
 
 }
 
-void MusicScore::SetNoteDamage(const Vector3& position, uint32_t num) {
+void MusicScore::SetNoteDamage(const Vector3& position, uint32_t num, float judgeline) {
 
 	NoteDamage* newNote = new NoteDamage();
 	newNote->ModelLoad(notesModels_[2]);
@@ -202,6 +216,7 @@ void MusicScore::SetNoteDamage(const Vector3& position, uint32_t num) {
 	newNote->SetPlayer(player_);
 	newNote->SetPosition(position);
 	newNote->SetNumber(num);
+	newNote->SetJudgeFrame(judgeline);
 	notes_.push_back(newNote);
 
 }

@@ -35,6 +35,22 @@ public:
 	//移動方向から向きを計算する
 	void SetRotate(Vector3 velocity);
 
+	Vector3 GetInsidePosition() { return worldTransformInside_.translation_; }
+
+	void SetInsidePosition(const Vector3& position) {
+		worldTransformInside_.translation_ = position;
+		worldTransformInside_.UpdateMatrix();
+	}
+
+	bool GetIsMove() { return isMove; }
+
+	int GetLinePass() { return linePass; }
+
+	//加算値の変更
+	void SetAddPoint(float x) { addPoint_ = x; }
+
+	void SetDivisionNumber(float x) { divisionNumber = x; }
+
 private:
 
 	const float kSpeed = 10.0f;
@@ -53,6 +69,9 @@ private:
 	WorldTransform worldTransform_;
 	WorldTransform worldTransformArrow_;
 
+	//内部判定用のワールドトランスフォーム
+	WorldTransform worldTransformInside_;
+
 	//キーを押した瞬間
 	bool isTap_ = false;
 
@@ -63,8 +82,10 @@ private:
 	bool isRelease_ = false;
 
 	//線上移動用変数群
-	const uint32_t divisionNumber = 2;
+	float divisionNumber = 0.75f;
 	float point = 0.0f;
+	//ポイント加算値
+	float addPoint_ = 0.1f;
 	float t = 0.0f;
 
 	int linePass = 0;

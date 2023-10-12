@@ -52,6 +52,23 @@ public:
 
 	uint32_t GetNumber() { return number_; }
 
+	Vector3 GetInsidePosition() { return worldTransformInside_.translation_; }
+
+	void SetInsidePosition(const Vector3& position) {
+		worldTransformInside_.translation_ = position;
+		worldTransformInside_.UpdateMatrix();
+	}
+
+	void SetBPM(float bpm) {
+		BPM_ = bpm;
+		//4/4拍子の速さ
+		noteSpeed_ = 30.0f / float(3600 / BPM_);
+	}
+
+	void SetJudgeFrame(float frame) { judgeFrame_ = frame; }
+
+	float GetJudgeFrame() { return judgeFrame_; }
+
 protected:
 
 	NoteType type_ = Normal;
@@ -59,6 +76,18 @@ protected:
 	Model* model_ = nullptr;
 
 	WorldTransform worldTransform_;
+
+	//内部判定用のワールドトランスフォーム
+	WorldTransform worldTransformInside_;
+
+	//判定フレーム初期位置
+	float judgeFrame_ = 0.0f;
+
+	//BPM
+	float BPM_ = 120.0f;
+
+	//内部当たり判定のノーツの流れる速度
+	float noteSpeed_ = 0.1f;
 
 	Player* player_;
 

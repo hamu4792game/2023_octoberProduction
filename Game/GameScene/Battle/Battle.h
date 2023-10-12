@@ -30,18 +30,28 @@ public:
 
 	Player* GetPlayer() { return player_.get(); }
 
+	void SetCountMeasure(float bpm){ 
+		maxCountMeasure_ = int(3600 / bpm * 4);
+	}
+
 private:
 
 	std::unique_ptr<Player> player_;
 
+	std::vector<std::unique_ptr<MusicScore>> musicScores_;
+	
 	std::unique_ptr<MusicScore> musicScore_;
 
 	std::unique_ptr<Skydome> skydome_;
 
 	std::vector<Model*> notesModels_;
 
-	
+	float BPM_ = 120.0f;
 
+	//一小節のカウント
+	int maxCountMeasure_ = int(3600 / BPM_ * 4);
+
+	int countMeasure_ = 0;
 
 private:
 	std::vector<std::unique_ptr<Line>> lines_;
@@ -53,4 +63,5 @@ private:
 	std::unique_ptr<AudioInput> drumLoop_;
 
 	Vector3 EndPos;
+
 };

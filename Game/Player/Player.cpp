@@ -12,6 +12,7 @@ void Player::Initialize(Vector3 pos) {
 	isTap_ = false;
 	velocity_ = { 0.0f,0.0f,0.0f };
 	SetPosition(pos);
+	SetInsidePosition({ 0.0f,0.0f,0.0f });
 	prePosition_ = worldTransform_.translation_;
 	worldTransformArrow_.parent_ = &worldTransform_;
 	worldTransformArrow_.translation_.z = 3.0f;
@@ -90,6 +91,7 @@ void Player::Update(std::vector<Vector3> ControlPoints, int lastLinePass) {
 
 	worldTransform_.UpdateMatrix();
 	worldTransformArrow_.UpdateMatrix();
+	worldTransformInside_.UpdateMatrix();
 
 	prePosition_ = worldTransform_.translation_;
 
@@ -99,6 +101,7 @@ void Player::Draw(const Matrix4x4& viewProjection) {
 
 	model_->ModelDraw(worldTransform_, viewProjection, 0xffffffff, model_.get());
 	arrowModel_->ModelDraw(worldTransformArrow_, viewProjection, 0xffffffff, arrowModel_.get());
+	model_->ModelDraw(worldTransformInside_, viewProjection, 0xffffffff, model_.get());
 
 }
 
