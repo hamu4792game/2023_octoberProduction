@@ -14,7 +14,6 @@ decltype(Texture2D::vertexShader) Texture2D::vertexShader;
 decltype(Texture2D::pixelShader) Texture2D::pixelShader;
 
 
-
 Texture2D::~Texture2D()
 {
 	indexResource->Release();
@@ -54,7 +53,7 @@ void Texture2D::Texture(const std::string& filePath, const std::string& vsFileNa
 	vertexShader = GraphicsPipeline::GetInstance()->CreateVSShader(vsFileName);
 	//pixelShader = ShaderManager::GetInstance()->CompileShader(ConvertString(psFileName), L"ps_6_0");
 	pixelShader = GraphicsPipeline::GetInstance()->CreatePSShader(psFileName);
-
+	
 	CreateVertexResource(AnchorPoint::Center);
 
 
@@ -84,7 +83,8 @@ void Texture2D::Texture(const std::string& filePath, const std::string& vsFileNa
 	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[3].Descriptor.ShaderRegister = 2;
 
-	if (!rootSignature)	{
+
+	if (!rootSignature) {
 		rootSignature = GraphicsPipeline::GetInstance()->CreateRootSignature(rootParameter, 4);
 	}
 	for (uint16_t i = 0; i < static_cast<uint16_t>(BlendMode::BlendCount); i++) {
@@ -92,7 +92,6 @@ void Texture2D::Texture(const std::string& filePath, const std::string& vsFileNa
 			graphicsPipelineState[i] = GraphicsPipeline::GetInstance()->CreateGraphicsPipeline(rootSignature.Get(), vertexShader.Get(), pixelShader.Get(), static_cast<BlendMode>(i));
 		}
 	}
-	
 }
 
 void Texture2D::SetAnchorPoint(AnchorPoint anchor)
@@ -213,7 +212,7 @@ void Texture2D::CreateVertexResource(AnchorPoint anchor)
 }
 
 void Texture2D::Draw(Vector2 pos, Vector2 scale, float rotate, Matrix4x4 viewProjectionMat, uint32_t color)
-{
+{	
 	/*ImGui::Begin("a");
 	ImGui::DragFloat2("%0.2f", &cBuffer->pibot.x, 1.0f);
 	ImGui::End();*/
