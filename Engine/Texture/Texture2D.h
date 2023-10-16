@@ -80,6 +80,9 @@ public:
 
 	//BlendMode blend = BlendMode::Normal;
 	//void SetBlend(BlendMode blend_);
+	
+
+
 
 };
 

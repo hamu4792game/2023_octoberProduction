@@ -47,6 +47,7 @@ void Line::Finalize()
 		rootSignature.Reset();
 	}
 }
+
 void Line::CreateVertexResource(Vector3 start, Vector3 end)
 {
 	// 頂点データ

@@ -23,6 +23,7 @@ public:
 	~Model();
 
 	static void Finalize();
+
 public:
 	//	モデルデータ構造体
 	ModelData modelData;
@@ -51,7 +52,7 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap = nullptr;
 
 public:
-
+	
 	/// <summary>
 	/// モデルデータのロード
 	/// </summary>
@@ -63,7 +64,7 @@ public:
 	void Texture(const std::string& filePath, const std::string& vsFileName, const std::string& psFileName, const std::string& texturePath);
 
 private:
-
+	
 	void CreateDescriptor(const std::string& filePath);
 
 	void CreateDescriptor(const std::string& filePath, const std::string& texturePath);

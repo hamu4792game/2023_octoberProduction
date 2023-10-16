@@ -14,7 +14,7 @@ GraphicsPipeline::GraphicsPipeline() {
 	//	CreateGraphicsPipeline(type);
 	//	type = static_cast<BlendMode>(i);
 	//}
-
+	
 }
 
 
