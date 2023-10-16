@@ -14,7 +14,7 @@ class CommandDirectX
 private:
 	//	コンストラクタ等、未定義
 	CommandDirectX() = default;
-	~CommandDirectX();
+	~CommandDirectX() = default;
 private:
 	WinApp* winApp_;
 	int32_t bufferWidth_;

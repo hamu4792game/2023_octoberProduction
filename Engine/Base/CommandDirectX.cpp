@@ -20,10 +20,6 @@
 //	関数の外部宣言
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-CommandDirectX::~CommandDirectX()
-{
-}
-
 CommandDirectX* CommandDirectX::GetInstance()
 {
 	static CommandDirectX instance;
@@ -261,7 +257,7 @@ void CommandDirectX::Finalize()
 	rtvDescriptorHeap->Release();
 
 	peraVB->Release();
-	peraResource->Release();
+	//peraResource->Release();
 	peraRTVHeap->Release();
 	peraSRVHeap->Release();
 
