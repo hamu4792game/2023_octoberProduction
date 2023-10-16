@@ -11,7 +11,7 @@ decltype(Model::vertexShader) Model::vertexShader;
 decltype(Model::pixelShader) Model::pixelShader;
 
 Model::~Model() {
-
+	
 	if (SRVHeap) {
 		SRVHeap->Release();
 		SRVHeap.Reset();
@@ -28,6 +28,7 @@ Model::~Model() {
 		resource[0]->Release();
 		resource[0].Reset();
 	}
+
 }
 
 void Model::Finalize()
@@ -56,7 +57,7 @@ void Model::Texture(const std::string& filePath, const std::string& vsFileName, 
 {
 	//	モデルのロードとデスクリプタヒープの生成
 	CreateDescriptor(filePath);
-
+	
 	//	ピクセルシェーダーのコンパイルがなぜかできないため、緊急措置を行っている
 	//pixelShader = ShaderManager::GetInstance()->CompileShader(ConvertString(psFileName), L"ps_6_0");
 	vertexShader = GraphicsPipeline::GetInstance()->CreateVSShader(vsFileName);
@@ -170,7 +171,7 @@ void Model::CreateDescriptor(const std::string& filePath)
 
 	//	デスクリプタヒープを生成
 	SRVHeap = CreateDescriptorHeap(Engine::GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 10, true);
-
+	
 	//	設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
@@ -213,7 +214,7 @@ void Model::CreateDescriptor(const std::string& filePath, const std::string& tex
 void Model::CreateVertexResource()
 {
 	//	頂点データ
-
+	
 	vertexResource = Engine::CreateBufferResource(Engine::GetDevice(), sizeof(VertexData) * modelData.vertices.size());
 
 	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();

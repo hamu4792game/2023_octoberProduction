@@ -12,6 +12,7 @@ public:
 	~Line();
 
 	static void Finalize();
+
 private:
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
