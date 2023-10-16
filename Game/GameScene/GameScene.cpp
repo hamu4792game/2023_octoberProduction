@@ -3,6 +3,7 @@
 #include "Engine/Input/KeyInput/KeyInput.h"
 #include "Engine/Easing/Ease.h"
 #include <algorithm>
+#include "Game/PartsEnum.h"
 
 GameScene* GameScene::GetInstance()
 {
@@ -31,6 +32,12 @@ void GameScene::Initialize()
 
 	box = std::make_shared<Texture2D>();
 
+	//	主人公のモデルの生成
+	hero_.resize(static_cast<uint8_t>(HeroParts::kMaxCount));
+	for (uint8_t i = 0; i < static_cast<uint8_t>(HeroParts::kMaxCount); i++) {
+		hero_[i] = std::make_shared<Model>();
+	}
+
 	ModelLoad();
 
 	//	音源の生成とセット
@@ -42,17 +49,24 @@ void GameScene::Initialize()
 	////	音量の設定
 	//bgm_->SetVolume(0.2f);
 	
-	//	シーンの生成と初期化
+	//	シーンの生成
 	title = std::make_unique<Title>();
-	title->Initialize();
+	battle = std::make_unique<Battle>(camera);
+
+
+	//	モデルのセット
+	std::vector<Model*> noteModels{ notesModelNormal_.get(), notesModelLong_.get(), notesModelDamage_.get() };
+
 	title->SetModels(model_);
 	title->SetHud(hud_);
 
-	battle = std::make_unique<Battle>();
-	std::vector<Model*> noteModels{ notesModelNormal_.get(), notesModelLong_.get(), notesModelDamage_.get() };
-
 	battle->ModelLoad(noteModels);
+	battle->SetHeroModels(hero_);
+
+	//	シーンの初期化
+	title->Initialize();
 	battle->Initialize();
+
 
 	//	変数の初期化
 	scene = Scene::BATTLE;
@@ -181,6 +195,10 @@ void GameScene::ModelLoad()
 	notesModelNormal_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/normal.png");
 	notesModelLong_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/long.png");
 	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/damage.png");
+
+
+	hero_[static_cast<uint8_t>(HeroParts::Body)]->Texture("Resources/player/body.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	hero_[static_cast<uint8_t>(HeroParts::Head)]->Texture("Resources/player/head.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
 }
 

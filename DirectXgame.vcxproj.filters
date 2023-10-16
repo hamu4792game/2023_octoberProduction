@@ -113,6 +113,15 @@
     <ClCompile Include="Game\Notes\Notes.cpp">
       <Filter>Game\Notes</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Character\BaseCharacter\BaseCharacter.cpp">
+      <Filter>Game\Character\BaseCharacter</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Character\Hero\Hero.cpp">
+      <Filter>Game\Character\Hero</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BattleAnimation\BattleAnimation.cpp">
+      <Filter>Game\BattleAnimation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h">
@@ -239,6 +248,18 @@
     <ClInclude Include="Game\Notes\Notes.h">
       <Filter>Game\Notes</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Character\BaseCharacter\BaseCharacter.h">
+      <Filter>Game\Character\BaseCharacter</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Character\Hero\Hero.h">
+      <Filter>Game\Character\Hero</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BattleAnimation\BattleAnimation.h">
+      <Filter>Game\BattleAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\PartsEnum.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -336,6 +357,18 @@
     </Filter>
     <Filter Include="Game\Notes">
       <UniqueIdentifier>{bb9e414e-3cb0-4b4f-ae0e-f535a10a4854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Character">
+      <UniqueIdentifier>{0f048953-27bd-4041-b2bd-c13e675311aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Character\BaseCharacter">
+      <UniqueIdentifier>{57dce3b4-60a4-4650-9069-ef515a2e85c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Character\Hero">
+      <UniqueIdentifier>{606b99d0-8f1d-4daa-8831-e21d9965950d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\BattleAnimation">
+      <UniqueIdentifier>{5b402d87-23ac-496d-b9d9-be077d15c087}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -75,6 +75,8 @@ private: // モデル変数
 	std::unique_ptr<Model> notesModelDamage_;
 	std::shared_ptr<Texture2D> hud_;
 
+	std::vector<std::shared_ptr<Model>> hero_;
+
 private: // 音源
 	std::unique_ptr<AudioInput> bgm_;
 
