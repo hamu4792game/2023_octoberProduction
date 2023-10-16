@@ -4,6 +4,7 @@
 #include "Engine/Texture/Model.h"
 #include "math/Matrix4x4.h"
 #include <memory>
+#include "Engine/Input/AudioInput/AudioInput.h"
 
 class Player
 {
@@ -51,6 +52,11 @@ public:
 
 	void SetDivisionNumber(float x) { divisionNumber = x; }
 
+	void SetLinePass(int i) {
+		linePass = i;
+		point = 0.0f;
+	}
+
 private:
 
 	const float kSpeed = 10.0f;
@@ -82,7 +88,7 @@ private:
 	bool isRelease_ = false;
 
 	//線上移動用変数群
-	float divisionNumber = 0.75f;
+	float divisionNumber = 0.6f;
 	float point = 0.0f;
 	//ポイント加算値
 	float addPoint_ = 0.1f;
@@ -94,6 +100,8 @@ private:
 	int LastLinePass = 2;
 
 	bool isMove = false;
+
+	std::unique_ptr<AudioInput> SE1_;
 
 public:
 

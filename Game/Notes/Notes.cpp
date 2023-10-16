@@ -48,10 +48,7 @@ void Notes::Update() {
 	}
 
 	//判定フレーム更新
-	if (player_->GetIsMove()) {
-		judgeFrame_ -= 1.0f;
-		worldTransformInside_.translation_.x = judgeFrame_;
-	}
+	worldTransformInside_.translation_.x = judgeFrame_;
 
 	worldTransform_.UpdateMatrix();
 	worldTransformInside_.UpdateMatrix();
@@ -190,10 +187,7 @@ void NoteLong::Update() {
 	}
 
 	//判定フレーム更新
-	if (player_->GetIsMove()) {
-		judgeFrame_ -= 1.0f;
-		worldTransformInside_.translation_.x = judgeFrame_;
-	}
+	worldTransformInside_.translation_.x = judgeFrame_;
 
 	worldTransform_.UpdateMatrix();
 	worldTransformInside_.UpdateMatrix();
@@ -241,10 +235,7 @@ void NoteDamage::Update() {
 	}
 
 	//判定フレーム更新
-	if (player_->GetIsMove()) {
-		judgeFrame_ -= 1.0f;
-		worldTransformInside_.translation_.x = judgeFrame_;
-	}
+	worldTransformInside_.translation_.x = judgeFrame_;
 
 	worldTransform_.UpdateMatrix();
 	worldTransformInside_.UpdateMatrix();

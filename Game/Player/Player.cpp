@@ -5,6 +5,8 @@
 Player::Player() {
 	model_ = std::make_unique<Model>();
 	arrowModel_ = std::make_unique<Model>();
+	SE1_ = std::make_unique<AudioInput>();
+	SE1_->SoundLoadWave("./Resources/loopBGM/tempo.wav");
 }
 
 void Player::Initialize(Vector3 pos) {
@@ -38,6 +40,9 @@ void Player::Update(std::vector<Vector3> ControlPoints, int lastLinePass) {
 	//キーを押した瞬間の判定
 	if (KeyInput::PushKey(DIK_SPACE)) {
 		isTap_ = true;
+		SE1_->SoundStop();
+		SE1_->SoundPlayWave();
+		SE1_->SetVolume(0.2f);
 	}
 	else {
 		isTap_ = false;

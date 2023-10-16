@@ -73,6 +73,9 @@ void MusicScore::Update(std::vector<Vector3> position) {
 				note->UpdateFlag();
 			}
 
+			if (player_->GetIsMove()) {
+				note->MoveJudgeFrame();
+			}
 			note->Update();
 		}
 
@@ -102,7 +105,7 @@ void MusicScore::SetNotes(ScoreType type, std::vector<Vector3> position) {
 	float judgeLine;
 
 	if (position.size() != 0) {
-		judgeLine = float(maxCountMeasure_ / float(position.size()));
+		judgeLine = float(maxCountMeasure_ / float(position.size() - 1));
 	}
 	else {
 		judgeLine = float(maxCountMeasure_);
@@ -114,12 +117,12 @@ void MusicScore::SetNotes(ScoreType type, std::vector<Vector3> position) {
 	{
 	case MusicScore::Easy_01:
 
-		for (int i = 0; i < position.size(); i++) {
+		for (int i = 0; i < position.size() - 1; i++) {
 
 			//要素がある場合に処理
 			if (&position[i]) {
 
-				if (i != 0 && i % 4 == 0 && i != 8) {
+				if (i % 4 == 0) {
 
 					SetNoteNormal(position[i], i, judgeLine * i);
 

@@ -11,7 +11,7 @@ Battle::Battle()
 
 	musicScore_ = std::make_unique<MusicScore>();
 	musicScore_->SetPlayer(player_.get());
-	
+	musicScore_->SetBPM(BPM_);
 	
 	
 
@@ -27,11 +27,11 @@ Battle::Battle()
 	drumLoop_ = std::make_unique<AudioInput>();
 
 	//	ロード
-	drumLoop_->SoundLoadWave("./Resources/loopBGM/drumloop1.wav");
+	drumLoop_->SoundLoadWave("./Resources/loopBGM/drumloop2.wav");
 	//	音の再生
-	drumLoop_->SoundPlayWave(true);
+	
 	//	音量の設定
-	drumLoop_->SetVolume(0.2f);
+	
 
 }
 
@@ -55,10 +55,22 @@ void Battle::Initialize()
 void Battle::Update()
 {
 
-	if (--countMeasure_ <= 0) {
+	if (player_->GetIsMove()) {
+		countMeasure_--;
+	}
+
+	if (countMeasure_ <= 0/* && player_->GetLinePass() == 0*/) {
 		musicScore_->SetNotes(MusicScore::Easy_01, makeCatmull_->GetControlPoints());
-		player_->SetDivisionNumber(float(maxCountMeasure_ / float(makeCatmull_->GetControlPoints().size()) / 10.0f));
-		countMeasure_ = maxCountMeasure_;
+		player_->SetLinePass(0);
+		player_->SetDivisionNumber(float(maxCountMeasure_ / float(makeCatmull_->GetControlPoints().size() - 1) / 10.0f));
+		countMeasure_ = maxCountMeasure_ - 1;
+
+		if (player_->GetIsMove()) {
+			drumLoop_->SoundStop();
+			drumLoop_->SoundPlayWave();
+			drumLoop_->SetVolume(0.2f);
+		}
+		
 	}
 
 	player_->Update(makeCatmull_->GetControlPoints(),makeCatmull_->GetLastLinePass());

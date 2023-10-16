@@ -60,7 +60,7 @@ private:
 	std::vector<Model*> notesModels_;
 
 	//曲のテンポの速さ
-	float BPM_ = 120.0f;
+	float BPM_ = 150.0f;
 
 	int beat_ = int(7200 / BPM_);
 

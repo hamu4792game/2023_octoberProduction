@@ -69,6 +69,8 @@ public:
 
 	float GetJudgeFrame() { return judgeFrame_; }
 
+	void MoveJudgeFrame() { judgeFrame_ -= noteSpeed_; }
+
 protected:
 
 	NoteType type_ = Normal;
@@ -84,10 +86,10 @@ protected:
 	float judgeFrame_ = 0.0f;
 
 	//BPM
-	float BPM_ = 120.0f;
+	float BPM_ = 150.0f;
 
 	//内部当たり判定のノーツの流れる速度
-	float noteSpeed_ = 0.1f;
+	float noteSpeed_ = 1.0f;
 
 	Player* player_;
 

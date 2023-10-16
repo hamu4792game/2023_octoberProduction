@@ -46,7 +46,7 @@ private:
 
 	std::vector<Model*> notesModels_;
 
-	float BPM_ = 120.0f;
+	float BPM_ = 150.0f;
 
 	//一小節のカウント
 	int maxCountMeasure_ = int(3600 / BPM_ * 4);
