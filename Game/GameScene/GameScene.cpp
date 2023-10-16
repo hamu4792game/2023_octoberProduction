@@ -5,14 +5,12 @@
 #include <algorithm>
 #include "Game/PartsEnum.h"
 
-GameScene* GameScene::GetInstance()
-{
+GameScene* GameScene::GetInstance() {
 	static GameScene instance;
 	return &instance;
 }
 
-void GameScene::Initialize()
-{
+void GameScene::Initialize() {
 	//	カメラの読み込みと生成
 	camera = std::make_shared<Camera>(2000.0f, true);
 	camera->transform.translation_.y = 70.0f;
@@ -33,9 +31,14 @@ void GameScene::Initialize()
 	box = std::make_shared<Texture2D>();
 
 	//	主人公のモデルの生成
-	hero_.resize(static_cast<uint8_t>(HeroParts::kMaxCount));
+	heroModel_.resize(static_cast<uint8_t>(HeroParts::kMaxCount));
 	for (uint8_t i = 0; i < static_cast<uint8_t>(HeroParts::kMaxCount); i++) {
-		hero_[i] = std::make_shared<Model>();
+		heroModel_[i] = std::make_shared<Model>();
+	}
+	//	ボスのモデルの生成
+	bossModel_.resize(static_cast<uint8_t>(BossParts::kMaxCount));
+	for (uint8_t i = 0; i < static_cast<uint8_t>(BossParts::kMaxCount); i++) {
+		bossModel_[i] = std::make_shared<Model>();
 	}
 
 	ModelLoad();
@@ -61,7 +64,8 @@ void GameScene::Initialize()
 	title->SetHud(hud_);
 
 	battle->ModelLoad(noteModels);
-	battle->SetHeroModels(hero_);
+	battle->SetHeroModels(heroModel_);
+	battle->SetBossModels(bossModel_);
 
 	//	シーンの初期化
 	title->Initialize();
@@ -74,8 +78,7 @@ void GameScene::Initialize()
 
 }
 
-void GameScene::Update()
-{
+void GameScene::Update() {
 #ifdef _DEBUG
 	ImGui::Begin("camera");
 	ImGui::DragFloat3("translate", &camera->transform.translation_.x, 1.0f);
@@ -88,8 +91,7 @@ void GameScene::Update()
 
 	//	シーン切替わり時の初期化
 	if (oldscene != scene) {
-		switch (scene)
-		{
+		switch (scene) {
 		case GameScene::Scene::TITLE:
 			title->Initialize();
 			camera->transform.translation_.y = 15.0f;
@@ -114,8 +116,7 @@ void GameScene::Update()
 	}
 	oldscene = scene;
 
-	switch (scene)
-	{
+	switch (scene) {
 	case GameScene::Scene::TITLE:
 		title->Update();
 		break;
@@ -141,12 +142,10 @@ void GameScene::Update()
 
 }
 
-void GameScene::Draw()
-{
+void GameScene::Draw() {
 
 	//	3D描画
-	switch (scene)
-	{
+	switch (scene) {
 	case GameScene::Scene::TITLE:
 		title->Draw3D(viewProjectionMatrix);
 		break;
@@ -158,8 +157,7 @@ void GameScene::Draw()
 	}
 
 	//	2D描画
-	switch (scene)
-	{
+	switch (scene) {
 	case GameScene::Scene::TITLE:
 		title->Draw2D(viewProjectionMatrix2d);
 		break;
@@ -176,16 +174,14 @@ void GameScene::Draw()
 
 }
 
-void GameScene::Finalize()
-{
+void GameScene::Finalize() {
 	Line::Finalize();
 	Model::Finalize();
 	Texture2D::Finalize();
 }
 
 
-void GameScene::ModelLoad()
-{
+void GameScene::ModelLoad() {
 	model_->Texture("Resources/eatRamen/eatRamen.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	hud_->Texture("Resources/uvChecker.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
@@ -197,14 +193,16 @@ void GameScene::ModelLoad()
 	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/damage.png");
 
 
-	hero_[static_cast<uint8_t>(HeroParts::Body)]->Texture("Resources/player/body.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
-	hero_[static_cast<uint8_t>(HeroParts::Head)]->Texture("Resources/player/head.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	heroModel_[static_cast<uint8_t>(HeroParts::Body)]->Texture("Resources/player/body.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	heroModel_[static_cast<uint8_t>(HeroParts::Head)]->Texture("Resources/player/head.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+
+	bossModel_[static_cast<uint8_t>(BossParts::Body)]->Texture("Resources/player/body.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	bossModel_[static_cast<uint8_t>(BossParts::Head)]->Texture("Resources/player/head.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
 }
 
 
-void GameScene::SceneChange()
-{
+void GameScene::SceneChange() {
 	//80
 	boxtransform.rotation_.z += AngleToRadian(15.0f);
 	easeNum += 0.02f;

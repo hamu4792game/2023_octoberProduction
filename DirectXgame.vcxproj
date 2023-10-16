@@ -126,6 +126,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Game\BattleAnimation\BattleAnimation.cpp" />
     <ClCompile Include="Game\Character\BaseCharacter\BaseCharacter.cpp" />
+    <ClCompile Include="Game\Character\Boss\Boss.cpp" />
     <ClCompile Include="Game\Character\Hero\Hero.cpp" />
     <ClCompile Include="Game\GameScene\Battle\Battle.cpp" />
     <ClCompile Include="Game\GameScene\GameScene.cpp" />
@@ -173,6 +174,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
     <ClInclude Include="Game\BattleAnimation\BattleAnimation.h" />
     <ClInclude Include="Game\Character\BaseCharacter\BaseCharacter.h" />
+    <ClInclude Include="Game\Character\Boss\Boss.h" />
     <ClInclude Include="Game\Character\Hero\Hero.h" />
     <ClInclude Include="Game\GameScene\Battle\Battle.h" />
     <ClInclude Include="Game\GameScene\GameScene.h" />

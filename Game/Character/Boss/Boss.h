@@ -1,11 +1,11 @@
 #pragma once
 #include "Game/Character/BaseCharacter/BaseCharacter.h"
 
-class Hero : public BaseCharacter
+class Boss : public BaseCharacter
 {
 public:
-	Hero() = default;
-	~Hero() = default;
+	Boss() = default;
+	~Boss() = default;
 
 	void Initialize() override;
 
