@@ -1,6 +1,6 @@
 #include "Battle.h"
 
-Battle::Battle()
+Battle::Battle(std::shared_ptr<Camera> camera)
 {
 
 	player_ = std::make_unique<Player>();
@@ -20,8 +20,7 @@ Battle::Battle()
 	makeCatmull_->Initialize();
 
 	
-
-
+	battleAnimation_ = std::make_unique<BattleAnimation>(camera);
 	
 
 	drumLoop_ = std::make_unique<AudioInput>();
@@ -48,7 +47,8 @@ void Battle::Initialize()
 	player_->Initialize(makeCatmull_->GetFirstControlPoint());
 	musicScore_->Initialize();
 
-	
+	battleAnimation_->Initialize();
+
 
 }
 
@@ -75,24 +75,26 @@ void Battle::Update()
 	}
 
 	//makeCatmull_->Update();
+	battleAnimation_->Update();
 
 }
 
 void Battle::Draw3D(const Matrix4x4& viewProjection)
 {
 
-	skydome_->Draw(viewProjection);
+	//skydome_->Draw(viewProjection);
 
-	player_->Draw(viewProjection);
+	//player_->Draw(viewProjection);
 
-	musicScore_->Draw(viewProjection);
+	//musicScore_->Draw(viewProjection);
 
-	makeCatmull_->Draw(viewProjection);
+	//makeCatmull_->Draw(viewProjection);
 
 	for (size_t i = 0; i < lines_.size(); i++){
 		lines_[i]->DrawLine(ControlPoints_[i] - EndPos, ControlPoints_[i] + EndPos, viewProjection, 0xff0000ff);
 	}
 
+	battleAnimation_->Draw3D(viewProjection);
 }
 
 void Battle::Draw2D(const Matrix4x4& viewProjection){
