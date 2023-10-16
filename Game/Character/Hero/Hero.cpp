@@ -2,18 +2,15 @@
 #include "Game/PartsEnum.h"
 #include "externals/imgui/imgui.h"
 
-Hero::Hero() {
-}
-
-void Hero::Initialize()
-{
+void Hero::Initialize() {
 	partsTransform_.resize(parts_.size());
 	partsTransform_[static_cast<uint8_t>(HeroParts::Body)].parent_ = &transform_;
 	for (int8_t i = static_cast<uint8_t>(HeroParts::Body) + 1; i < static_cast<uint8_t>(HeroParts::kMaxCount); i++)	{
 		partsTransform_[i].parent_ = &partsTransform_[static_cast<uint8_t>(HeroParts::Body)];
 	}
 
-	transform_.translation_.z = -80.0f;
+	transform_.translation_ = Vector3(-3.0f, 12.0f, -85.0f);
+	partsTransform_[static_cast<uint8_t>(HeroParts::Head)].translation_.y = 2.0f;
 }
 
 void Hero::Update() {

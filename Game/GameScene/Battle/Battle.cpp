@@ -40,8 +40,7 @@ Battle::~Battle() {
 
 }
 
-void Battle::Initialize()
-{
+void Battle::Initialize() {
 	EndPos = { 0.0f,2.0f,0.0f };
 
 	player_->Initialize(makeCatmull_->GetFirstControlPoint());
@@ -52,8 +51,7 @@ void Battle::Initialize()
 
 }
 
-void Battle::Update()
-{
+void Battle::Update() {
 
 	if (--countMeasure_ <= 0) {
 		musicScore_->SetNotes(MusicScore::Easy_01, makeCatmull_->GetControlPoints());
@@ -79,10 +77,9 @@ void Battle::Update()
 
 }
 
-void Battle::Draw3D(const Matrix4x4& viewProjection)
-{
+void Battle::Draw3D(const Matrix4x4& viewProjection) {
 
-	//skydome_->Draw(viewProjection);
+	skydome_->Draw(viewProjection);
 
 	//player_->Draw(viewProjection);
 
@@ -90,14 +87,14 @@ void Battle::Draw3D(const Matrix4x4& viewProjection)
 
 	//makeCatmull_->Draw(viewProjection);
 
-	for (size_t i = 0; i < lines_.size(); i++){
-		lines_[i]->DrawLine(ControlPoints_[i] - EndPos, ControlPoints_[i] + EndPos, viewProjection, 0xff0000ff);
-	}
+	//for (size_t i = 0; i < lines_.size(); i++){
+	//	lines_[i]->DrawLine(ControlPoints_[i] - EndPos, ControlPoints_[i] + EndPos, viewProjection, 0xff0000ff);
+	//}
 
 	battleAnimation_->Draw3D(viewProjection);
 }
 
-void Battle::Draw2D(const Matrix4x4& viewProjection){
+void Battle::Draw2D(const Matrix4x4& viewProjection) {
 
 }
 
