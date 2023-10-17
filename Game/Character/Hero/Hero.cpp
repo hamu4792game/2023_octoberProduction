@@ -96,6 +96,8 @@ void Hero::Update() {
 
 	ImGui::End();
 
+	transform_.translation_.z += 1.0f;
+
 	//	座標更新
 	transform_.UpdateMatrix();
 	for (uint8_t i = 0; i < partsTransform_.size(); i++) {
