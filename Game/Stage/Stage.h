@@ -1,5 +1,6 @@
 #pragma once
 #include "math/Matrix4x4.h"
+#include "Engine/Texture/Model.h"
 
 class Stage
 {
@@ -13,6 +14,9 @@ public:
 
 	void ModelLoad();
 
-private:
+private: // モデルデータ
+	std::vector<std::shared_ptr<Model>> buildings;
+
+	std::vector<WorldTransform> transforms_;
 
 };
