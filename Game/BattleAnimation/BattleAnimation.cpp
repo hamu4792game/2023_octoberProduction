@@ -1,4 +1,5 @@
 #include "BattleAnimation.h"
+#include "externals/imgui/imgui.h"
 
 BattleAnimation::BattleAnimation(std::shared_ptr<Camera> camera) {
 	camera_ = camera;
@@ -22,7 +23,7 @@ void BattleAnimation::Initialize() {
 	stageCount = 0u;
 
 	stage_.clear();
-	for (uint8_t i = 0; i < 3; i++) {
+	for (uint8_t i = 0; i < 4; i++) {
 		stage_.push_back(std::make_unique<Stage>(stageModel_));
 		// 逆イテレーター z軸ステージサイズ * ステージの数
 		(*stage_.rbegin())->Initialize(Vector3(0.0f, 0.0f, 140.0f * stageCount));
@@ -37,6 +38,25 @@ void BattleAnimation::Update() {
 	for (auto& i : stage_) {
 		i->Update();
 	}
+
+	// ステージの先頭要素と主人公のベクトルを取得
+	Vector3 dis = FindVector(hero_->GetTransform().translation_, stage_.front()->GetTransform().translation_);
+	ImGui::Begin("Distance");
+	ImGui::Text("%f", dis.z);
+	ImGui::End();
+	// z軸が指定以上離れている(見えなくなる)場合
+	if (dis.z <= -80.0f) {
+		// 先頭要素を除外する
+		stage_.pop_front();
+		// 末尾にステージ要素を追加する
+		stage_.push_back(std::make_unique<Stage>(stageModel_));
+		// 逆イテレーター z軸ステージサイズ * ステージの数
+		(*stage_.rbegin())->Initialize(Vector3(0.0f, 0.0f, 140.0f * stageCount));
+		stageCount++;
+	}
+
+
+
 }
 
 void BattleAnimation::Draw3D(const Matrix4x4& viewProjectionMat) {

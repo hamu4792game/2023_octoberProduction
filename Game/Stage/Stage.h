@@ -18,6 +18,8 @@ public:
 
 	void Draw3D(const Matrix4x4& viewProjectionMat);
 
+	const WorldTransform& GetTransform() { return worldTrans_; }
+
 private: // モデルデータ
 	std::vector<std::shared_ptr<Model>> models_;
 
