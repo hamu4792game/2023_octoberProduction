@@ -9,6 +9,8 @@
 #include "Game/GameScene/Title/Title.h"
 #include "Game/GameScene/Battle/Battle.h"
 
+#include "Game/Stage/Stage.h"
+
 #include<vector>
 
 class GameScene
@@ -68,12 +70,17 @@ private: // メンバ関数
 	bool flag = false;
 	void SceneChange();
 
+private: // ステージの生成
+	std::shared_ptr<Stage> stage_;
+
 private: // モデル変数
 	std::shared_ptr<Model> model_;
 	std::unique_ptr<Model> notesModelNormal_;
 	std::unique_ptr<Model> notesModelLong_;
 	std::unique_ptr<Model> notesModelDamage_;
 	std::shared_ptr<Texture2D> hud_;
+
+	std::shared_ptr<Model> boxModel_;
 
 	//	主人公のモデル
 	std::vector<std::shared_ptr<Model>> heroModel_;

@@ -30,6 +30,8 @@ void GameScene::Initialize() {
 
 	box = std::make_shared<Texture2D>();
 
+	boxModel_ = std::make_shared<Model>();
+
 	//	主人公のモデルの生成
 	heroModel_.resize(static_cast<uint8_t>(HeroParts::kMaxCount));
 	for (uint8_t i = 0; i < static_cast<uint8_t>(HeroParts::kMaxCount); i++) {
@@ -41,6 +43,10 @@ void GameScene::Initialize() {
 		bossModel_[i] = std::make_shared<Model>();
 	}
 
+	//	ステージの生成
+	stage_ = std::make_shared<Stage>();
+	
+	//	モデルのロード
 	ModelLoad();
 
 	//	音源の生成とセット
@@ -192,6 +198,7 @@ void GameScene::ModelLoad() {
 	notesModelLong_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/long.png");
 	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/damage.png");
 
+	boxModel_->Texture("Resources/box/box.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
 
 	heroModel_[static_cast<uint8_t>(HeroParts::Body)]->Texture("Resources/player/body.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/player/body.png");
 	heroModel_[static_cast<uint8_t>(HeroParts::Head)]->Texture("Resources/player/head.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
@@ -216,6 +223,9 @@ void GameScene::ModelLoad() {
 	bossModel_[static_cast<uint8_t>(HeroParts::LeftUpperLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
 	bossModel_[static_cast<uint8_t>(HeroParts::RightBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
 	bossModel_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+
+	//	ステージモデルのロード
+	stage_->ModelLoad();
 
 }
 
