@@ -193,11 +193,29 @@ void GameScene::ModelLoad() {
 	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/damage.png");
 
 
-	heroModel_[static_cast<uint8_t>(HeroParts::Body)]->Texture("Resources/player/body.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	heroModel_[static_cast<uint8_t>(HeroParts::Body)]->Texture("Resources/player/body.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "player/body.png");
 	heroModel_[static_cast<uint8_t>(HeroParts::Head)]->Texture("Resources/player/head.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	heroModel_[static_cast<uint8_t>(HeroParts::Waist)]->Texture("Resources/player/waist.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "player/leg.png");
+	heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)]->Texture("Resources/player/legs.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	heroModel_[static_cast<uint8_t>(HeroParts::LeftUpperArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	heroModel_[static_cast<uint8_t>(HeroParts::RightBottomArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	heroModel_[static_cast<uint8_t>(HeroParts::LeftBottomArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	heroModel_[static_cast<uint8_t>(HeroParts::RightUpperLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	heroModel_[static_cast<uint8_t>(HeroParts::LeftUpperLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	heroModel_[static_cast<uint8_t>(HeroParts::RightBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	heroModel_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
 
-	bossModel_[static_cast<uint8_t>(BossParts::Body)]->Texture("Resources/player/body.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
-	bossModel_[static_cast<uint8_t>(BossParts::Head)]->Texture("Resources/player/head.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	bossModel_[static_cast<uint8_t>(BossParts::Body)] = heroModel_[static_cast<uint8_t>(HeroParts::Body)];
+	bossModel_[static_cast<uint8_t>(BossParts::Head)] = heroModel_[static_cast<uint8_t>(HeroParts::Head)];
+	bossModel_[static_cast<uint8_t>(HeroParts::Waist)] = heroModel_[static_cast<uint8_t>(HeroParts::Waist)];
+	bossModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::LeftUpperArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::RightBottomArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::LeftBottomArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::RightUpperLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::LeftUpperLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::RightBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
 
 }
 
