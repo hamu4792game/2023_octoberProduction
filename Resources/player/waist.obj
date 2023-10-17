@@ -1,6 +1,6 @@
 # Blender v3.5.0 OBJ File: 'charaModel.blend'
 # www.blender.org
-mtllib player/waist.mtl
+mtllib waist.mtl
 o 腰_立方体.001
 v 0.000000 -1.380000 0.001099
 v 1.000000 0.005705 -1.000000

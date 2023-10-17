@@ -107,8 +107,8 @@ void Player::Draw(const Matrix4x4& viewProjection) {
 
 void Player::ModelLoad() {
 
-	model_->Texture("Resources/player/player.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "player/player.png");
-	arrowModel_->Texture("Resources/arrow/arrow.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "player/player.png");
+	model_->Texture("Resources/player/player.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/player/player.png");
+	arrowModel_->Texture("Resources/arrow/arrow.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/player/player.png");
 }
 
 void Player::SetRotate(Vector3 velocity) {
