@@ -7,13 +7,13 @@ enum class HeroParts {
 
 	RightUpperArm,	// 右上腕
 	LeftUpperArm,	// 左上腕
-	RightLastArm,	// 右下腕
-	LeftLastArm,	// 左下腕
+	RightBottomArm,	// 右下腕
+	LeftBottomArm,	// 左下腕
 
 	RightUpperLeg,	// 右上脚
 	LeftUpperLeg,	// 左上脚
-	RightLastLeg,	// 右下脚
-	LeftLastLeg,	// 左下脚
+	RightBottomLeg,	// 右下脚
+	LeftBottomLeg,	// 左下脚
 
 	kMaxCount // 最大数用
 };
@@ -25,13 +25,13 @@ enum class BossParts {
 
 	RightUpperArm,	// 右上腕
 	LeftUpperArm,	// 左上腕
-	RightLastArm,	// 右下腕
-	LeftLastArm,	// 左下腕
+	RightBottomArm,	// 右下腕
+	LeftBottomArm,	// 左下腕
 
 	RightUpperLeg,	// 右上脚
 	LeftUpperLeg,	// 左上脚
-	RightLastLeg,	// 右下脚
-	LeftLastLeg,	// 左下脚
+	RightBottomLeg,	// 右下脚
+	LeftBottomLeg,	// 左下脚
 
 	kMaxCount // 最大数用
 };
