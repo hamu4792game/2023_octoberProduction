@@ -63,6 +63,7 @@ void Battle::Update()
 		musicScore_->SetNotes(MusicScore::Easy_01, makeCatmull_->GetControlPoints());
 		player_->SetLinePass(0);
 		player_->SetDivisionNumber(float(maxCountMeasure_ / float(makeCatmull_->GetControlPoints().size() - 1) / 10.0f));
+		//-1を付けるとズレが無くなるのでおまじないで付けてる
 		countMeasure_ = maxCountMeasure_ - 1;
 
 		if (player_->GetIsMove()) {
