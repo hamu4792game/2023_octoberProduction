@@ -43,8 +43,10 @@ void GameScene::Initialize() {
 		bossModel_[i] = std::make_shared<Model>();
 	}
 
-	//	ステージの生成
-	stage_ = std::make_shared<Stage>();
+	//	ステージモデルの生成
+	for (uint8_t i = 0; i < 6; i++) {
+		stageModel_.push_back(std::make_shared<Model>());
+	}
 	
 	//	モデルのロード
 	ModelLoad();
@@ -72,6 +74,7 @@ void GameScene::Initialize() {
 	battle->ModelLoad(noteModels);
 	battle->SetHeroModels(heroModel_);
 	battle->SetBossModels(bossModel_);
+	battle->SetStageModels(stageModel_);
 
 	//	シーンの初期化
 	title->Initialize();
@@ -99,22 +102,15 @@ void GameScene::Update() {
 	if (oldscene != scene) {
 		switch (scene) {
 		case GameScene::Scene::TITLE:
+			camera->SetParent(nullptr);
 			title->Initialize();
 			camera->transform.translation_.y = 15.0f;
 			camera->transform.translation_.z = -100.0f;
 			camera->transform.rotation_ = { 0.0f,0.0f,0.0f };
-			camera->SetParent(nullptr);
 			break;
 		case GameScene::Scene::BATTLE:
-			/*battle->Initialize();
-			camera->transform.translation_.y = 70.0f;
-			camera->transform.translation_.z = -40.0f;
-			camera->transform.rotation_ = { 1.0f,0.0f,0.0f };
-			camera->SetParent(battle->GetPlayer()->GetWorldTransformPtr());*/
-			camera->transform.translation_.y = 15.0f;
-			camera->transform.translation_.z = -100.0f;
-			camera->transform.rotation_ = { 0.0f,0.0f,0.0f };
 			camera->SetParent(nullptr);
+			battle->Initialize();
 			break;
 		case GameScene::Scene::RESULT:
 			break;
@@ -224,8 +220,13 @@ void GameScene::ModelLoad() {
 	bossModel_[static_cast<uint8_t>(HeroParts::RightBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
 	bossModel_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
 
-	//	ステージモデルのロード
-	stage_->ModelLoad();
+	//	ステージモデル
+	stageModel_[0]->Texture("Resources/plane/plane.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
+	stageModel_[1]->Texture("Resources/box/box.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
+	stageModel_[2] = stageModel_[1];
+	stageModel_[3] = stageModel_[1];
+	stageModel_[4] = stageModel_[1];
+	stageModel_[5] = stageModel_[1];
 
 }
 
