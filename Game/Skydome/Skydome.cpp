@@ -24,7 +24,7 @@ void Skydome::Initialize()
 
 void Skydome::ModelLoad()
 {
-	skydome->Texture("Resources/skydome/skydome.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "skydome/skydome.png");
+	skydome->Texture("Resources/skydome/skydome.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/skydome/skydome.png");
 }
 
 void Skydome::Draw(const Matrix4x4& viewProjection)

@@ -1,6 +1,6 @@
 # Blender v3.5.0 OBJ File: 'player.blend'
 # www.blender.org
-mtllib player/head.mtl
+mtllib head.mtl
 o 頭_立方体.009
 v 0.394527 0.331238 -0.000176
 v 0.394527 0.990492 -0.000176

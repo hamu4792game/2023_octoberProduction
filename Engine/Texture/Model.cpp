@@ -181,7 +181,7 @@ void Model::CreateDescriptor(const std::string& filePath)
 	//	モデル読み込み
 	modelData = TextureManager::LoadObjFile(filePath);
 
-	DirectX::ScratchImage mipImages = TextureManager::LoadTexture("./Resources/" + modelData.material.textureFilePath);
+	DirectX::ScratchImage mipImages = TextureManager::LoadTexture(modelData.material.textureFilePath);
 	//DirectX::ScratchImage mipImages = TextureManager::LoadTexture("./Resources/uvChecker.png");
 	const DirectX::TexMetadata& metaData = mipImages.GetMetadata();
 	resource[0] = Engine::CreateTextureResource(Engine::GetDevice(), metaData);
@@ -209,7 +209,7 @@ void Model::CreateDescriptor(const std::string& filePath, const std::string& tex
 	//	モデル読み込み
 	modelData = TextureManager::LoadObjFile(filePath);
 
-	DirectX::ScratchImage mipImages = TextureManager::LoadTexture("./Resources/" + texturePath);
+	DirectX::ScratchImage mipImages = TextureManager::LoadTexture(texturePath);
 	//DirectX::ScratchImage mipImages = TextureManager::LoadTexture("./Resources/uvChecker.png");
 	const DirectX::TexMetadata& metaData = mipImages.GetMetadata();
 	resource[0] = Engine::CreateTextureResource(Engine::GetDevice(), metaData);

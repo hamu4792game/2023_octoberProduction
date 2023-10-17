@@ -1,6 +1,6 @@
 # Blender v3.5.0 OBJ File: 'charaModel.blend'
 # www.blender.org
-mtllib player/body.mtl
+mtllib body.mtl
 o 体_立方体
 v 1.000000 0.000000 -1.000000
 v 1.000000 2.000000 -1.000000

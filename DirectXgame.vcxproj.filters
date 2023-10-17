@@ -125,6 +125,9 @@
     <ClCompile Include="Game\Character\Boss\Boss.cpp">
       <Filter>Game\Character\Boss</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Stage\Stage.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h">
@@ -266,6 +269,9 @@
     <ClInclude Include="Game\Character\Boss\Boss.h">
       <Filter>Game\Character\Boss</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Stage\Stage.h">
+      <Filter>Game\Stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -378,6 +384,9 @@
     </Filter>
     <Filter Include="Game\Character\Boss">
       <UniqueIdentifier>{b75deacc-5b55-41b2-8cf2-c8cea640cd29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Stage">
+      <UniqueIdentifier>{58db2fa4-d841-495c-a353-4f5be3190f65}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
