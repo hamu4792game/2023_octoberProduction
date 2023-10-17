@@ -18,6 +18,8 @@ public:
 
 	void SetModel(std::vector<std::shared_ptr<Model>> model) { parts_ = model; };
 
+	const WorldTransform& GetTransform() { return transform_; }
+
 protected:
 	
 	//	中心座標

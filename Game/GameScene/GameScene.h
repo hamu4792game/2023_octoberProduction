@@ -70,9 +70,6 @@ private: // メンバ関数
 	bool flag = false;
 	void SceneChange();
 
-private: // ステージの生成
-	std::shared_ptr<Stage> stage_;
-
 private: // モデル変数
 	std::shared_ptr<Model> model_;
 	std::unique_ptr<Model> notesModelNormal_;
@@ -86,6 +83,8 @@ private: // モデル変数
 	std::vector<std::shared_ptr<Model>> heroModel_;
 	//	ボスのモデル
 	std::vector<std::shared_ptr<Model>> bossModel_;
+	//	ステージ用のモデル
+	std::vector<std::shared_ptr<Model>> stageModel_;
 
 private: // 音源
 	std::unique_ptr<AudioInput> bgm_;

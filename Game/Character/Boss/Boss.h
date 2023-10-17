@@ -11,6 +11,8 @@ public:
 
 	void Update() override;
 
+	void SetParent(const WorldTransform* parent) { transform_.parent_ = parent; }
+
 private:
 
 };
