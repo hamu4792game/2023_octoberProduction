@@ -38,9 +38,7 @@ public:
 
 	void SetPosition(const Vector3& position) { 
 		worldTransform_.translation_ = position;
-		worldTransformLine_.translation_ = position;
 		worldTransform_.UpdateMatrix();
-		worldTransformLine_.UpdateMatrix();
 	}
 
 	void SetPlayer(Player* player) { player_ = player; }

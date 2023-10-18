@@ -48,7 +48,9 @@ void Battle::Initialize() {
 
 	//battleAnimation_->Initialize();
 
+	worldTransformLine_.scale_ = { 1.0f,1.0f,1.0f };
 	worldTransformLine_.scale_ *= 5.0f;
+	worldTransformLine_.translation_.y = 10.0f;
 
 }
 
@@ -88,6 +90,8 @@ void Battle::Update() {
 
 	//makeCatmull_->Update();
 	//battleAnimation_->Update();
+
+	worldTransformLine_.UpdateMatrix();
 
 }
 

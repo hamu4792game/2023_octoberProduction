@@ -10,6 +10,7 @@ Notes::Notes() {
 void Notes::Initialize() {
 
 	worldTransformLine_.scale_ *= 0.0f;
+	worldTransformLine_.translation_.y = 10.0f;
 	/*worldTransformLine_.parent_ = &worldTransform_;*/
 	worldTransformLine_.UpdateMatrix();
 
@@ -125,7 +126,8 @@ void NoteNormal::Initialize() {
 	type_ = Normal;
 	model_ = modelList_[0];
 	worldTransformLine_.scale_ *= 0.0f;
-	worldTransformLine_.parent_ = &worldTransform_;
+	worldTransformLine_.translation_.y = 10.0f;
+	/*worldTransformLine_.parent_ = &worldTransform_;*/
 	worldTransformLine_.UpdateMatrix();
 
 }
@@ -144,7 +146,8 @@ void NoteLong::Initialize() {
 	type_ = Long;
 	model_ = modelList_[1];
 	worldTransformLine_.scale_ *= 0.0f;
-	worldTransformLine_.parent_ = &worldTransform_;
+	worldTransformLine_.translation_.y = 10.0f;
+	/*worldTransformLine_.parent_ = &worldTransform_;*/
 	worldTransformLine_.UpdateMatrix();
 
 }
@@ -231,7 +234,8 @@ void NoteDamage::Initialize() {
 	type_ = Damage;
 	model_ = modelList_[2];
 	worldTransformLine_.scale_ *= 0.0f;
-	worldTransformLine_.parent_ = &worldTransform_;
+	worldTransformLine_.translation_.y = 10.0f;
+	/*worldTransformLine_.parent_ = &worldTransform_;*/
 	worldTransformLine_.UpdateMatrix();
 
 }
