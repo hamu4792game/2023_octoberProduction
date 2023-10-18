@@ -35,6 +35,8 @@ private:
 
 	std::vector<std::string> posName;
 
+	std::vector<std::string> fileName;
+
 	std::vector<HeroTransform> startPos;
 
 	std::vector<HeroTransform> EndPos;
@@ -45,9 +47,15 @@ private:
 
 	const std::string kDirectoryName = "Resources/Animation";
 
-	const std::string kItemName = "Hero";
+	const std::string kItemName_ = "Hero";
 
-	void SaveFile();
+	char ItemName_[256]{};
+
+	void DrawImgui();
+
+	void SaveFile(const std::string& kItemName);
+
+	void ChackFiles();
 
 	void LoadFiles();
 

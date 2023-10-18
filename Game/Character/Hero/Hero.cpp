@@ -44,14 +44,26 @@ void Hero::Initialize() {
 			startPos[i].scale_ = partsTransform_[i].scale_;
 		}
 		EndPos.resize(startPos.size());
-
+		
 	}
 
-
+	ChackFiles();
 
 }
 
 void Hero::Update() {
+	DrawImgui();
+
+	transform_.translation_.z += 1.0f;
+
+	//	座標更新
+	transform_.UpdateMatrix();
+	for (uint8_t i = 0; i < partsTransform_.size(); i++) {
+		partsTransform_[i].UpdateMatrix();
+	}
+}
+
+void Hero::DrawImgui(){
 	ImGui::Begin("Animation");
 	if (ImGui::TreeNode("Body")) {
 		if (ImGui::TreeNode("Start")) {
@@ -228,9 +240,10 @@ void Hero::Update() {
 		}
 		ImGui::TreePop();
 	}
+	ImGui::InputText("ファイル自体の名前", ItemName_, sizeof(ItemName_));
 
 	if (ImGui::Button("保存")) {
-		SaveFile();
+		SaveFile(std::string() + ItemName_);
 	}
 
 	ImGui::End();
@@ -312,9 +325,6 @@ void Hero::Update() {
 		ImGui::TreePop();
 	}
 
-
-
-
 	ImGui::End();
 
 
@@ -324,24 +334,16 @@ void Hero::Update() {
 
 	ImGui::Begin("確認");
 	ImGui::Text("ファイル読み込み出来たかどうか = %d", chackOnlyNumber);
-	for (size_t i = 0; i < partsName.size(); ++i) {
-		ImGui::Text(partsName[i].c_str());
+	for (size_t i = 0; i < fileName.size(); ++i) {
+		ImGui::Text(fileName[i].c_str());
 	}
-	ImGui::Text("中に入っている要素数 = %d", partsName.size());
+	ImGui::Text("中に入っている要素数 = %d", fileName.size());
 	ImGui::Text("中に入っている要素数 = %d", startPos.size());
 	ImGui::Text("中に入っている要素数 = %d", EndPos.size());
 	ImGui::End();
-
-	transform_.translation_.z += 1.0f;
-
-	//	座標更新
-	transform_.UpdateMatrix();
-	for (uint8_t i = 0; i < partsTransform_.size(); i++) {
-		partsTransform_[i].UpdateMatrix();
-	}
 }
 
-void Hero::SaveFile() {
+void Hero::SaveFile(const std::string& kItemName) {
 	//保存
 	json root;
 	root = json::object();
@@ -398,8 +400,36 @@ void Hero::SaveFile() {
 			ofs.close();
 		}
 	}
+
+	fileName.push_back(kItemName);
 	std::string message = std::format("{}.json saved.", kItemName);
 	MessageBoxA(nullptr, message.c_str(), "Element", 0);
+}
+
+void Hero::ChackFiles(){
+	if (!std::filesystem::exists(kDirectoryPath)) {
+		std::string message = "Failed open data file for write.";
+		MessageBoxA(nullptr, message.c_str(), "Element", 0);
+		assert(0);
+		return;
+	}
+
+	std::filesystem::directory_iterator dir_it(kDirectoryPath);
+
+	for (const std::filesystem::directory_entry& entry : dir_it) {
+		//ファイルパスを取得
+		const std::filesystem::path& filePath = entry.path();
+
+		//ファイル拡張子を取得
+		std::string extension = filePath.extension().string();
+		//.jsonファイル以外はスキップ
+		if (extension.compare(".json") != 0) {
+			continue;
+		}
+
+		//ファイルの名前を取得
+		fileName.push_back(filePath.stem().string());
+	}
 }
 
 void Hero::LoadFiles() {
@@ -449,13 +479,13 @@ void Hero::LoadFile(const std::string& groupName) {
 	//ファイルを閉じる
 	ifs.close();
 	//グループを検索
-	nlohmann::json::iterator itGroup = root.find(kItemName);
+	nlohmann::json::iterator itGroup = root.find(groupName);
 	//未登録チェック
 	assert(itGroup != root.end());
 
 	//各アイテムについて
 	for (size_t i = 0; i < partsName.size(); ++i) {
-		for (const auto& root_ : root[kItemName][partsName[i].c_str()][posName[0].c_str()]) {
+		for (const auto& root_ : root[groupName][partsName[i].c_str()][posName[0].c_str()]) {
 			Vector3 v{};
 			from_json(root_, v);
 
@@ -472,7 +502,7 @@ void Hero::from_json(const json& j, Vector3& v) {
 
 bool Hero::LoadChackItem(const std::string& directoryPath, const std::string& itemName) {
 	// 書き込むjsonファイルのフルパスを合成する
-	std::string filePath = kDirectoryPath + kItemName + ".json";
+	std::string filePath = kDirectoryPath + itemName + ".json";
 	//読み込み用のファイルストリーム
 	std::ifstream ifs;
 	//ファイルを読み込み用に開く
@@ -491,7 +521,7 @@ bool Hero::LoadChackItem(const std::string& directoryPath, const std::string& it
 	//ファイルを閉じる
 	ifs.close();
 	//グループを検索
-	nlohmann::json::iterator itGroup = root.find(kItemName);
+	nlohmann::json::iterator itGroup = root.find(itemName);
 	//未登録チェック
 	if (itGroup != root.end()) {
 		return true;
