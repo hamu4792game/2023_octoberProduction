@@ -77,3 +77,7 @@ void Stage::Draw3D(const Matrix4x4& viewProjectionMat) {
 		Model::ModelDraw(transforms_[i], viewProjectionMat, 0xffffffff, models_[i].get());
 	}
 }
+
+void Stage::SetPosition(const Vector3& position) {
+	worldTrans_.translation_ = position;
+}
