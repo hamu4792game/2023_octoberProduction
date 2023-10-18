@@ -3,15 +3,14 @@
 #include "Engine/Input/KeyInput/KeyInput.h"
 #include "Engine/Easing/Ease.h"
 #include <algorithm>
+#include "Game/PartsEnum.h"
 
-GameScene* GameScene::GetInstance()
-{
+GameScene* GameScene::GetInstance() {
 	static GameScene instance;
 	return &instance;
 }
 
-void GameScene::Initialize()
-{
+void GameScene::Initialize() {
 	//	カメラの読み込みと生成
 	camera = std::make_shared<Camera>(2000.0f, true);
 	camera->transform.translation_.y = 70.0f;
@@ -32,6 +31,25 @@ void GameScene::Initialize()
 
 	box = std::make_shared<Texture2D>();
 
+	boxModel_ = std::make_shared<Model>();
+
+	//	主人公のモデルの生成
+	heroModel_.resize(static_cast<uint8_t>(HeroParts::kMaxCount));
+	for (uint8_t i = 0; i < static_cast<uint8_t>(HeroParts::kMaxCount); i++) {
+		heroModel_[i] = std::make_shared<Model>();
+	}
+	//	ボスのモデルの生成
+	bossModel_.resize(static_cast<uint8_t>(BossParts::kMaxCount));
+	for (uint8_t i = 0; i < static_cast<uint8_t>(BossParts::kMaxCount); i++) {
+		bossModel_[i] = std::make_shared<Model>();
+	}
+
+	//	ステージモデルの生成
+	for (uint8_t i = 0; i < 6; i++) {
+		stageModel_.push_back(std::make_shared<Model>());
+	}
+	
+	//	モデルのロード
 	ModelLoad();
 
 	//	音源の生成とセット
@@ -43,18 +61,25 @@ void GameScene::Initialize()
 	////	音量の設定
 	//bgm_->SetVolume(0.2f);
 	
-	//	シーンの生成と初期化
+	//	シーンの生成
 	title = std::make_unique<Title>();
-	title->Initialize();
+	battle = std::make_unique<Battle>(camera);
+
+	std::vector<Model*> noteModels{ notesModelNormal_.get(), notesModelLong_.get(), notesModelDamage_.get(), notesModelNormal_.get() };
+	std::vector<Texture2D*> noteTextures{ hitLine_.get() };
+
 	title->SetModels(model_);
 	title->SetHud(hud_);
 
-	battle = std::make_unique<Battle>();
-	std::vector<Model*> noteModels{ notesModelNormal_.get(), notesModelLong_.get(), notesModelDamage_.get(), notesModelHitLine_.get() };
-	std::vector<Texture2D*> noteTextures{ hitLine_.get() };
-
 	battle->ModelLoad(noteModels, noteTextures);
+	battle->SetHeroModels(heroModel_);
+	battle->SetBossModels(bossModel_);
+	battle->SetStageModels(stageModel_);
+
+	//	シーンの初期化
+	title->Initialize();
 	battle->Initialize();
+
 
 	//	変数の初期化
 	scene = Scene::BATTLE;
@@ -62,8 +87,7 @@ void GameScene::Initialize()
 
 }
 
-void GameScene::Update()
-{
+void GameScene::Update() {
 #ifdef _DEBUG
 	ImGui::Begin("camera");
 	ImGui::DragFloat3("translate", &camera->transform.translation_.x, 1.0f);
@@ -76,25 +100,17 @@ void GameScene::Update()
 
 	//	シーン切替わり時の初期化
 	if (oldscene != scene) {
-		switch (scene)
-		{
+		switch (scene) {
 		case GameScene::Scene::TITLE:
+			camera->SetParent(nullptr);
 			title->Initialize();
 			camera->transform.translation_.y = 15.0f;
 			camera->transform.translation_.z = -100.0f;
 			camera->transform.rotation_ = { 0.0f,0.0f,0.0f };
-			camera->SetParent(nullptr);
 			break;
 		case GameScene::Scene::BATTLE:
-			/*battle->Initialize();
-			camera->transform.translation_.y = 70.0f;
-			camera->transform.translation_.z = -40.0f;
-			camera->transform.rotation_ = { 1.0f,0.0f,0.0f };
-			camera->SetParent(battle->GetPlayer()->GetWorldTransformPtr());*/
-			camera->transform.translation_.y = 15.0f;
-			camera->transform.translation_.z = -100.0f;
-			camera->transform.rotation_ = { 0.0f,0.0f,0.0f };
 			camera->SetParent(nullptr);
+			battle->Initialize();
 			break;
 		case GameScene::Scene::RESULT:
 			break;
@@ -102,8 +118,7 @@ void GameScene::Update()
 	}
 	oldscene = scene;
 
-	switch (scene)
-	{
+	switch (scene) {
 	case GameScene::Scene::TITLE:
 		title->Update();
 		break;
@@ -129,12 +144,10 @@ void GameScene::Update()
 
 }
 
-void GameScene::Draw()
-{
+void GameScene::Draw() {
 
 	//	3D描画
-	switch (scene)
-	{
+	switch (scene) {
 	case GameScene::Scene::TITLE:
 		title->Draw3D(viewProjectionMatrix);
 		break;
@@ -146,8 +159,7 @@ void GameScene::Draw()
 	}
 
 	//	2D描画
-	switch (scene)
-	{
+	switch (scene) {
 	case GameScene::Scene::TITLE:
 		title->Draw2D(viewProjectionMatrix2d);
 		break;
@@ -164,32 +176,63 @@ void GameScene::Draw()
 
 }
 
-void GameScene::Finalize()
-{
+void GameScene::Finalize() {
 	Line::Finalize();
 	Model::Finalize();
 	Texture2D::Finalize();
 }
 
 
-void GameScene::ModelLoad()
-{
+void GameScene::ModelLoad() {
 	model_->Texture("Resources/eatRamen/eatRamen.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	hud_->Texture("Resources/uvChecker.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	hitLine_->Texture("Resources/hitline/hitline.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
 	box->Texture("Resources/block.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
-	notesModelNormal_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/normal.png");
-	notesModelLong_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/long.png");
-	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/damage.png");
-	notesModelHitLine_->Texture("Resources/hitline/hitline.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "hitline/hitline.png");
+	notesModelNormal_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/normal.png");
+	notesModelLong_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/long.png");
+	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/damage.png");
+	/*notesModelHitLine_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/normal.png");*/
+
+	boxModel_->Texture("Resources/box/box.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
+
+	heroModel_[static_cast<uint8_t>(HeroParts::Body)]->Texture("Resources/player/body.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/player/body.png");
+	heroModel_[static_cast<uint8_t>(HeroParts::Head)]->Texture("Resources/player/head.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	heroModel_[static_cast<uint8_t>(HeroParts::Waist)]->Texture("Resources/player/waist.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/player/leg.png");
+	heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)]->Texture("Resources/player/legs.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	heroModel_[static_cast<uint8_t>(HeroParts::LeftUpperArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	heroModel_[static_cast<uint8_t>(HeroParts::RightBottomArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	heroModel_[static_cast<uint8_t>(HeroParts::LeftBottomArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	heroModel_[static_cast<uint8_t>(HeroParts::RightUpperLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	heroModel_[static_cast<uint8_t>(HeroParts::LeftUpperLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	heroModel_[static_cast<uint8_t>(HeroParts::RightBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	heroModel_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+
+	bossModel_[static_cast<uint8_t>(BossParts::Body)] = heroModel_[static_cast<uint8_t>(HeroParts::Body)];
+	bossModel_[static_cast<uint8_t>(BossParts::Head)] = heroModel_[static_cast<uint8_t>(HeroParts::Head)];
+	bossModel_[static_cast<uint8_t>(HeroParts::Waist)] = heroModel_[static_cast<uint8_t>(HeroParts::Waist)];
+	bossModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::LeftUpperArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::RightBottomArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::LeftBottomArm)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::RightUpperLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::LeftUpperLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::RightBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+	bossModel_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+
+	//	ステージモデル
+	stageModel_[0]->Texture("Resources/plane/plane.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
+	stageModel_[1]->Texture("Resources/box/box.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
+	stageModel_[2] = stageModel_[1];
+	stageModel_[3] = stageModel_[1];
+	stageModel_[4] = stageModel_[1];
+	stageModel_[5] = stageModel_[1];
 
 }
 
 
-void GameScene::SceneChange()
-{
+void GameScene::SceneChange() {
 	//80
 	boxtransform.rotation_.z += AngleToRadian(15.0f);
 	easeNum += 0.02f;
