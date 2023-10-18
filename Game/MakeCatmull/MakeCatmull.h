@@ -112,7 +112,8 @@ private:
 
 	void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix);
 
-	void DrawCatmullRom(const Vector3& controlPoint0, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& controlPoint3,
+	void DrawCatmullRom(const Vector3& controlPoint0, const Vector3& controlPoint1, 
+		const Vector3& controlPoint2, const Vector3& controlPoint3,
 		const Matrix4x4& viewProjectionMatrix, uint32_t color);
 
 	void DrawControlPoints();
