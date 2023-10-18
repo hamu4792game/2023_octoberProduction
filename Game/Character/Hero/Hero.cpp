@@ -48,7 +48,7 @@ void Hero::Initialize() {
 	}
 
 	ChackFiles();
-	LoadFiles();
+	//LoadFiles();
 }
 
 void Hero::Update() {
@@ -64,7 +64,60 @@ void Hero::Update() {
 }
 
 void Hero::DrawImgui(){
-	ImGui::Begin("Animation");
+	ImGui::Begin("Animation",nullptr,ImGuiWindowFlags_MenuBar);
+	/*if (ImGui::Button("保存")) {
+		std::string itemNameString = ItemName_;
+		if (!itemNameString.empty()) {
+			SaveFile(std::string() + ItemName_);
+		}
+	}*/
+
+	if (ImGui::BeginMenuBar()) {
+		if (ImGui::BeginMenu("ファイル保存")){
+			ImGui::InputText("ファイル自体の名前", ItemName_, sizeof(ItemName_));
+			if (ImGui::MenuItem("保存")) {
+				std::string itemNameString = ItemName_;
+				if (!itemNameString.empty()) {
+					SaveFile(std::string() + ItemName_);
+				}
+			}
+
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("ファイル読み込み")) {
+			
+			ImGui::Text(("選択しているファイル  " + Name_).c_str());
+			if (ImGui::MenuItem("ロード")) {
+				if (!Name_.empty()) {
+					LoadFile(Name_);
+				}
+			}
+			if (ImGui::TreeNode("読み込むファイル")) {
+				for (size_t i = 0; i < fileName.size(); i++) {
+					if (ImGui::RadioButton(fileName[i].c_str(), &fileNumber, static_cast<int>(i))) {
+						Name_ = fileName[fileNumber].c_str();
+					}
+					ImGui::SameLine();
+				}
+				ImGui::TreePop();
+			}
+
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("ファイル一覧")) {
+			for (size_t i = 0; i < fileName.size(); ++i) {
+				ImGui::Text(fileName[i].c_str());
+			}
+
+			ImGui::EndMenu();
+		}
+
+
+		ImGui::EndMenuBar();
+	}
+
+
+
 	if (ImGui::TreeNode("Body")) {
 		if (ImGui::TreeNode("Start")) {
 			ImGui::DragFloat3("Translate", &startPos[static_cast<uint8_t>(HeroParts::Body)].translation_.x, 0.1f);
@@ -240,14 +293,7 @@ void Hero::DrawImgui(){
 		}
 		ImGui::TreePop();
 	}
-	ImGui::InputText("ファイル自体の名前", ItemName_, sizeof(ItemName_));
-
-	if (ImGui::Button("保存")) {
-		std::string itemNameString = ItemName_;
-		if (!itemNameString.empty()) {
-			SaveFile(std::string() + ItemName_);
-		}
-	}
+	
 
 	ImGui::End();
 
@@ -337,9 +383,7 @@ void Hero::DrawImgui(){
 
 	ImGui::Begin("確認");
 	ImGui::Text("ファイル読み込み出来たかどうか = %d", chackOnlyNumber);
-	for (size_t i = 0; i < fileName.size(); ++i) {
-		ImGui::Text(fileName[i].c_str());
-	}
+	
 	ImGui::Text("中に入っている要素数 = %d", fileName.size());
 	ImGui::Text("中に入っている要素数 = %d", startPos.size());
 	ImGui::Text("中に入っている要素数 = %d", EndPos.size());
@@ -471,7 +515,7 @@ void Hero::ChackFiles(){
 void Hero::LoadFiles() {
 	if (!std::filesystem::exists(kDirectoryPath)) {
 		std::string message = "Failed open data file for write.";
-		MessageBoxA(nullptr, message.c_str(), "Element", 0);
+		MessageBoxA(nullptr, message.c_str(), "Animetion", 0);
 		assert(0);
 		return;
 	}
@@ -555,6 +599,8 @@ void Hero::LoadFile(const std::string& groupName) {
 		}
 		EndPos[i] = baseTrans2;
 	}
+	std::string message = std::format("{}.json Loading successful.", groupName);
+	MessageBoxA(nullptr, message.c_str(), "Animetion", 0);
 }
 
 void Hero::from_json(const json& j, Vector3& v) {

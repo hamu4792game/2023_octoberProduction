@@ -43,11 +43,15 @@ private:
 
 	int chackOnlyNumber = 0;
 
+	int fileNumber = 0;
+
 	const std::string kDirectoryPath = "Resources/Animation/";
 
 	const std::string kDirectoryName = "Resources/Animation";
 
 	const std::string kItemName_ = "Hero";
+
+	std::string Name_ = "\0";
 
 	char ItemName_[256]{};
 
