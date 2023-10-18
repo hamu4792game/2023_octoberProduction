@@ -9,7 +9,7 @@ void Boss::Initialize() {
 		partsTransform_[i].parent_ = &partsTransform_[static_cast<uint8_t>(BossParts::Body)];
 	}
 
-	transform_.translation_ = Vector3(12.0f, 15.0f, -55.0f);
+	transform_.translation_ = Vector3(2.0f, 2.0f, 35.0f);
 	partsTransform_[static_cast<uint8_t>(BossParts::Head)].translation_.y = 2.0f;
 }
 

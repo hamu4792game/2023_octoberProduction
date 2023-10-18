@@ -9,7 +9,7 @@ void Hero::Initialize() {
 		partsTransform_[i].parent_ = &partsTransform_[static_cast<uint8_t>(HeroParts::Body)];
 	}
 
-	transform_.translation_ = Vector3(-3.0f, 12.0f, -85.0f);
+	transform_.translation_ = Vector3(7.5f, 0.0f, -45.0f);
 	partsTransform_[static_cast<uint8_t>(HeroParts::Head)].translation_.y = 2.0f;
 
 	partsName = {
@@ -331,6 +331,8 @@ void Hero::Update() {
 	ImGui::Text("中に入っている要素数 = %d", startPos.size());
 	ImGui::Text("中に入っている要素数 = %d", EndPos.size());
 	ImGui::End();
+
+	transform_.translation_.z += 1.0f;
 
 	//	座標更新
 	transform_.UpdateMatrix();

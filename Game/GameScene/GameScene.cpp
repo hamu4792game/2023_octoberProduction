@@ -30,6 +30,8 @@ void GameScene::Initialize() {
 
 	box = std::make_shared<Texture2D>();
 
+	boxModel_ = std::make_shared<Model>();
+
 	//	主人公のモデルの生成
 	heroModel_.resize(static_cast<uint8_t>(HeroParts::kMaxCount));
 	for (uint8_t i = 0; i < static_cast<uint8_t>(HeroParts::kMaxCount); i++) {
@@ -41,6 +43,12 @@ void GameScene::Initialize() {
 		bossModel_[i] = std::make_shared<Model>();
 	}
 
+	//	ステージモデルの生成
+	for (uint8_t i = 0; i < 6; i++) {
+		stageModel_.push_back(std::make_shared<Model>());
+	}
+	
+	//	モデルのロード
 	ModelLoad();
 
 	//	音源の生成とセット
@@ -66,6 +74,7 @@ void GameScene::Initialize() {
 	battle->ModelLoad(noteModels);
 	battle->SetHeroModels(heroModel_);
 	battle->SetBossModels(bossModel_);
+	battle->SetStageModels(stageModel_);
 
 	//	シーンの初期化
 	title->Initialize();
@@ -93,22 +102,15 @@ void GameScene::Update() {
 	if (oldscene != scene) {
 		switch (scene) {
 		case GameScene::Scene::TITLE:
+			camera->SetParent(nullptr);
 			title->Initialize();
 			camera->transform.translation_.y = 15.0f;
 			camera->transform.translation_.z = -100.0f;
 			camera->transform.rotation_ = { 0.0f,0.0f,0.0f };
-			camera->SetParent(nullptr);
 			break;
 		case GameScene::Scene::BATTLE:
-			/*battle->Initialize();
-			camera->transform.translation_.y = 70.0f;
-			camera->transform.translation_.z = -40.0f;
-			camera->transform.rotation_ = { 1.0f,0.0f,0.0f };
-			camera->SetParent(battle->GetPlayer()->GetWorldTransformPtr());*/
-			camera->transform.translation_.y = 15.0f;
-			camera->transform.translation_.z = -100.0f;
-			camera->transform.rotation_ = { 0.0f,0.0f,0.0f };
 			camera->SetParent(nullptr);
+			battle->Initialize();
 			break;
 		case GameScene::Scene::RESULT:
 			break;
@@ -192,6 +194,7 @@ void GameScene::ModelLoad() {
 	notesModelLong_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/long.png");
 	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/damage.png");
 
+	boxModel_->Texture("Resources/box/box.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
 
 	heroModel_[static_cast<uint8_t>(HeroParts::Body)]->Texture("Resources/player/body.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/player/body.png");
 	heroModel_[static_cast<uint8_t>(HeroParts::Head)]->Texture("Resources/player/head.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
@@ -216,6 +219,14 @@ void GameScene::ModelLoad() {
 	bossModel_[static_cast<uint8_t>(HeroParts::LeftUpperLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
 	bossModel_[static_cast<uint8_t>(HeroParts::RightBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
 	bossModel_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
+
+	//	ステージモデル
+	stageModel_[0]->Texture("Resources/plane/plane.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
+	stageModel_[1]->Texture("Resources/box/box.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
+	stageModel_[2] = stageModel_[1];
+	stageModel_[3] = stageModel_[1];
+	stageModel_[4] = stageModel_[1];
+	stageModel_[5] = stageModel_[1];
 
 }
 
