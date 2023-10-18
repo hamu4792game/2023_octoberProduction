@@ -5,6 +5,7 @@
 #include "math/Matrix4x4.h"
 #include "Game/Player/Player.h"
 #include "math/Vector3.h"
+#include "Engine/Texture/Texture2D.h"
 
 class Notes
 {
@@ -29,11 +30,17 @@ public:
 
 	virtual void Draw(const Matrix4x4& viewProjection);
 
-	virtual void ModelLoad(Model* model);
+	virtual void Draw2D(const Matrix4x4& viewProjection);
+
+	virtual void ModelLoad(std::vector<Model*> models);
+
+	void TextureLoad(Texture2D* texture) { lineTexture_ = texture; }
 
 	void SetPosition(const Vector3& position) { 
 		worldTransform_.translation_ = position;
+		worldTransformLine_.translation_ = position;
 		worldTransform_.UpdateMatrix();
+		worldTransformLine_.UpdateMatrix();
 	}
 
 	void SetPlayer(Player* player) { player_ = player; }
@@ -75,9 +82,16 @@ protected:
 
 	NoteType type_ = Normal;
 
+	std::vector<Model*> modelList_;
+
+	//表示するモデル
 	Model* model_ = nullptr;
 
+	//ノーツの判定ライン画像
+	Texture2D* lineTexture_;
+
 	WorldTransform worldTransform_;
+	WorldTransform worldTransformLine_;
 
 	//内部判定用のワールドトランスフォーム
 	WorldTransform worldTransformInside_;

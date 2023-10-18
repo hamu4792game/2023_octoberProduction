@@ -26,13 +26,15 @@ public:
 
 	void Draw(const Matrix4x4& viewProjection);
 
+	void Draw2D(const Matrix4x4& viewProjection);
+
 	void SetPlayer(Player* player) { player_ = player; }
 
 	void SetNotes(ScoreType type, std::vector<Vector3> position);
 
 	bool IsEmpty() { return notes_.empty(); }
 
-	void ModelLoad(std::vector<Model*> models);
+	void ModelLoad(std::vector<Model*> models, std::vector<Texture2D*> textures);
 
 	void SetNoteNormal(const Vector3& position, uint32_t num, float judgeline);
 
@@ -58,6 +60,8 @@ private:
 	std::list<Notes*> notes_;
 
 	std::vector<Model*> notesModels_;
+
+	std::vector<Texture2D*> noteTextures_;
 
 	//曲のテンポの速さ
 	float BPM_ = 150.0f;

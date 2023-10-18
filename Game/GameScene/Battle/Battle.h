@@ -26,7 +26,7 @@ public:
 	void Draw3D(const Matrix4x4& viewProjection);
 	void Draw2D(const Matrix4x4& viewProjection);
 
-	void ModelLoad(std::vector<Model*> models);
+	void ModelLoad(std::vector<Model*> models, std::vector<Texture2D*> textures);
 
 	Player* GetPlayer() { return player_.get(); }
 
@@ -45,6 +45,10 @@ private:
 	std::unique_ptr<Skydome> skydome_;
 
 	std::vector<Model*> notesModels_;
+
+	std::vector<Texture2D*> noteTextures_;
+
+	WorldTransform worldTransformLine_;
 
 	float BPM_ = 150.0f;
 

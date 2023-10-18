@@ -73,7 +73,9 @@ private: // モデル変数
 	std::unique_ptr<Model> notesModelNormal_;
 	std::unique_ptr<Model> notesModelLong_;
 	std::unique_ptr<Model> notesModelDamage_;
+	std::unique_ptr<Model> notesModelHitLine_;
 	std::shared_ptr<Texture2D> hud_;
+	std::unique_ptr<Texture2D> hitLine_;
 
 private: // 音源
 	std::unique_ptr<AudioInput> bgm_;

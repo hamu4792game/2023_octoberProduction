@@ -48,7 +48,7 @@ void Battle::Initialize()
 	player_->Initialize(makeCatmull_->GetFirstControlPoint());
 	musicScore_->Initialize();
 
-	
+	worldTransformLine_.scale_ *= 5.0f;
 
 }
 
@@ -102,6 +102,8 @@ void Battle::Draw3D(const Matrix4x4& viewProjection)
 
 	makeCatmull_->Draw(viewProjection);
 
+	notesModels_[4]->ModelDraw(worldTransformLine_, viewProjection, 0xffffffff, notesModels_[4]);
+
 	for (size_t i = 0; i < lines_.size(); i++){
 		lines_[i]->DrawLine(ControlPoints_[i] - EndPos, ControlPoints_[i] + EndPos, viewProjection, 0xff0000ff);
 	}
@@ -110,10 +112,13 @@ void Battle::Draw3D(const Matrix4x4& viewProjection)
 
 void Battle::Draw2D(const Matrix4x4& viewProjection){
 
+	musicScore_->Draw2D(viewProjection);
+
 }
 
-void Battle::ModelLoad(std::vector<Model*> models) {
+void Battle::ModelLoad(std::vector<Model*> models, std::vector<Texture2D*> textures) {
 
 	notesModels_ = models;
-	musicScore_->ModelLoad(notesModels_);
+	noteTextures_ = textures;
+	musicScore_->ModelLoad(notesModels_, noteTextures_);
 }

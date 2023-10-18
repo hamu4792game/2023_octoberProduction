@@ -93,6 +93,14 @@ void MusicScore::Draw(const Matrix4x4& viewProjection) {
 
 }
 
+void MusicScore::Draw2D(const Matrix4x4& viewProjection) {
+
+	for (Notes* note : notes_) {
+		note->Draw2D(viewProjection);
+	}
+
+}
+
 void MusicScore::SetNotes(ScoreType type, std::vector<Vector3> position) {
 
 	notes_.remove_if([](Notes* note) {
@@ -164,16 +172,19 @@ void MusicScore::SetNotes(ScoreType type, std::vector<Vector3> position) {
 
 }
 
-void MusicScore::ModelLoad(std::vector<Model*> models) {
+void MusicScore::ModelLoad(std::vector<Model*> models, std::vector<Texture2D*> textures) {
 
 	notesModels_ = models;
+
+	noteTextures_ = textures;
 
 }
 
 void MusicScore::SetNoteNormal(const Vector3& position, uint32_t num, float judgeline) {
 
 	NoteNormal* newNote = new NoteNormal();
-	newNote->ModelLoad(notesModels_[0]);
+	newNote->ModelLoad(notesModels_);
+	newNote->TextureLoad(noteTextures_[0]);
 	newNote->Initialize();
 	newNote->SetPlayer(player_);
 	newNote->SetPosition(position);
@@ -186,7 +197,8 @@ void MusicScore::SetNoteNormal(const Vector3& position, uint32_t num, float judg
 void MusicScore::SetNoteLStart(const Vector3& position, uint32_t num, float judgeline) {
 
 	NoteLong* newNote = new NoteLong();
-	newNote->ModelLoad(notesModels_[1]);
+	newNote->ModelLoad(notesModels_);
+	newNote->TextureLoad(noteTextures_[0]);
 	newNote->Initialize();
 	newNote->SetLongNoteType(NoteLong::Start);
 	newNote->SetPlayer(player_);
@@ -200,7 +212,8 @@ void MusicScore::SetNoteLStart(const Vector3& position, uint32_t num, float judg
 void MusicScore::SetNoteLEnd(const Vector3& position, uint32_t num, float judgeline) {
 
 	NoteLong* newNote = new NoteLong();
-	newNote->ModelLoad(notesModels_[1]);
+	newNote->ModelLoad(notesModels_);
+	newNote->TextureLoad(noteTextures_[0]);
 	newNote->Initialize();
 	newNote->SetLongNoteType(NoteLong::End);
 	newNote->SetPlayer(player_);
@@ -214,7 +227,8 @@ void MusicScore::SetNoteLEnd(const Vector3& position, uint32_t num, float judgel
 void MusicScore::SetNoteDamage(const Vector3& position, uint32_t num, float judgeline) {
 
 	NoteDamage* newNote = new NoteDamage();
-	newNote->ModelLoad(notesModels_[2]);
+	newNote->ModelLoad(notesModels_);
+	newNote->TextureLoad(noteTextures_[0]);
 	newNote->Initialize();
 	newNote->SetPlayer(player_);
 	newNote->SetPosition(position);

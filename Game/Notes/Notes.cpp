@@ -9,6 +9,10 @@ Notes::Notes() {
 
 void Notes::Initialize() {
 
+	worldTransformLine_.scale_ *= 0.0f;
+	/*worldTransformLine_.parent_ = &worldTransform_;*/
+	worldTransformLine_.UpdateMatrix();
+
 }
 
 void Notes::UpdateFlag() {
@@ -49,8 +53,11 @@ void Notes::Update() {
 
 	//判定フレーム更新
 	worldTransformInside_.translation_.x = judgeFrame_;
+	worldTransformLine_.scale_ = { 50.0f - judgeFrame_, 50.0f - judgeFrame_, 50.0f - judgeFrame_ };
+	worldTransformLine_.scale_ *= 1.0f / 10.0f;
 
 	worldTransform_.UpdateMatrix();
+	worldTransformLine_.UpdateMatrix();
 	worldTransformInside_.UpdateMatrix();
 
 }
@@ -89,11 +96,23 @@ void Notes::Draw(const Matrix4x4& viewProjection) {
 
 	model_->ModelDraw(worldTransformInside_, viewProjection, 0xffffffff, model_);
 
+	if (judgeFrame_ <= 50.0f) {
+		modelList_[3]->ModelDraw(worldTransformLine_, viewProjection, 0xffffffff, modelList_[3]);
+	}
+
 }
 
-void Notes::ModelLoad(Model* model) {
+void Notes::Draw2D(const Matrix4x4& viewProjection) {
 
-	model_ = model;
+	/*if (judgeFrame_ <= 20.0f && judgeFrame_ >= 0.0f) {
+		lineTexture_->TextureDraw(worldTransformLine_, viewProjection, 0xffffffff, lineTexture_);
+	}*/
+
+}
+
+void Notes::ModelLoad(std::vector<Model*> models) {
+
+	modelList_ = models;
 	
 }
 
@@ -104,6 +123,10 @@ NoteNormal::NoteNormal() {
 void NoteNormal::Initialize() {
 
 	type_ = Normal;
+	model_ = modelList_[0];
+	worldTransformLine_.scale_ *= 0.0f;
+	worldTransformLine_.parent_ = &worldTransform_;
+	worldTransformLine_.UpdateMatrix();
 
 }
 
@@ -119,6 +142,10 @@ void NoteLong::StaticInitialize() {
 void NoteLong::Initialize() {
 
 	type_ = Long;
+	model_ = modelList_[1];
+	worldTransformLine_.scale_ *= 0.0f;
+	worldTransformLine_.parent_ = &worldTransform_;
+	worldTransformLine_.UpdateMatrix();
 
 }
 
@@ -190,6 +217,7 @@ void NoteLong::Update() {
 	worldTransformInside_.translation_.x = judgeFrame_;
 
 	worldTransform_.UpdateMatrix();
+	worldTransformLine_.UpdateMatrix();
 	worldTransformInside_.UpdateMatrix();
 
 }
@@ -201,6 +229,10 @@ NoteDamage::NoteDamage() {
 void NoteDamage::Initialize() {
 
 	type_ = Damage;
+	model_ = modelList_[2];
+	worldTransformLine_.scale_ *= 0.0f;
+	worldTransformLine_.parent_ = &worldTransform_;
+	worldTransformLine_.UpdateMatrix();
 
 }
 
@@ -238,6 +270,7 @@ void NoteDamage::Update() {
 	worldTransformInside_.translation_.x = judgeFrame_;
 
 	worldTransform_.UpdateMatrix();
+	worldTransformLine_.UpdateMatrix();
 	worldTransformInside_.UpdateMatrix();
 
 }

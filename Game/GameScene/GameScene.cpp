@@ -28,6 +28,7 @@ void GameScene::Initialize()
 	notesModelLong_ = std::make_unique<Model>();
 	notesModelDamage_ = std::make_unique<Model>();
 	hud_ = std::make_shared<Texture2D>();
+	hitLine_ = std::make_unique<Texture2D>();
 
 	box = std::make_shared<Texture2D>();
 
@@ -49,9 +50,10 @@ void GameScene::Initialize()
 	title->SetHud(hud_);
 
 	battle = std::make_unique<Battle>();
-	std::vector<Model*> noteModels{ notesModelNormal_.get(), notesModelLong_.get(), notesModelDamage_.get() };
+	std::vector<Model*> noteModels{ notesModelNormal_.get(), notesModelLong_.get(), notesModelDamage_.get(), notesModelHitLine_.get() };
+	std::vector<Texture2D*> noteTextures{ hitLine_.get() };
 
-	battle->ModelLoad(noteModels);
+	battle->ModelLoad(noteModels, noteTextures);
 	battle->Initialize();
 
 	//	変数の初期化
@@ -174,13 +176,14 @@ void GameScene::ModelLoad()
 {
 	model_->Texture("Resources/eatRamen/eatRamen.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	hud_->Texture("Resources/uvChecker.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
-
+	hitLine_->Texture("Resources/hitline/hitline.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
 	box->Texture("Resources/block.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
 	notesModelNormal_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/normal.png");
 	notesModelLong_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/long.png");
 	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "notes/damage.png");
+	notesModelHitLine_->Texture("Resources/hitline/hitline.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "hitline/hitline.png");
 
 }
 
