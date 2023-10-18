@@ -34,7 +34,7 @@ void Hero::Initialize() {
 
 		LoadFiles();
 	}
-	else*/ {
+	else */{
 		chackOnlyNumber = 0;
 
 		startPos.resize(partsName.size());
@@ -48,7 +48,7 @@ void Hero::Initialize() {
 	}
 
 	ChackFiles();
-
+	LoadFiles();
 }
 
 void Hero::Update() {
@@ -400,8 +400,23 @@ void Hero::SaveFile(const std::string& kItemName) {
 			ofs.close();
 		}
 	}
+	if (fileName.size() != 0) {
+		bool noneFail = true;
+		for (size_t i = 0; i < fileName.size(); i++) {
+			if (fileName[i].c_str() == kItemName) {
+				noneFail = false;
+			}
+		}
+		if (noneFail) {
+			fileName.push_back(kItemName);
+		}
 
-	fileName.push_back(kItemName);
+	}
+	else {
+		//ファイルの名前を取得
+		fileName.push_back(kItemName);
+	}
+
 	std::string message = std::format("{}.json saved.", kItemName);
 	MessageBoxA(nullptr, message.c_str(), "Element", 0);
 }
@@ -427,8 +442,26 @@ void Hero::ChackFiles(){
 			continue;
 		}
 
-		//ファイルの名前を取得
-		fileName.push_back(filePath.stem().string());
+		if (LoadChackItem(kDirectoryPath, filePath.stem().string())) {
+			chackOnlyNumber = 1;
+		}
+
+		if (fileName.size() != 0) {
+			bool noneFail = true;
+			for (size_t i = 0; i < fileName.size(); i++){
+				if (fileName[i].c_str() == filePath.stem().string()) {
+					noneFail = false;
+				}
+			}
+			if (noneFail){
+				fileName.push_back(filePath.stem().string());
+			}
+
+		}
+		else {
+			//ファイルの名前を取得
+			fileName.push_back(filePath.stem().string());
+		}
 	}
 }
 
@@ -485,12 +518,39 @@ void Hero::LoadFile(const std::string& groupName) {
 
 	//各アイテムについて
 	for (size_t i = 0; i < partsName.size(); ++i) {
+		int count = 0;
+		HeroTransform baseTrans{};
 		for (const auto& root_ : root[groupName][partsName[i].c_str()][posName[0].c_str()]) {
 			Vector3 v{};
 			from_json(root_, v);
-
-
+			if (count == 0) {
+				baseTrans.translation_ = v;
+			}else if (count == 1) {
+				baseTrans.rotation_ = v;
+			}else if (count == 2) {
+				baseTrans.scale_ = v;
+			}
+			count++;
 		}
+		startPos[i] = baseTrans;
+
+		count = 0;
+		HeroTransform baseTrans2{};
+		for (const auto& root_ : root[groupName][partsName[i].c_str()][posName[1].c_str()]) {
+			Vector3 v{};
+			from_json(root_, v);
+			if (count == 0) {
+				baseTrans2.translation_ = v;
+			}
+			else if (count == 1) {
+				baseTrans2.rotation_ = v;
+			}
+			else if (count == 2) {
+				baseTrans2.scale_ = v;
+			}
+			count++;
+		}
+		EndPos[i] = baseTrans2;
 	}
 }
 
