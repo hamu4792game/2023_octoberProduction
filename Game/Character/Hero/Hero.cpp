@@ -243,7 +243,10 @@ void Hero::DrawImgui(){
 	ImGui::InputText("ファイル自体の名前", ItemName_, sizeof(ItemName_));
 
 	if (ImGui::Button("保存")) {
-		SaveFile(std::string() + ItemName_);
+		std::string itemNameString = ItemName_;
+		if (!itemNameString.empty()) {
+			SaveFile(std::string() + ItemName_);
+		}
 	}
 
 	ImGui::End();
