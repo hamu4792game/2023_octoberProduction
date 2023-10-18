@@ -46,7 +46,7 @@ void Battle::Initialize() {
 	player_->Initialize(makeCatmull_->GetFirstControlPoint());
 	musicScore_->Initialize();
 
-	battleAnimation_->Initialize();
+	//battleAnimation_->Initialize();
 
 	worldTransformLine_.scale_ *= 5.0f;
 
@@ -107,7 +107,7 @@ void Battle::Draw3D(const Matrix4x4& viewProjection) {
 		lines_[i]->DrawLine(ControlPoints_[i] - EndPos, ControlPoints_[i] + EndPos, viewProjection, 0xff0000ff);
 	}
 
-	battleAnimation_->Draw3D(viewProjection);
+	//battleAnimation_->Draw3D(viewProjection);
 }
 
 void Battle::Draw2D(const Matrix4x4& viewProjection) {
