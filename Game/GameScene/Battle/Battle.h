@@ -11,11 +11,13 @@
 #include "Game/MakeCatmull/MakeCatmull.h"
 #include "Engine/Input/AudioInput/AudioInput.h"
 
+#include "Game/BattleAnimation/BattleAnimation.h"
+#include "Engine/Camera/Camera.h"
 
 
 class Battle {
 public:
-	Battle();
+	Battle(std::shared_ptr<Camera> camera = nullptr);
 	~Battle();
 
 	//	初期化
@@ -63,5 +65,14 @@ private:
 	std::unique_ptr<AudioInput> drumLoop_;
 
 	Vector3 EndPos;
+
+	std::unique_ptr<BattleAnimation> battleAnimation_;
+
+
+public: // セッター
+	void SetHeroModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetHeroModels(model); }
+	void SetBossModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetBossModels(model); }
+	void SetStageModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetStageModels(model); }
+
 
 };

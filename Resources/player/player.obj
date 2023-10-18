@@ -1,6 +1,6 @@
 # Blender 3.5.0
 # www.blender.org
-mtllib player/player.mtl
+mtllib player.mtl
 o 円錐
 v 0.000000 -1.303986 1.000000
 v -0.195090 -1.303986 0.980785

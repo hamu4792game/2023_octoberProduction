@@ -124,6 +124,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="externals\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="externals\imgui\imgui_tables.cpp" />
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Game\BattleAnimation\BattleAnimation.cpp" />
+    <ClCompile Include="Game\Character\BaseCharacter\BaseCharacter.cpp" />
+    <ClCompile Include="Game\Character\Boss\Boss.cpp" />
+    <ClCompile Include="Game\Character\Hero\Hero.cpp" />
     <ClCompile Include="Game\GameScene\Battle\Battle.cpp" />
     <ClCompile Include="Game\GameScene\GameScene.cpp" />
     <ClCompile Include="Game\GameScene\Title\Title.cpp" />
@@ -133,6 +137,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Notes\Notes.cpp" />
     <ClCompile Include="Game\Player\Player.cpp" />
     <ClCompile Include="Game\Skydome\Skydome.cpp" />
+    <ClCompile Include="Game\Stage\Stage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\Matrix4x4.cpp" />
     <ClCompile Include="math\Vector2.cpp" />
@@ -168,6 +173,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="externals\imgui\imstb_rectpack.h" />
     <ClInclude Include="externals\imgui\imstb_textedit.h" />
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
+    <ClInclude Include="Game\BattleAnimation\BattleAnimation.h" />
+    <ClInclude Include="Game\Character\BaseCharacter\BaseCharacter.h" />
+    <ClInclude Include="Game\Character\Boss\Boss.h" />
+    <ClInclude Include="Game\Character\Hero\Hero.h" />
     <ClInclude Include="Game\GameScene\Battle\Battle.h" />
     <ClInclude Include="Game\GameScene\GameScene.h" />
     <ClInclude Include="Game\GameScene\Title\Title.h" />
@@ -175,8 +184,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\MakeCatmull\MakeCatmull.h" />
     <ClInclude Include="Game\MusicScore\MusicScore.h" />
     <ClInclude Include="Game\Notes\Notes.h" />
+    <ClInclude Include="Game\PartsEnum.h" />
     <ClInclude Include="Game\Player\Player.h" />
     <ClInclude Include="Game\Skydome\Skydome.h" />
+    <ClInclude Include="Game\Stage\Stage.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />

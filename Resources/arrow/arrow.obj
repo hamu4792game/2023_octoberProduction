@@ -1,6 +1,6 @@
 # Blender 3.5.0
 # www.blender.org
-mtllib arrow/arrow.mtl
+mtllib arrow.mtl
 o 立方体
 v 0.000000 1.740880 2.842889
 v -1.000000 1.740880 -0.748107

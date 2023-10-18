@@ -9,6 +9,8 @@
 #include "Game/GameScene/Title/Title.h"
 #include "Game/GameScene/Battle/Battle.h"
 
+#include "Game/Stage/Stage.h"
+
 #include<vector>
 
 class GameScene
@@ -74,6 +76,15 @@ private: // モデル変数
 	std::unique_ptr<Model> notesModelLong_;
 	std::unique_ptr<Model> notesModelDamage_;
 	std::shared_ptr<Texture2D> hud_;
+
+	std::shared_ptr<Model> boxModel_;
+
+	//	主人公のモデル
+	std::vector<std::shared_ptr<Model>> heroModel_;
+	//	ボスのモデル
+	std::vector<std::shared_ptr<Model>> bossModel_;
+	//	ステージ用のモデル
+	std::vector<std::shared_ptr<Model>> stageModel_;
 
 private: // 音源
 	std::unique_ptr<AudioInput> bgm_;
