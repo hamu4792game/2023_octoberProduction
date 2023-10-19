@@ -16,6 +16,9 @@ void Stage::Initialize(const Vector3& position) {
 	transforms_[1].translation_ = { -23.0f,9.0f,0.0f };
 	transforms_[1].scale_ = { 5.0f,8.0f,15.0f };
 	transforms_[1].rotation_ = { 0.0f,3.14f,0.0f };
+	transforms_[2].translation_ = { -27.3f,13.0f,113.0f };
+	transforms_[2].scale_ = { 5.0f,12.5f,11.0f };
+	transforms_[2].rotation_ = { 0.0f,3.14f,0.0f };
 }
 
 void Stage::Update() {
