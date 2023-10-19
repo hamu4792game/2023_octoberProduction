@@ -10,13 +10,12 @@
 
 #include "Engine/Base/ConstantBuffer.h"
 #include "Engine/Base/GraphicsPipeline/GraphicsPipeline.h"
-
+#include "Engine/Base/MultipathRendering/MultipathRendering.h"
 
 //	imguiのinclude
 #include "externals/imgui/imgui.h"
 #include "externals/imgui/imgui_impl_dx12.h"
 #include "externals/imgui/imgui_impl_win32.h"
-#include "GraphicsPipeline/GraphicsPipeline.h"
 //	関数の外部宣言
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -25,7 +24,6 @@ CommandDirectX* CommandDirectX::GetInstance()
 	static CommandDirectX instance;
 	return &instance;
 }
-
 
 void CommandDirectX::Initialize(WinApp* winApp, int32_t bufferWidth, int32_t bufferHeight)
 {
@@ -52,6 +50,10 @@ void CommandDirectX::Initialize(WinApp* winApp, int32_t bufferWidth, int32_t buf
 
 	//	Audioの初期化処理
 	AudioManager::Initialize();
+
+	//	マルチパスレンダリング用の定数バッファ変数の初期化
+	MultipathRendering::GetInstance()->Initialize();
+
 }
 
 void CommandDirectX::PreDraw()
@@ -96,7 +98,7 @@ void CommandDirectX::PreDraw()
 
 	//	描画先のRTVとDSVを設定する
 	// 1パス目
-	auto rtvHeapPointer = peraRTVHeap->GetCPUDescriptorHandleForHeapStart();
+	auto rtvHeapPointer = GetCPUDescriptorHandle(rtvDescriptorHeap.Get(), device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV), 2);
 
 	auto dsvHandle = dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 
@@ -134,8 +136,6 @@ void CommandDirectX::PreDraw()
 void CommandDirectX::PostDraw()
 {
 	//	描画用のDescriptorHeapの設定
-	ID3D12DescriptorHeap* descriptorHeap[] = { srvDescriptorHeap };
-	commandList->SetDescriptorHeaps(1, descriptorHeap);
 
 	//	peraResourceを反転させる
 	D3D12_RESOURCE_BARRIER peraBarrier{};
@@ -169,24 +169,29 @@ void CommandDirectX::PostDraw()
 	commandList->ResourceBarrier(1, &barrier);
 
 	auto rtvHeapPointer = rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	rtvHeapPointer.ptr += static_cast<unsigned long long>(backBufferIndex) * device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	rtvHeapPointer.ptr += backBufferIndex * device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
 	commandList->OMSetRenderTargets(1, &rtvHeapPointer, false, nullptr);
 	ClearRenderTarget(rtvHeapPointer);
 
+	commandList->SetDescriptorHeaps(1, srvDescriptorHeap.GetAddressOf());
 
 	//	ペラポリゴンの描画
 	commandList->SetGraphicsRootSignature(peraRootSignature.Get());
 	commandList->SetPipelineState(peraPipeline.Get());
-	commandList->SetDescriptorHeaps(1, peraSRVHeap.GetAddressOf());
-	auto handle = peraSRVHeap->GetGPUDescriptorHandleForHeapStart();
-	commandList->SetGraphicsRootDescriptorTable(0, handle);
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	commandList->IASetVertexBuffers(0, 1, &peraVBV);
+	//commandList->SetDescriptorHeaps(1, srvDescriptorHeap.GetAddressOf());
+	auto handle = GetGPUDescriptorHandle(srvDescriptorHeap.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 1);
+
+	//	srv用のDescriptorTableの先頭を設定。2はrootParameter[2]
+	commandList->SetGraphicsRootDescriptorTable(0, handle);
+	//commandList->SetGraphicsRootConstantBufferView(1, MultipathRendering::GetInstance()->cEffectParameters.GetGPUVirtualAddress());
+
 	commandList->DrawInstanced(4, 1, 0, 0);
 
 	//	ImGuiの内部コマンドを生成
-	commandList->SetDescriptorHeaps(1, &srvDescriptorHeap);
+	//commandList->SetDescriptorHeaps(1, srvDescriptorHeap.GetAddressOf());
 	ImGui::Render();
 #ifdef _DEBUG
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);
@@ -258,8 +263,8 @@ void CommandDirectX::Finalize()
 
 	peraVB->Release();
 	//peraResource->Release();
-	peraRTVHeap->Release();
-	peraSRVHeap->Release();
+	/*peraRTVHeap->Release();
+	peraSRVHeap->Release();*/
 
 	swapChain->Release();
 	commandList->Release();
@@ -382,8 +387,9 @@ void CommandDirectX::CreateRenderTargetView()
 {
 	HRESULT hr = S_FALSE;
 	//	ディスクリプタヒープの生成
-	//	RTV用のヒープでディスクリプタの数は2。RTVはShader内で触るものではないので、ShaderVisibleはfalse
-	rtvDescriptorHeap = CreateDescriptorHeap(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
+	//	RTV用のヒープでディスクリプタの数は3。RTVはShader内で触るものではないので、ShaderVisibleはfalse
+	//	0 flontBuffer 1 backBuffer 2 maltipath
+	rtvDescriptorHeap = CreateDescriptorHeap(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 3, false);
 	//	SRV用のヒープでディスクリプタの数は128。SRVはShader内で触るものなので、ShaderVisibleはtrue
 	srvDescriptorHeap = CreateDescriptorHeap(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 
@@ -422,7 +428,7 @@ void CommandDirectX::CreateRenderTargetView()
 	ImGui_ImplDX12_Init(device.Get(),
 		SCD.BufferCount,
 		rtvDesc.Format,
-		srvDescriptorHeap,
+		srvDescriptorHeap.Get(),
 		srvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(),
 		srvDescriptorHeap->GetGPUDescriptorHandleForHeapStart()
 	);
@@ -454,22 +460,22 @@ void CommandDirectX::CreateMultipathRendering()
 
 	// ↓ビューを作る
 
-	// 作成済みのヒープ情報を使ってもう一枚作る
-	auto heapDesc = rtvDescriptorHeap->GetDesc();
-	
-	// RTV用ヒープを作る
-	heapDesc.NumDescriptors = 1;
-	result = device->CreateDescriptorHeap(
-		&heapDesc,
-		IID_PPV_ARGS(peraRTVHeap.GetAddressOf()));
-	assert(SUCCEEDED(result));
+	//// 作成済みのヒープ情報を使ってもう一枚作る
+	//auto heapDesc = rtvDescriptorHeap->GetDesc();
+	//
+	//// RTV用ヒープを作る
+	//heapDesc.NumDescriptors = 1;
+	//result = device->CreateDescriptorHeap(
+	//	&heapDesc,
+	//	IID_PPV_ARGS(peraRTVHeap.GetAddressOf()));
+	//assert(SUCCEEDED(result));
 
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 
-	// レンダーターゲットビュー(RTV)を作る
-	auto handle = peraRTVHeap->GetCPUDescriptorHandleForHeapStart();
+	// レンダーターゲットビュー(RTV)を作る 3つ目
+	D3D12_CPU_DESCRIPTOR_HANDLE handle  = GetCPUDescriptorHandle(rtvDescriptorHeap.Get(), device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV), 2);
 
 	device->CreateRenderTargetView(
 		peraResource.Get(),
@@ -477,7 +483,7 @@ void CommandDirectX::CreateMultipathRendering()
 		handle);
 
 	// SRV用ヒープを作る
-	heapDesc = {};
+	/*heapDesc = {};
 	heapDesc.NumDescriptors = 1;
 	heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
@@ -486,7 +492,7 @@ void CommandDirectX::CreateMultipathRendering()
 	result = device->CreateDescriptorHeap(
 		&heapDesc,
 		IID_PPV_ARGS(peraSRVHeap.GetAddressOf()));
-	assert(SUCCEEDED(result));
+	assert(SUCCEEDED(result));*/
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
@@ -494,8 +500,7 @@ void CommandDirectX::CreateMultipathRendering()
 	srvDesc.Texture2D.MipLevels = 1;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-	auto peraHandle = peraSRVHeap->GetCPUDescriptorHandleForHeapStart();
-	//peraHandle.ptr += device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	auto peraHandle = GetCPUDescriptorHandle(srvDescriptorHeap.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 1);
 
 	//	シェーダーリソースビューを作る
 	device->CreateShaderResourceView(
@@ -549,37 +554,17 @@ void CommandDirectX::CreatePeraPipeline()
 	range.NumDescriptors = 1;
 	range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	D3D12_ROOT_PARAMETER rp{};
-	rp.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rp.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rp.DescriptorTable.pDescriptorRanges = &range;
-	rp.DescriptorTable.NumDescriptorRanges = 1;
+	D3D12_ROOT_PARAMETER rp[1] = {};
+	rp[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rp[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rp[0].DescriptorTable.pDescriptorRanges = &range;
+	rp[0].DescriptorTable.NumDescriptorRanges = 1;
 
-	D3D12_STATIC_SAMPLER_DESC sampler = CD3DX12_STATIC_SAMPLER_DESC(0);
+	//rp[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV; // b
+	//rp[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//rp[1].Descriptor.ShaderRegister = 0;
 
-	D3D12_ROOT_SIGNATURE_DESC rootSigDesc = {};
-	rootSigDesc.NumParameters = 1;
-	rootSigDesc.NumStaticSamplers = 1;
-	rootSigDesc.pParameters = &rp;
-	rootSigDesc.pStaticSamplers = &sampler;
-	rootSigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-
-	//	シリアライズしてバイナリにする
-	ID3DBlob* signatureBlob = nullptr;
-	ID3DBlob* errorBlob = nullptr;
-	HRESULT result = D3D12SerializeRootSignature(&rootSigDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob, &errorBlob);
-	if (FAILED(result)) {
-		Log(reinterpret_cast<char*>(errorBlob->GetBufferPointer()));
-		assert(false);
-	}
-	//	バイナリを元に生成
-	result = device->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&peraRootSignature));
-	assert(SUCCEEDED(result));
-	if (errorBlob)
-	{
-		errorBlob->Release();
-	}
-	signatureBlob->Release();
+	peraRootSignature = GraphicsPipeline::GetInstance()->CreateRootSignature(rp, 1);
 
 #pragma endregion
 
@@ -650,7 +635,7 @@ void CommandDirectX::CreatePeraPipeline()
 	};
 
 	//	実際に生成
-	result = device->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(peraPipeline.ReleaseAndGetAddressOf()));
+	HRESULT result = device->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(peraPipeline.ReleaseAndGetAddressOf()));
 	assert(SUCCEEDED(result));
 
 

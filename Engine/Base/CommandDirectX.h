@@ -9,6 +9,11 @@
 #include "WinApp.h"
 #include <wrl.h>
 
+#include "math/Vector2.h"
+
+template<typename T>
+class ConstantBuffer;
+
 class CommandDirectX
 {
 private:
@@ -140,11 +145,11 @@ private:
 	IDXGISwapChain4* swapChain;
 	//	ディスクリプタヒープの生成
 	//	RTV用のヒープでディスクリプタの数は2。RTVはShader内で触るものではないので、ShaderVisibleはfalse
-	ID3D12DescriptorHeap* rtvDescriptorHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap;
 	//	SRV用のヒープでディスクリプタの数は128。SRVはShader内で触るものなので、ShaderVisibleはtrue
-	ID3D12DescriptorHeap* srvDescriptorHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap;
 	//	DSV用のヒープでディスクリプタの数は1。DSVはShader内で触るものではないので、ShaderVisibleはfalse
-	ID3D12DescriptorHeap* dsvDescriptorHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap;
 	//	SwapChainからResourceを引っ張ってくる
 	Microsoft::WRL::ComPtr<ID3D12Resource> swapChainResources[2]{ nullptr };
 	//	フェンスの生成
@@ -160,9 +165,9 @@ private:
 	//	ぺらポリゴン用のリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource> peraResource = nullptr;
 	//	レンダーターゲット用
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> peraRTVHeap = nullptr;
+	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> peraRTVHeap = nullptr;
 	//	テクスチャ用
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> peraSRVHeap = nullptr;
+	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> peraSRVHeap = nullptr;
 
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> peraRootSignature = nullptr;
 
@@ -172,7 +177,9 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> peraVB = nullptr;
 	D3D12_VERTEX_BUFFER_VIEW peraVBV;
 
-
+public:
+	
+	
 public:
 	/// <summary>
 	/// デバイスの取得
