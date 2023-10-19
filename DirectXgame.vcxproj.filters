@@ -128,6 +128,9 @@
     <ClCompile Include="Game\Stage\Stage.cpp">
       <Filter>Game\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Base\MultipathRendering\MultipathRendering.cpp">
+      <Filter>Engine\MultipathRendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h">
@@ -272,6 +275,9 @@
     <ClInclude Include="Game\Stage\Stage.h">
       <Filter>Game\Stage</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Base\MultipathRendering\MultipathRendering.h">
+      <Filter>Engine\MultipathRendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -387,6 +393,9 @@
     </Filter>
     <Filter Include="Game\Stage">
       <UniqueIdentifier>{58db2fa4-d841-495c-a353-4f5be3190f65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\MultipathRendering">
+      <UniqueIdentifier>{eb481126-255d-48b2-8f4c-7ca5394421fa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

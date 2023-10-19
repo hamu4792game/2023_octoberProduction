@@ -1,6 +1,7 @@
 #include "BattleAnimation.h"
 #include "externals/imgui/imgui.h"
 #include "Engine/Input/KeyInput/KeyInput.h"
+#include "Engine/Base/MultipathRendering/MultipathRendering.h"
 
 BattleAnimation::BattleAnimation(std::shared_ptr<Camera> camera) {
 	camera_ = camera;
@@ -40,6 +41,10 @@ void BattleAnimation::Update() {
 	Vector3 dis = FindVector(hero_->GetTransform().translation_, stage_.front()->GetTransform().translation_);
 	ImGui::Begin("Distance");
 	ImGui::Text("%f:%f:%f", dis.x, dis.y, dis.z);
+	ImGui::End();
+
+	ImGui::Begin("aaaaa");
+	ImGui::DragInt("type", &MultipathRendering::GetInstance()->cEffectParameters->type);
 	ImGui::End();
 
 	if (KeyInput::PushKey(DIK_SPACE)) {
@@ -83,6 +88,8 @@ void BattleAnimation::Update() {
 			hero_->SetPosition(Vector3(7.5f, 0.0f, 0.0f));
 		}
 		break;
+	default:
+		break;
 	}
 
 	if (cameraMoveFlag) {
@@ -119,6 +126,7 @@ void BattleAnimation::SetCameraMove() {
 	case MovePattern::Run:
 		cameraMoveEnd = Vector3(15.0f, 6.0f, -18.0f);
 		cameraRotateEnd = Vector3(0.105f, -0.472f, 0.0f);
+		
 		break;
 	case MovePattern::Stop:
 		cameraMoveEnd = Vector3(35.0f, 30.0f, 90.0f);
