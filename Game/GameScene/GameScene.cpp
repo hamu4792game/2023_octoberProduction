@@ -220,7 +220,7 @@ void GameScene::ModelLoad() {
 
 	//	ステージモデル
 	stageModel_[0]->Texture("Resources/plane/plane.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
-	stageModel_[1]->Texture("Resources/box/box.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
+	stageModel_[1]->Texture("Resources/box/box.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/stage/building1.png");
 	stageModel_[2] = stageModel_[1];
 	stageModel_[3] = stageModel_[1];
 	stageModel_[4] = stageModel_[1];

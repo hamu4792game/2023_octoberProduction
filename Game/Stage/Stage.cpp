@@ -12,6 +12,10 @@ void Stage::Initialize(const Vector3& position) {
 		i.parent_ = &worldTrans_;
 	}
 	transforms_[0].scale_ = Vector3(50.0f, 1.0f, 70.0f);
+
+	transforms_[1].translation_ = { -23.0f,9.0f,0.0f };
+	transforms_[1].scale_ = { 5.0f,8.0f,15.0f };
+	transforms_[1].rotation_ = { 0.0f,3.14f,0.0f };
 }
 
 void Stage::Update() {
