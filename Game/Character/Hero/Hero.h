@@ -16,6 +16,9 @@ public:
 
 	void Update() override;
 
+public:
+	void SetPosition(const Vector3& position);
+
 private:
 	enum Position {
 		Start = 0,

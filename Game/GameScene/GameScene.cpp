@@ -96,8 +96,6 @@ void GameScene::Update() {
 	ImGui::End();
 #endif // _DEBUG
 
-	
-
 	//	シーン切替わり時の初期化
 	if (oldscene != scene) {
 		switch (scene) {

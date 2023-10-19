@@ -20,6 +20,8 @@ public:
 
 	const WorldTransform& GetTransform() { return transform_; }
 
+	void TransformUpdate();
+
 protected:
 	
 	//	中心座標

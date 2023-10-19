@@ -22,7 +22,7 @@ void Boss::Update() {
 
 	//	座標更新
 	transform_.UpdateMatrix();
-	for (uint8_t i = 0; i < partsTransform_.size(); i++) {
-		partsTransform_[i].UpdateMatrix();
+	for (auto& i : partsTransform_) {
+		i.UpdateMatrix();
 	}
 }

@@ -297,6 +297,7 @@ void Hero::DrawImgui(){
 
 	ImGui::End();
 
+#pragma region Parts
 	ImGui::Begin("Hero");
 
 	if (ImGui::TreeNode("Transform")) {
@@ -305,7 +306,6 @@ void Hero::DrawImgui(){
 		ImGui::DragFloat3("Rotate", &transform_.rotation_.x, AngleToRadian(1.0f));
 		ImGui::TreePop();
 	}
-#pragma region Parts
 
 	if (ImGui::TreeNode("Body")) {
 		ImGui::DragFloat3("Translate", &partsTransform_[static_cast<uint8_t>(HeroParts::Body)].translation_.x, 0.1f);
@@ -379,7 +379,6 @@ void Hero::DrawImgui(){
 
 #pragma endregion
 
-	//ImGui::End();
 
 	ImGui::Begin("確認");
 	ImGui::Text("ファイル読み込み出来たかどうか = %d", chackOnlyNumber);
@@ -388,6 +387,18 @@ void Hero::DrawImgui(){
 	ImGui::Text("中に入っている要素数 = %d", startPos.size());
 	ImGui::Text("中に入っている要素数 = %d", EndPos.size());
 	ImGui::End();
+
+	transform_.translation_.z += 1.0f;
+
+	//	座標更新
+	transform_.UpdateMatrix();
+	for (auto& i : partsTransform_) {
+		i.UpdateMatrix();
+	}
+}
+
+void Hero::SetPosition(const Vector3& position) {
+	transform_.translation_ = position;
 }
 
 void Hero::SaveFile(const std::string& kItemName) {

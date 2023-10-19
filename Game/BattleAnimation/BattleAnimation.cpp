@@ -33,11 +33,6 @@ void BattleAnimation::Initialize() {
 }
 
 void BattleAnimation::Update() {
-	hero_->Update();
-	boss_->Update();
-	for (auto& i : stage_) {
-		i->Update();
-	}
 
 	// ステージの先頭要素と主人公のベクトルを取得
 	Vector3 dis = FindVector(hero_->GetTransform().translation_, stage_.front()->GetTransform().translation_);
@@ -45,18 +40,20 @@ void BattleAnimation::Update() {
 	ImGui::Text("%f", dis.z);
 	ImGui::End();
 	// z軸が指定以上離れている(見えなくなる)場合
-	if (dis.z <= -80.0f) {
-		// 先頭要素を除外する
-		stage_.pop_front();
-		// 末尾にステージ要素を追加する
-		stage_.push_back(std::make_unique<Stage>(stageModel_));
-		// 逆イテレーター z軸ステージサイズ * ステージの数
-		(*stage_.rbegin())->Initialize(Vector3(0.0f, 0.0f, 140.0f * stageCount));
-		stageCount++;
+	if (dis.z <= -140.0f * 2.0f) {
+		stageCount = 0u;
+		for (auto& i : stage_) {
+			i->SetPosition(Vector3(0.0f, 0.0f, 140.0f * stageCount));
+			stageCount++;
+		}
+		hero_->SetPosition(Vector3(7.5f, 0.0f, 0.0f));
 	}
 
-
-
+	hero_->Update();
+	boss_->Update();
+	for (auto& i : stage_) {
+		i->Update();
+	}
 }
 
 void BattleAnimation::Draw3D(const Matrix4x4& viewProjectionMat) {
@@ -66,5 +63,4 @@ void BattleAnimation::Draw3D(const Matrix4x4& viewProjectionMat) {
 	for (auto& i : stage_) {
 		i->Draw3D(viewProjectionMat);
 	}
-
 }
