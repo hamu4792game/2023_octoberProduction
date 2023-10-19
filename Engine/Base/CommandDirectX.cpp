@@ -438,7 +438,7 @@ void CommandDirectX::CreateMultipathRendering()
 	auto resDesc = backbuffer->GetDesc();
 	D3D12_HEAP_PROPERTIES heapProp = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 	//	レンダリング時のクリア値と同じ値
-	float clearColor[4] = { 0.0f,0.0f,0.0f,1.0f };
+	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//	青っぽい色、RGBA
 	D3D12_CLEAR_VALUE clearValue = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
 
 	HRESULT result = device->CreateCommittedResource(
@@ -674,8 +674,8 @@ void CommandDirectX::ClearRenderTarget(D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapPointe
 	/*UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();*/
 
 	//	指定した色で画面全体をクリアする
-	//float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//	青っぽい色、RGBA
-	float clearColor[] = { 0.0f,0.0f,0.0f,1.0f };	//	青っぽい色、RGBA
+	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//	青っぽい色、RGBA
+	//float clearColor[] = { 0.0f,0.0f,0.0f,1.0f };	//	青っぽい色、RGBA
 	commandList->ClearRenderTargetView(rtvHeapPointer, clearColor, 0, nullptr);
 }
 
