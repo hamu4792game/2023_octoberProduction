@@ -26,10 +26,18 @@ private:
 	std::vector<std::shared_ptr<Model>> stageModel_;
 
 	MovePattern movepattern_ = MovePattern::Run;
+	bool cameraMoveFlag = false;
+	Vector3 cameraMoveStart; Vector3 cameraMoveEnd;
+	Vector3 cameraRotateStart; Vector3 cameraRotateEnd;
+	float cameraT_ = 0.0f;
 
 private:
 	//	ステージ用カウント変数
 	uint32_t stageCount = 0u;
+
+private: // メンバ関数
+	//	カメラ移動用のパラメーターセット関数
+	void SetCameraMove();
 
 public: // セッター
 	void SetHeroModels(std::vector<std::shared_ptr<Model>> model) { hero_->SetModel(model); }

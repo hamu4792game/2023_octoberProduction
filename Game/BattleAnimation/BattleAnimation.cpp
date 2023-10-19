@@ -20,6 +20,7 @@ void BattleAnimation::Initialize() {
 		camera_->transform.translation_ = Vector3(15.0f, 6.0f, -18.0f);
 		camera_->transform.rotation_ = Vector3(0.105f, -0.472f, 0.0f);
 	}
+	cameraT_ = 0.0f;
 
 	stageCount = 0u;
 
@@ -48,11 +49,13 @@ void BattleAnimation::Update() {
 		if (movepattern_ == MovePattern::kMaxCount) {
 			movepattern_ = MovePattern::Run;
 		}
+		cameraMoveFlag = true;
+		SetCameraMove();
 	}
 
 	switch (movepattern_) {
 	case MovePattern::Run:
-		
+
 		// z軸が指定以上離れている(見えなくなる)場合
 		if (dis.z <= -140.0f * 2.0f) {
 			stageCount = 0u;
@@ -65,6 +68,10 @@ void BattleAnimation::Update() {
 		}
 		break;
 	case MovePattern::Stop:
+
+		cameraMoveStart = camera_->transform.translation_;
+		cameraRotateStart = camera_->transform.rotation_;
+
 		// z軸が指定以上離れている(見えなくなる)場合
 		if (dis.y >= 140.0f) {
 			stageCount = 0u;
@@ -78,6 +85,13 @@ void BattleAnimation::Update() {
 		break;
 	}
 
+	if (cameraMoveFlag) {
+		cameraT_ += 0.01f;
+		if (!camera_->CameraWork(cameraMoveStart, cameraMoveEnd, cameraRotateStart, cameraRotateEnd, cameraT_)) {
+			cameraT_ = 0.0f;
+			cameraMoveFlag = false;
+		}
+	}
 	
 	hero_->Move(static_cast<uint32_t>(movepattern_));
 
@@ -95,5 +109,20 @@ void BattleAnimation::Draw3D(const Matrix4x4& viewProjectionMat) {
 
 	for (auto& i : stage_) {
 		i->Draw3D(viewProjectionMat);
+	}
+}
+
+void BattleAnimation::SetCameraMove() {
+	cameraMoveStart = camera_->transform.translation_;
+	cameraRotateStart = camera_->transform.rotation_;
+	switch (movepattern_) {
+	case MovePattern::Run:
+		cameraMoveEnd = Vector3(15.0f, 6.0f, -18.0f);
+		cameraRotateEnd = Vector3(0.105f, -0.472f, 0.0f);
+		break;
+	case MovePattern::Stop:
+		cameraMoveEnd = Vector3(35.0f, 30.0f, 90.0f);
+		cameraRotateEnd = Vector3(0.314f, -2.724f, 0.0f);
+		break;
 	}
 }
