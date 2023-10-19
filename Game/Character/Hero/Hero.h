@@ -51,6 +51,16 @@ private:
 
 	int fileNumber = 0;
 
+	int SetStart = Position::Start;
+
+	bool isAnimation = false;
+
+	float moveSpeedArm = (1.7f / 20.0f);
+
+	float moveSpeedUpperLeg = (1.6f / 20.0f);
+
+	float moveSpeedBottomLeg = (1.27f / 20.0f);
+
 	const std::string kDirectoryPath = "Resources/Animation/";
 
 	const std::string kDirectoryName = "Resources/Animation";

@@ -65,12 +65,46 @@ void Hero::Update() {
 	DrawImgui();
 
 	//Move(static_cast<uint32_t>(MovePattern::Run));
-
-	for (size_t i = 0; i < partsName.size(); i++) {
-		partsTransform_[i].translation_ = startPos[i].translation_;
-		partsTransform_[i].rotation_ = startPos[i].rotation_;
-		partsTransform_[i].scale_ = startPos[i].scale_;
+	if (SetStart == Position::Start) {
+		for (size_t i = 0; i < partsName.size(); i++) {
+			partsTransform_[i].translation_ = startPos[i].translation_;
+			partsTransform_[i].rotation_ = startPos[i].rotation_;
+			partsTransform_[i].scale_ = startPos[i].scale_;
+		}
 	}
+	else if (SetStart == Position::End) {
+		for (size_t i = 0; i < partsName.size(); i++) {
+			partsTransform_[i].translation_ = EndPos[i].translation_;
+			partsTransform_[i].rotation_ = EndPos[i].rotation_;
+			partsTransform_[i].scale_ = EndPos[i].scale_;
+		}
+	}
+	else if (SetStart ==Position::kMaxCount){
+		if (isAnimation){
+			
+			partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x += moveSpeedUpperLeg;
+			partsTransform_[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x -= moveSpeedUpperLeg;
+			partsTransform_[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x -= moveSpeedBottomLeg;
+			partsTransform_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x += moveSpeedBottomLeg;
+			partsTransform_[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x -= moveSpeedArm;
+
+			partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y -= moveSpeedArm;
+
+			if (partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y < -2.1f) {
+				moveSpeedArm *= -1.0f;
+				moveSpeedUpperLeg *= -1.0f;
+				moveSpeedBottomLeg *= -1.0f;
+			}
+			else if (partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y > -0.6f) {
+				moveSpeedArm *= -1.0f;
+				moveSpeedUpperLeg *= -1.0f;
+				moveSpeedBottomLeg *= -1.0f;
+			}
+
+		}
+
+	}
+	
 
 	//	座標更新
 	transform_.UpdateMatrix();
@@ -118,7 +152,13 @@ void Hero::DrawImgui(){
 			if (ImGui::MenuItem("ロード")) {
 				if (!Name_.empty()) {
 					LoadFile(Name_);
+					for (size_t i = 0; i < partsName.size(); i++) {
+						partsTransform_[i].translation_ = startPos[i].translation_;
+						partsTransform_[i].rotation_ = startPos[i].rotation_;
+						partsTransform_[i].scale_ = startPos[i].scale_;
+					}
 				}
+
 			}
 			if (ImGui::TreeNode("読み込むファイル")) {
 				for (size_t i = 0; i < fileName.size(); i++) {
@@ -137,6 +177,15 @@ void Hero::DrawImgui(){
 				ImGui::Text(fileName[i].c_str());
 			}
 
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("位置確認用SRT切り替え")) {
+			ImGui::RadioButton("始点", &SetStart, Position::Start);			
+			ImGui::RadioButton("終点", &SetStart, Position::End);
+			ImGui::RadioButton("セットしない", &SetStart, Position::kMaxCount);
+			if (SetStart == Position::kMaxCount) {
+				ImGui::Checkbox("アニメーション開始", &isAnimation);
+			}
 			ImGui::EndMenu();
 		}
 
