@@ -35,7 +35,18 @@ public:
 
 	Vector3 position;	//カメラの座標
 
-	//送信確認
+public:
+	
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="startTrans"></param>
+	/// <param name="endTrans"></param>
+	/// <param name="startRotate"></param>
+	/// <param name="endRotate"></param>
+	/// <param name="t"></param>
+	/// <returns>true = 動いて入る false = 動いていない</returns>
+	bool CameraWork(const Vector3& startTrans, const Vector3& endTrans,const Vector3& startRotate, const Vector3& endRotate, const float& t);
 
 };
 
