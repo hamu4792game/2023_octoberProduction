@@ -66,6 +66,12 @@ void Hero::Update() {
 
 	transform_.translation_.z += 1.0f;
 
+	for (size_t i = 0; i < partsName.size(); i++) {
+		partsTransform_[i].translation_ = startPos[i].translation_;
+		partsTransform_[i].rotation_ = startPos[i].rotation_;
+		partsTransform_[i].scale_ = startPos[i].scale_;
+	}
+
 	//	座標更新
 	transform_.UpdateMatrix();
 	for (uint8_t i = 0; i < partsTransform_.size(); i++) {

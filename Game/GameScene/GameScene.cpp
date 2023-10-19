@@ -127,9 +127,9 @@ void GameScene::Update() {
 		break;
 	}
 
-	if (KeyInput::PushKey(DIK_S)) {
-		sceneChangeFlag = true;
-	}
+	//if (KeyInput::PushKey(DIK_S)) {
+	//	sceneChangeFlag = true;
+	//}
 
 	//	シーンチェンジの処理
 	if (sceneChangeFlag) {
