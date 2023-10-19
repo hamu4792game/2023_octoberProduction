@@ -36,6 +36,16 @@ void Player::Update(std::vector<Vector3> ControlPoints, int lastLinePass) {
 
 #endif // _DEBUG
 
+	if (KeyInput::PushKey(DIK_Q)) {
+		
+		if (isMove) {
+			isMove = false;
+		}
+		else {
+			isMove = true;
+		}
+
+	}
 
 	//キーを押した瞬間の判定
 	if (KeyInput::PushKey(DIK_SPACE)) {

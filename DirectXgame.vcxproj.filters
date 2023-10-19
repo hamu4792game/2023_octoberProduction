@@ -128,6 +128,9 @@
     <ClCompile Include="Game\Stage\Stage.cpp">
       <Filter>Game\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="math\Rand.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h">
@@ -271,6 +274,9 @@
     </ClInclude>
     <ClInclude Include="Game\Stage\Stage.h">
       <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Rand.h">
+      <Filter>math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

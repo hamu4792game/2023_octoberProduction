@@ -1,4 +1,5 @@
 #include "Battle.h"
+#include "math/Rand.h"
 
 Battle::Battle(std::shared_ptr<Camera> camera)
 {
@@ -9,17 +10,10 @@ Battle::Battle(std::shared_ptr<Camera> camera)
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->ModelLoad();
 
-	musicScore_ = std::make_unique<MusicScore>();
-	musicScore_->SetPlayer(player_.get());
-	musicScore_->SetBPM(BPM_);
-	
-	
-
 	makeCatmull_ = std::make_unique<MakeCatmull>();
 
 	makeCatmull_->Initialize();
 
-	
 	battleAnimation_ = std::make_unique<BattleAnimation>(camera);
 	
 
@@ -44,7 +38,37 @@ void Battle::Initialize() {
 	EndPos = { 0.0f,2.0f,0.0f };
 
 	player_->Initialize(makeCatmull_->GetFirstControlPoint());
-	musicScore_->Initialize();
+
+	musicScoreList_.clear();
+
+	for (int32_t i = 0; i < 4; i++) {
+		std::unique_ptr<MusicScore> tmpScore = std::make_unique<MusicScore>();
+		tmpScore->ModelLoad(notesModels_, noteTextures_);
+		tmpScore->SetPlayer(player_.get());
+		tmpScore->SetBPM(BPM_);
+		if (i <= 1) {
+			tmpScore->SetNotes(MusicScore::Rest, makeCatmull_->GetControlPoints(), i);
+		}
+		else {
+			tmpScore->SetNotes(MusicScore::Easy_01, makeCatmull_->GetControlPoints(), i);
+		}
+		tmpScore->Initialize();
+		musicScoreList_.push_back(std::move(tmpScore));
+	}
+
+	for (int32_t i = 0; i < 1; i++) {
+		musicScores_[i] = std::make_unique<MusicScore>();
+		musicScores_[i]->ModelLoad(notesModels_, noteTextures_);
+		musicScores_[i]->SetPlayer(player_.get());
+		musicScores_[i]->SetBPM(BPM_);
+		if (i <= 1) {
+			musicScores_[i]->SetNotes(MusicScore::Rest, makeCatmull_->GetControlPoints(), i);
+		}
+		else {
+			musicScores_[i]->SetNotes(MusicScore::Easy_01, makeCatmull_->GetControlPoints(), i);
+		}
+		musicScores_[i]->Initialize();
+	}
 
 	//battleAnimation_->Initialize();
 
@@ -56,12 +80,16 @@ void Battle::Initialize() {
 
 void Battle::Update() {
 
+	//フラグを降ろす
+	MusicScore::isUpdateFlag_ = false;
+
 	if (player_->GetIsMove()) {
 		countMeasure_--;
 	}
 
 	if (countMeasure_ <= 0/* && player_->GetLinePass() == 0*/) {
-		musicScore_->SetNotes(MusicScore::Easy_01, makeCatmull_->GetControlPoints());
+		UpdateScores();
+		/*musicScores_[0]->SetNotes(MusicScore::Easy_04, makeCatmull_->GetControlPoints(), 0);*/
 		player_->SetLinePass(0);
 		player_->SetDivisionNumber(float(maxCountMeasure_ / float(makeCatmull_->GetControlPoints().size() - 1) / 10.0f));
 		//-1を付けるとズレが無くなるのでおまじないで付けてる
@@ -75,9 +103,17 @@ void Battle::Update() {
 		
 	}
 
+	for (const auto& score : musicScoreList_) {
+		score->Update(makeCatmull_->GetControlPoints());
+	}
+
+	/*for (int32_t i = 0; i < 1; i++) {
+		musicScores_[i]->Update(makeCatmull_->GetControlPoints());
+	}*/
+
 	player_->Update(makeCatmull_->GetControlPoints(),makeCatmull_->GetLastLinePass());
 
-	musicScore_->Update(makeCatmull_->GetControlPoints());
+	/*currentMusicScore_->Update(makeCatmull_->GetControlPoints());*/
 
 	ControlPoints_ = makeCatmull_->GetControlPoints();
 
@@ -101,7 +137,15 @@ void Battle::Draw3D(const Matrix4x4& viewProjection) {
 
 	player_->Draw(viewProjection);
 
-	musicScore_->Draw(viewProjection);
+	for (const auto& score : musicScoreList_) {
+		score->Draw(viewProjection);
+	}
+
+	/*for (int32_t i = 0; i < 1; i++) {
+		musicScores_[i]->Draw(viewProjection);
+	}*/
+
+	/*currentMusicScore_->Draw(viewProjection);*/
 
 	makeCatmull_->Draw(viewProjection);
 
@@ -116,7 +160,7 @@ void Battle::Draw3D(const Matrix4x4& viewProjection) {
 
 void Battle::Draw2D(const Matrix4x4& viewProjection) {
 
-	musicScore_->Draw2D(viewProjection);
+	/*currentMusicScore_->Draw2D(viewProjection);*/
 
 }
 
@@ -124,5 +168,17 @@ void Battle::ModelLoad(std::vector<Model*> models, std::vector<Texture2D*> textu
 
 	notesModels_ = models;
 	noteTextures_ = textures;
-	musicScore_->ModelLoad(notesModels_, noteTextures_);
+	/*currentMusicScore_->ModelLoad(notesModels_, noteTextures_);*/
+}
+
+void Battle::UpdateScores() {
+
+	//空でない場合処理
+	if (!musicScoreList_.empty()) {
+		//最前列を後列に追加
+		musicScoreList_.push_back(std::move(musicScoreList_.front()));
+		musicScoreList_.pop_front();
+		musicScoreList_.back().get()->SetNotes(MusicScore::ScoreType(rand() % 10), makeCatmull_->GetControlPoints(), 3);
+	}
+
 }

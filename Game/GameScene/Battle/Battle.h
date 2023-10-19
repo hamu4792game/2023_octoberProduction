@@ -38,11 +38,15 @@ public:
 
 private:
 
+	void UpdateScores();
+
 	std::unique_ptr<Player> player_;
 
-	std::vector<std::unique_ptr<MusicScore>> musicScores_;
+	std::list<std::unique_ptr<MusicScore>> musicScoreList_;
+
+	std::unique_ptr<MusicScore> musicScores_[1];
 	
-	std::unique_ptr<MusicScore> musicScore_;
+	/*MusicScore* currentMusicScore_;*/
 
 	std::unique_ptr<Skydome> skydome_;
 

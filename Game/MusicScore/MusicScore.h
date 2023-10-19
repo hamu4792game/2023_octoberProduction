@@ -16,8 +16,19 @@ public:
 	/*static const uint32_t kMaxNotes = 16;*/
 
 	//譜面の種類
+	//後ろの数字は十六分音符単位での配置
 	enum ScoreType {
-		Easy_01,
+		Easy_01, //全音符1つ : 1000 0000 0000 0000
+		Easy_02, //二分音符2つ : 1000 0000 1000 1000
+		Easy_03, //四分音符3つ : 1000 1000 1000 0000
+		Easy_04, //四分音符4つ : 1000 1000 1000 1000
+		Easy_05, //二分1つ、四分2つ : 1000 0000 1000 1000
+		Normal_01, //四分3つ、八分2つ : 1000 1010 1000 1000
+		Normal_02, //四分2つ、八分4つ : 1000 1010 1010 1000
+		Normal_03, //四分2つ、八分4つ : 1010 1000 1010 1000
+		Normal_04, //四分1つ、八分6つ : 1010 1010 1010 1000
+		Normal_05, //八分8つ : 1010 1010 1010 1010
+		Rest, //全休符 : 0000 0000 0000 0000
 	};
 
 	void Initialize();
@@ -30,7 +41,7 @@ public:
 
 	void SetPlayer(Player* player) { player_ = player; }
 
-	void SetNotes(ScoreType type, std::vector<Vector3> position);
+	void SetNotes(ScoreType type, std::vector<Vector3> position, int32_t offset);
 
 	bool IsEmpty() { return notes_.empty(); }
 
@@ -52,6 +63,9 @@ public:
 	void SetCountMeasure(float bpm) {
 		maxCountMeasure_ = int(3600 / bpm * 4);
 	}
+
+	//全てのMusicScoreから一つのノーツだけ判定を取るための変数
+	static bool isUpdateFlag_;
 
 private:
 
