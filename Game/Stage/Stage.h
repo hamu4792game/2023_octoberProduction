@@ -21,6 +21,7 @@ public:
 	const WorldTransform& GetTransform() { return worldTrans_; }
 
 	void SetPosition(const Vector3& position);
+	void SetRotation(const Vector3& rotation);
 
 private: // モデルデータ
 	std::vector<std::shared_ptr<Model>> models_;

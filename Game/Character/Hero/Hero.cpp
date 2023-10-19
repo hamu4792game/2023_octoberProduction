@@ -64,7 +64,7 @@ void Hero::Initialize() {
 void Hero::Update() {
 	DrawImgui();
 
-	transform_.translation_.z += 1.0f;
+	//Move(static_cast<uint32_t>(MovePattern::Run));
 
 	for (size_t i = 0; i < partsName.size(); i++) {
 		partsTransform_[i].translation_ = startPos[i].translation_;
@@ -76,6 +76,18 @@ void Hero::Update() {
 	transform_.UpdateMatrix();
 	for (uint8_t i = 0; i < partsTransform_.size(); i++) {
 		partsTransform_[i].UpdateMatrix();
+	}
+}
+
+void Hero::Move(const int& pattern) {
+	switch (pattern) {
+	case static_cast<uint32_t>(MovePattern::Run):
+		transform_.translation_.z += 1.0f;
+		break;
+	case static_cast<uint32_t>(MovePattern::Stop):
+		transform_.translation_.y -= 1.0f;
+		break;
+
 	}
 }
 
@@ -403,14 +415,6 @@ void Hero::DrawImgui(){
 	ImGui::Text("中に入っている要素数 = %d", startPos.size());
 	ImGui::Text("中に入っている要素数 = %d", EndPos.size());
 	ImGui::End();
-
-	transform_.translation_.z += 1.0f;
-
-	//	座標更新
-	transform_.UpdateMatrix();
-	for (auto& i : partsTransform_) {
-		i.UpdateMatrix();
-	}
 }
 
 void Hero::SetPosition(const Vector3& position) {

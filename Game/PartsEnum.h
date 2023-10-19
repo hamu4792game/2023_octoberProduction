@@ -35,3 +35,10 @@ enum class BossParts {
 
 	kMaxCount // 最大数用
 };
+
+enum class MovePattern {
+	Run,
+	Stop,
+
+	kMaxCount // 最大数用数
+};

@@ -16,6 +16,9 @@ public:
 
 	void Update() override;
 
+	void Move(const int& pattern);
+
+
 public:
 	void SetPosition(const Vector3& position);
 

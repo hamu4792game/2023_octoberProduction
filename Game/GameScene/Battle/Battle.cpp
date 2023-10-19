@@ -31,6 +31,8 @@ Battle::Battle(std::shared_ptr<Camera> camera)
 	
 	//	音量の設定
 	
+	//	天球の親設定
+	skydome_->SetParent(battleAnimation_->GetHeroTransform());
 
 }
 

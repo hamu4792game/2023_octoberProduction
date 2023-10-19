@@ -1,5 +1,6 @@
 #include "BattleAnimation.h"
 #include "externals/imgui/imgui.h"
+#include "Engine/Input/KeyInput/KeyInput.h"
 
 BattleAnimation::BattleAnimation(std::shared_ptr<Camera> camera) {
 	camera_ = camera;
@@ -37,17 +38,49 @@ void BattleAnimation::Update() {
 	// ステージの先頭要素と主人公のベクトルを取得
 	Vector3 dis = FindVector(hero_->GetTransform().translation_, stage_.front()->GetTransform().translation_);
 	ImGui::Begin("Distance");
-	ImGui::Text("%f", dis.z);
+	ImGui::Text("%f:%f:%f", dis.x, dis.y, dis.z);
 	ImGui::End();
-	// z軸が指定以上離れている(見えなくなる)場合
-	if (dis.z <= -140.0f * 2.0f) {
-		stageCount = 0u;
-		for (auto& i : stage_) {
-			i->SetPosition(Vector3(0.0f, 0.0f, 140.0f * stageCount));
-			stageCount++;
+
+	if (KeyInput::PushKey(DIK_SPACE)) {
+		uint8_t handle = static_cast<uint32_t>(movepattern_);
+		handle++;
+		movepattern_ = static_cast<MovePattern>(handle);
+		if (movepattern_ == MovePattern::kMaxCount) {
+			movepattern_ = MovePattern::Run;
 		}
-		hero_->SetPosition(Vector3(7.5f, 0.0f, 0.0f));
 	}
+
+	switch (movepattern_) {
+	case MovePattern::Run:
+		
+		// z軸が指定以上離れている(見えなくなる)場合
+		if (dis.z <= -140.0f * 2.0f) {
+			stageCount = 0u;
+			for (auto& i : stage_) {
+				i->SetPosition(Vector3(0.0f, 0.0f, 140.0f * stageCount));
+				i->SetRotation(Vector3(0.0f, 0.0f, 0.0f));
+				stageCount++;
+			}
+			hero_->SetPosition(Vector3(7.5f, 0.0f, 0.0f));
+		}
+		break;
+	case MovePattern::Stop:
+		// z軸が指定以上離れている(見えなくなる)場合
+		if (dis.y >= 140.0f) {
+			stageCount = 0u;
+			for (auto& i : stage_) {
+				i->SetPosition(Vector3(0.0f, -140.0f * stageCount, 0.0f));
+				i->SetRotation(Vector3(AngleToRadian(90.0f), 0.0f, 0.0f));
+				stageCount++;
+			}
+			hero_->SetPosition(Vector3(7.5f, 0.0f, 0.0f));
+		}
+		break;
+	}
+
+	
+	hero_->Move(static_cast<uint32_t>(movepattern_));
+
 
 	hero_->Update();
 	boss_->Update();

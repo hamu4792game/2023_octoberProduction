@@ -88,3 +88,7 @@ void Stage::Draw3D(const Matrix4x4& viewProjectionMat) {
 void Stage::SetPosition(const Vector3& position) {
 	worldTrans_.translation_ = position;
 }
+
+void Stage::SetRotation(const Vector3& rotation) {
+	worldTrans_.rotation_ = rotation;
+}
