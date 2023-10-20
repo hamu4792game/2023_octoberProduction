@@ -52,6 +52,12 @@ void Notes::Update() {
 		player_->IsMiss();
 	}
 
+	//描画上のモデル座標更新
+	if (judgeFrame_ <= 30.0f) {
+		worldTransform_.translation_ = makeCatmullRom(startPosition_, startPosition_, goalPosition_, goalPosition_,
+			float((40.0f - (judgeFrame_ + 10.0f)) / 40.0f));
+	}
+
 	//判定フレーム更新
 	worldTransformInside_.translation_.x = judgeFrame_;
 	worldTransformLine_.scale_ = { 50.0f - judgeFrame_, 50.0f - judgeFrame_, 50.0f - judgeFrame_ };
@@ -93,7 +99,9 @@ void Notes::RestoreSize() {
 
 void Notes::Draw(const Matrix4x4& viewProjection) {
 
-	model_->ModelDraw(worldTransform_, viewProjection, 0xffffffff, model_);
+	if (judgeFrame_ <= 30.0f) {
+		model_->ModelDraw(worldTransform_, viewProjection, 0xffffffff, model_);
+	}
 
 	model_->ModelDraw(worldTransformInside_, viewProjection, 0xffffffff, model_);
 

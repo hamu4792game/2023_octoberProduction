@@ -67,20 +67,6 @@ void Battle::Initialize() {
 		musicScoreList_.push_back(std::move(tmpScore));
 	}
 
-	for (int32_t i = 0; i < 1; i++) {
-		musicScores_[i] = std::make_unique<MusicScore>();
-		musicScores_[i]->ModelLoad(notesModels_, noteTextures_);
-		musicScores_[i]->SetPlayer(player_.get());
-		musicScores_[i]->SetBPM(BPM_);
-		if (i <= 1) {
-			musicScores_[i]->SetNotes(MusicScore::Rest, makeCatmull_->GetControlPoints(), i);
-		}
-		else {
-			musicScores_[i]->SetNotes(MusicScore::Easy_04, makeCatmull_->GetControlPoints(), i);
-		}
-		musicScores_[i]->Initialize();
-	}
-
 	//battleAnimation_->Initialize();
 
 	worldTransformLine_.scale_ = { 1.0f,1.0f,1.0f };
@@ -162,13 +148,7 @@ void Battle::UpdateObjects() {
 		score->Update(makeCatmull_->GetControlPoints());
 	}
 
-	/*for (int32_t i = 0; i < 1; i++) {
-		musicScores_[i]->Update(makeCatmull_->GetControlPoints());
-	}*/
-
 	player_->Update(makeCatmull_->GetControlPoints(), makeCatmull_->GetLastLinePass());
-
-	/*currentMusicScore_->Update(makeCatmull_->GetControlPoints());*/
 
 	ControlPoints_ = makeCatmull_->GetControlPoints();
 
@@ -195,12 +175,6 @@ void Battle::Draw3D(const Matrix4x4& viewProjection) {
 	for (const auto& score : musicScoreList_) {
 		score->Draw(viewProjection);
 	}
-
-	/*for (int32_t i = 0; i < 1; i++) {
-		musicScores_[i]->Draw(viewProjection);
-	}*/
-
-	/*currentMusicScore_->Draw(viewProjection);*/
 
 	makeCatmull_->Draw(viewProjection);
 
@@ -233,7 +207,7 @@ void Battle::UpdateScores() {
 		//最前列を後列に追加
 		musicScoreList_.push_back(std::move(musicScoreList_.front()));
 		musicScoreList_.pop_front();
-		musicScoreList_.back().get()->SetNotes(MusicScore::Easy_04, makeCatmull_->GetControlPoints(), 3);
+		musicScoreList_.back().get()->SetNotes(MusicScore::ScoreType(rand() % 10), makeCatmull_->GetControlPoints(), 3);
 	}
 
 }

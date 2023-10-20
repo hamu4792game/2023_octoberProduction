@@ -68,9 +68,9 @@ void MusicScore::Update(std::vector<Vector3> position) {
 
 		for (Notes* note : notes_) {
 
-			if (position.size() > note->GetNumber()) {
-				note->SetPosition(position[note->GetNumber()]);
-			}
+			/*if (position.size() > note->GetNumber()) {
+				note->SetStartPosition(position[note->GetNumber()]);
+			}*/
 
 			//全てのMusicScoreのノーツの中から一つだけ当たり判定を取る
 			if (note->GetNumber() == updateNumber && isUpdateFlag_ == false) {
@@ -263,7 +263,9 @@ void MusicScore::SetNoteNormal(const Vector3& position, uint32_t num, float judg
 	newNote->TextureLoad(noteTextures_[0]);
 	newNote->Initialize();
 	newNote->SetPlayer(player_);
-	newNote->SetPosition(position);
+	newNote->SetStartPosition(position + Vector3{ 0.0f,0.0f,30.0f });
+	newNote->SetMiddlePosition(position);
+	newNote->SetGoalPosition(position + Vector3{ 0.0f,0.0f,-10.0f });
 	newNote->SetNumber(num);
 	newNote->SetJudgeFrame(judgeline);
 	notes_.push_back(newNote);
@@ -278,7 +280,7 @@ void MusicScore::SetNoteLStart(const Vector3& position, uint32_t num, float judg
 	newNote->Initialize();
 	newNote->SetLongNoteType(NoteLong::Start);
 	newNote->SetPlayer(player_);
-	newNote->SetPosition(position);
+	newNote->SetStartPosition(position);
 	newNote->SetNumber(num);
 	newNote->SetJudgeFrame(judgeline);
 	notes_.push_back(newNote);
@@ -293,7 +295,7 @@ void MusicScore::SetNoteLEnd(const Vector3& position, uint32_t num, float judgel
 	newNote->Initialize();
 	newNote->SetLongNoteType(NoteLong::End);
 	newNote->SetPlayer(player_);
-	newNote->SetPosition(position);
+	newNote->SetStartPosition(position);
 	newNote->SetNumber(num);
 	newNote->SetJudgeFrame(judgeline);
 	notes_.push_back(newNote);
@@ -307,7 +309,7 @@ void MusicScore::SetNoteDamage(const Vector3& position, uint32_t num, float judg
 	newNote->TextureLoad(noteTextures_[0]);
 	newNote->Initialize();
 	newNote->SetPlayer(player_);
-	newNote->SetPosition(position);
+	newNote->SetStartPosition(position);
 	newNote->SetNumber(num);
 	newNote->SetJudgeFrame(judgeline);
 	notes_.push_back(newNote);

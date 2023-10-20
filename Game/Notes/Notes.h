@@ -36,16 +36,26 @@ public:
 
 	void TextureLoad(Texture2D* texture) { lineTexture_ = texture; }
 
-	void SetPosition(const Vector3& position) { 
-		worldTransform_.translation_ = position;
-		worldTransform_.UpdateMatrix();
+	//描画上のスタートポジションセット
+	void SetStartPosition(const Vector3& position) { 
+		startPosition_ = position;
+	}
+
+	Vector3 GetPosition() { return worldTransform_.translation_; }
+	
+	//描画上の中間ポジション
+	void SetMiddlePosition(const Vector3& position) {
+		middlePosition_ = position;
+	}
+
+	//描画上のゴールポジション
+	void SetGoalPosition(const Vector3& position) {
+		goalPosition_ = position;
 	}
 
 	void SetPlayer(Player* player) { player_ = player; }
 
 	void SetNoteType(NoteType type) { type_ = type; }
-
-	Vector3 GetPosition() { return worldTransform_.translation_; }
 
 	bool GetIsHit() { return isHit_; }
 
@@ -93,6 +103,15 @@ protected:
 
 	//内部判定用のワールドトランスフォーム
 	WorldTransform worldTransformInside_;
+
+	//描画上のスタートポジション
+	Vector3 startPosition_{};
+
+	//描画上の中間ポジション
+	Vector3 middlePosition_{};
+
+	//描画上のゴールポジション
+	Vector3 goalPosition_{};
 
 	//判定フレーム初期位置
 	float judgeFrame_ = 0.0f;
