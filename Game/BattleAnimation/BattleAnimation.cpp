@@ -44,6 +44,8 @@ void BattleAnimation::Update() {
 	ImGui::End();
 
 	ImGui::Begin("aaaaa");
+	ImGui::DragFloat2("pos", &MultipathRendering::GetInstance()->cEffectParameters->centerPosition.x);
+	ImGui::DragFloat("rate", &MultipathRendering::GetInstance()->cEffectParameters->parameterRate);
 	ImGui::DragInt("type", &MultipathRendering::GetInstance()->cEffectParameters->type);
 	ImGui::End();
 

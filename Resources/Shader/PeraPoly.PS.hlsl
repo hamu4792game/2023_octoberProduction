@@ -30,5 +30,18 @@ float4 main(Output input) : SV_Target{
         break;
     }
 
-    return result;
+    //float len = centerPosition.x - input.position.x;
+    //len = clamp(len, 0.0f, 1.0f);
+
+    float v = pow(input.position.x - centerPosition.x,2) + 
+    pow(input.position.y - centerPosition.y,2);
+    if (v <= pow(parameterRate,2)) {
+        return result;
+    }
+/*
+    float2 posCenter = input.position.xy - centerPosition;
+    length(posCenter) - parameterRate
+    result.rgb = lerp(textureColor.rgb, result.rgb, );
+*/
+    return textureColor;
 }
