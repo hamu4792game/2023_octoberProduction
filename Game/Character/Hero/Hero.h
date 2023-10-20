@@ -4,6 +4,8 @@
 #include<iostream>
 #include<memory>
 #include"externals/nlohmann/json.hpp"
+#include"Engine/Easing/Ease.h"
+#include"Engine/Easing/Easing.h"
 
 
 class Hero : public BaseCharacter
@@ -26,7 +28,8 @@ private:
 	enum Position {
 		Start = 0,
 		End,
-		kMaxCount
+		kMaxCount,
+		Animation
 	};
 
 	struct HeroTransform {
@@ -53,13 +56,22 @@ private:
 
 	int SetStart = Position::Start;
 
+	//アニメーション関連
 	bool isAnimation = false;
+	//動きの速度に掛ける倍率
+	float Magnification = 1.0f;
+	//アニメーションスピード
+	float AnimationSpeed = 0.01f;
 
-	float moveSpeedArm = (1.7f / 20.0f);
+	float AnimationNum = 0.0f;
 
-	float moveSpeedUpperLeg = (1.6f / 20.0f);
+	float T = 0.0f;
 
-	float moveSpeedBottomLeg = (1.27f / 20.0f);
+	float ArmT = 0.0f;
+
+	float UpperLegT = 0.0f;
+
+	float BottomLegT = 0.0f;
 
 	const std::string kDirectoryPath = "Resources/Animation/";
 
