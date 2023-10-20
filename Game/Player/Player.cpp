@@ -48,7 +48,20 @@ void Player::Update(std::vector<Vector3> ControlPoints, int lastLinePass) {
 	}
 
 	//キーを押した瞬間の判定
-	if (KeyInput::PushKey(DIK_SPACE)) {
+	if (KeyInput::GetInstance()->GetPadConnect()) {
+
+		if (KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B)) {
+			isTap_ = true;
+			SE1_->SoundStop();
+			SE1_->SoundPlayWave();
+			SE1_->SetVolume(0.2f);
+		}
+		else {
+			isTap_ = false;
+		}
+
+	}
+	else if (KeyInput::PushKey(DIK_SPACE)) {
 		isTap_ = true;
 		SE1_->SoundStop();
 		SE1_->SoundPlayWave();
