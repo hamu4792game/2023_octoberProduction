@@ -40,7 +40,12 @@ private:
 
 	void UpdateScores();
 
+	//プレイヤー、譜面などの更新処理を纏めたもの
+	void UpdateObjects();
+
 	std::unique_ptr<Player> player_;
+
+	std::unique_ptr<AudioInput> loopBGMs_[5];
 
 	std::list<std::unique_ptr<MusicScore>> musicScoreList_;
 
@@ -61,7 +66,18 @@ private:
 	//一小節のカウント
 	int maxCountMeasure_ = int(3600 / BPM_ * 4);
 
-	int countMeasure_ = 0;
+	int countMeasure_ = maxCountMeasure_;
+
+	uint32_t loopCount_ = 8;
+
+	//更新処理速度によるズレを修正するための変数
+	float frameDifference_ = 0.0f;
+
+	//譜面の配置を更新するかどうか
+	bool isUpdateScore_ = false;
+
+	//フレーム確認
+	int frameCounter_ = 0;
 
 private:
 	std::vector<std::unique_ptr<Line>> lines_;

@@ -6,7 +6,7 @@ Player::Player() {
 	model_ = std::make_unique<Model>();
 	arrowModel_ = std::make_unique<Model>();
 	SE1_ = std::make_unique<AudioInput>();
-	SE1_->SoundLoadWave("./Resources/loopBGM/tempo.wav");
+	SE1_->SoundLoadWave("./Resources/loopBGM/hit.wav");
 }
 
 void Player::Initialize(Vector3 pos) {
@@ -59,20 +59,20 @@ void Player::Update(std::vector<Vector3> ControlPoints, int lastLinePass) {
 	}
 
 	//キーを押している最中の判定
-	if (KeyInput::GetKey(DIK_SPACE)) {
-		isHold_ = true;
-	}
-	else {
-		isHold_ = false;
-	}
+	//if (KeyInput::GetKey(DIK_SPACE)) {
+	//	isHold_ = true;
+	//}
+	//else {
+	//	isHold_ = false;
+	//}
 
-	//キーを離した瞬間の判定
-	if (KeyInput::ReleaseKey(DIK_SPACE)) {
-		isRelease_ = true;
-	}
-	else {
-		isRelease_ = false;
-	}
+	////キーを離した瞬間の判定
+	//if (KeyInput::ReleaseKey(DIK_SPACE)) {
+	//	isRelease_ = true;
+	//}
+	//else {
+	//	isRelease_ = false;
+	//}
 
 	if (isMove) {
 		point += 0.1f;

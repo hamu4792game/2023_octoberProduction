@@ -278,6 +278,7 @@
     <ClInclude Include="math\Rand.h">
       <Filter>math</Filter>
     </ClInclude>
+    <ClInclude Include="FrameCount.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

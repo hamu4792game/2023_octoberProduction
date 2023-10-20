@@ -1,5 +1,6 @@
 #include "Battle.h"
 #include "math/Rand.h"
+#include "FrameCount.h"
 
 Battle::Battle(std::shared_ptr<Camera> camera)
 {
@@ -19,8 +20,17 @@ Battle::Battle(std::shared_ptr<Camera> camera)
 
 	drumLoop_ = std::make_unique<AudioInput>();
 
+	for (int i = 0; i < 5; i++) {
+		loopBGMs_[i] = std::make_unique<AudioInput>();
+	}
+
 	//	ロード
 	drumLoop_->SoundLoadWave("./Resources/loopBGM/drumloop2.wav");
+	loopBGMs_[0]->SoundLoadWave("./Resources/loopBGM/tempo_01.wav");
+	loopBGMs_[1]->SoundLoadWave("./Resources/loopBGM/tempo_02.wav");
+	loopBGMs_[2]->SoundLoadWave("./Resources/loopBGM/tempo_03.wav");
+	loopBGMs_[3]->SoundLoadWave("./Resources/loopBGM/tempo_04.wav");
+	loopBGMs_[4]->SoundLoadWave("./Resources/loopBGM/tempo_05.wav");
 	//	音の再生
 	
 	//	音量の設定
@@ -35,6 +45,7 @@ Battle::~Battle() {
 }
 
 void Battle::Initialize() {
+
 	EndPos = { 0.0f,2.0f,0.0f };
 
 	player_->Initialize(makeCatmull_->GetFirstControlPoint());
@@ -50,7 +61,7 @@ void Battle::Initialize() {
 			tmpScore->SetNotes(MusicScore::Rest, makeCatmull_->GetControlPoints(), i);
 		}
 		else {
-			tmpScore->SetNotes(MusicScore::Easy_01, makeCatmull_->GetControlPoints(), i);
+			tmpScore->SetNotes(MusicScore::Easy_04, makeCatmull_->GetControlPoints(), i);
 		}
 		tmpScore->Initialize();
 		musicScoreList_.push_back(std::move(tmpScore));
@@ -65,7 +76,7 @@ void Battle::Initialize() {
 			musicScores_[i]->SetNotes(MusicScore::Rest, makeCatmull_->GetControlPoints(), i);
 		}
 		else {
-			musicScores_[i]->SetNotes(MusicScore::Easy_01, makeCatmull_->GetControlPoints(), i);
+			musicScores_[i]->SetNotes(MusicScore::Easy_04, makeCatmull_->GetControlPoints(), i);
 		}
 		musicScores_[i]->Initialize();
 	}
@@ -83,25 +94,69 @@ void Battle::Update() {
 	//フラグを降ろす
 	MusicScore::isUpdateFlag_ = false;
 
-	if (player_->GetIsMove()) {
-		countMeasure_--;
-	}
-
 	if (countMeasure_ <= 0/* && player_->GetLinePass() == 0*/) {
-		UpdateScores();
-		/*musicScores_[0]->SetNotes(MusicScore::Easy_04, makeCatmull_->GetControlPoints(), 0);*/
+		loopCount_++;
+		isUpdateScore_ = true;
 		player_->SetLinePass(0);
 		player_->SetDivisionNumber(float(maxCountMeasure_ / float(makeCatmull_->GetControlPoints().size() - 1) / 10.0f));
-		//-1を付けるとズレが無くなるのでおまじないで付けてる
-		countMeasure_ = maxCountMeasure_ - 1;
-
-		if (player_->GetIsMove()) {
-			drumLoop_->SoundStop();
-			drumLoop_->SoundPlayWave();
-			drumLoop_->SetVolume(0.2f);
+		
+		if (loopCount_ == 7) {
+			countMeasure_ = maxCountMeasure_ ;
+		}
+		else {
+			countMeasure_ = maxCountMeasure_;
 		}
 		
+
+		//音楽ループ継続
+		if (loopCount_ >= 8) {
+			for (int i = 0; i < 5; i++) {
+				loopBGMs_[i]->SoundStop();
+				loopBGMs_[i]->SoundPlayWave();
+				loopBGMs_[i]->SetVolume(0.2f);
+			}
+			loopCount_ = 0;
+			frameCounter_ = 0;
+		}
+
 	}
+
+	UpdateObjects();
+
+	if (isUpdateScore_) {
+		UpdateScores();
+		isUpdateScore_ = false;
+	}
+
+	if (player_->GetIsMove()) {
+
+		//現在フレームが60fpsでない場合、フレームの差分を貯める
+		frameDifference_ += float(FrameCount::currentFrameTime - (1.0f / 60.0f));
+
+		countMeasure_--;
+		frameCounter_++;
+
+		//フレームの差分が1フレーム分超えたら更新処理を挟む
+		if (frameDifference_ >= float(1.0f / 60.0f) && countMeasure_ != 0) {
+
+			UpdateObjects();
+			countMeasure_--;
+			frameCounter_++;
+			//1フレーム分の時間削る
+			frameDifference_ -= float(1.0f / 60.0f);
+
+		}
+
+	}
+	else {
+		for (int i = 0; i < 5; i++) {
+			loopBGMs_[i]->SoundStop();
+		}
+	}
+
+}
+
+void Battle::UpdateObjects() {
 
 	for (const auto& score : musicScoreList_) {
 		score->Update(makeCatmull_->GetControlPoints());
@@ -111,7 +166,7 @@ void Battle::Update() {
 		musicScores_[i]->Update(makeCatmull_->GetControlPoints());
 	}*/
 
-	player_->Update(makeCatmull_->GetControlPoints(),makeCatmull_->GetLastLinePass());
+	player_->Update(makeCatmull_->GetControlPoints(), makeCatmull_->GetLastLinePass());
 
 	/*currentMusicScore_->Update(makeCatmull_->GetControlPoints());*/
 
@@ -120,7 +175,7 @@ void Battle::Update() {
 	if (lines_.size() < makeCatmull_->GetControlPoints().size()) {
 		lines_.push_back(std::make_unique<Line>());
 	}
-	else if (lines_.size() > makeCatmull_->GetControlPoints().size()){
+	else if (lines_.size() > makeCatmull_->GetControlPoints().size()) {
 		lines_.pop_back();
 	}
 
@@ -178,7 +233,7 @@ void Battle::UpdateScores() {
 		//最前列を後列に追加
 		musicScoreList_.push_back(std::move(musicScoreList_.front()));
 		musicScoreList_.pop_front();
-		musicScoreList_.back().get()->SetNotes(MusicScore::ScoreType(rand() % 10), makeCatmull_->GetControlPoints(), 3);
+		musicScoreList_.back().get()->SetNotes(MusicScore::Easy_04, makeCatmull_->GetControlPoints(), 3);
 	}
 
 }

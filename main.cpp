@@ -4,8 +4,11 @@
 #include "externals/imgui/imgui.h"
 #include "Engine/Input/KeyInput/KeyInput.h"
 #include "math/Rand.h"
-
+#include <chrono>
+#include "FrameCount.h"
 #include "Game/GameScene/GameScene.h"
+
+float FrameCount::currentFrameTime = 0.0f;
 
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR lpCmdLine, _In_ int nShowCmd) {
 	static D3DResourceLeakChecker leak;
@@ -18,6 +21,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR lpCmdLine, _In
 
 	//	ウィンドウの×ボタンが押されるまでループ
 	while (!WinApp::ProcessMessage()) {
+		auto frameStartTime = std::chrono::high_resolution_clock::now();
 		//	フレームの開始
 		TimeBaseLoopExecuter fpsManager(60);
 		
@@ -36,6 +40,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR lpCmdLine, _In
 		//	フレームの終了
 		Engine::EndFrame();
 		fpsManager.TimeAdjustment();
+		auto frameEndTime = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<float> tmpFrameTime = frameEndTime - frameStartTime;
+		FrameCount::currentFrameTime = tmpFrameTime.count();
 		if (KeyInput::PushKey(DIK_ESCAPE)) {
 			break;
 		}
