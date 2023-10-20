@@ -25,6 +25,10 @@ float4 main(Output input) : SV_Target{
         retoro = float4(textureColor.rgb - fmod(textureColor.rgb, 0.25f),textureColor.a);
         result = retoro;
         break;
+    case 2:
+        Y = (0.299f * textureColor.r) + (0.587f * textureColor.g) + (0.114f * textureColor.b);
+        result = float4(Y,Y,Y,textureColor.a);
+        break;
     default:
         result = textureColor;
         break;

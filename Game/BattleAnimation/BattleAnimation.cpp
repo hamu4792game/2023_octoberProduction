@@ -26,7 +26,7 @@ void BattleAnimation::Initialize() {
 	stageCount = 0u;
 
 	stage_.clear();
-	for (uint8_t i = 0; i < 4; i++) {
+	for (uint8_t i = 0; i < 6; i++) {
 		stage_.push_back(std::make_unique<Stage>(stageModel_));
 		// 逆イテレーター z軸ステージサイズ * ステージの数
 		(*stage_.rbegin())->Initialize(Vector3(0.0f, 0.0f, 140.0f * stageCount));
