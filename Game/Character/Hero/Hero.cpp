@@ -42,6 +42,7 @@ void Hero::Initialize() {
 	};
 	posName = {
 		"Start",//始点
+		"Middle",//中間点
 		"End"//終点
 	};
 	/*if (LoadChackItem(kDirectoryPath, kItemName)) {
@@ -58,6 +59,7 @@ void Hero::Initialize() {
 			startPos[i].rotation_ = partsTransform_[i].rotation_;
 			startPos[i].scale_ = partsTransform_[i].scale_;
 		}
+		middlePos.resize(startPos.size());
 		EndPos.resize(startPos.size());
 		
 	}
@@ -77,6 +79,13 @@ void Hero::Update() {
 			partsTransform_[i].scale_ = startPos[i].scale_;
 		}
 	}
+	else if (SetStart == Position::Middle) {
+		for (size_t i = 0; i < partsName.size(); i++) {
+			partsTransform_[i].translation_ = middlePos[i].translation_;
+			partsTransform_[i].rotation_ =middlePos[i].rotation_;
+			partsTransform_[i].scale_ = middlePos[i].scale_;
+		}
+	}
 	else if (SetStart == Position::End) {
 		for (size_t i = 0; i < partsName.size(); i++) {
 			partsTransform_[i].translation_ = EndPos[i].translation_;
@@ -88,40 +97,132 @@ void Hero::Update() {
 		if (isAnimation){
 			AnimationNum += AnimationSpeed * Magnification;
 			T = Easing::EaseInOutExpo(AnimationNum);
+			if (AnimationCount ==0){
+				partsTransform_[static_cast<uint8_t>(HeroParts::Body)].rotation_.y =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y +
+					T * middlePos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y;
 
-			partsTransform_[static_cast<uint8_t>(HeroParts::Body)].rotation_.y =
-				(1 - T) * startPos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y +
-				T * EndPos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y;
+				partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x +
+					T * middlePos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x;
 
-			partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x = 
-				(1 - T) * startPos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x +
-				T * EndPos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x;
+				partsTransform_[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x +
+					T * middlePos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x;
 
-			partsTransform_[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x =
-				(1 - T) * startPos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x +
-				T * EndPos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x;
+				partsTransform_[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x +
+					T * middlePos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x;
 
-			partsTransform_[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x = 
-				(1 - T) * startPos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x +
-				T * EndPos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x;
+				partsTransform_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x +
+					T * middlePos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x;
 
-			partsTransform_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x = 
-				(1 - T) * startPos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x +
-				T * EndPos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x;			
+				partsTransform_[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x +
+					T * middlePos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x;
 
-			partsTransform_[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x =
-				(1 - T) * startPos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x +
-				T * EndPos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x;
+				partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y +
+					T * middlePos[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y;
 
-			partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y = 
-				(1 - T) * startPos[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y +
-				T * EndPos[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y;
+			}
+			else if (AnimationCount == 1) {
+				partsTransform_[static_cast<uint8_t>(HeroParts::Body)].rotation_.y =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y +
+					T * EndPos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y +
+					T * EndPos[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y;
+
+			}else if (AnimationCount == 2) {
+				partsTransform_[static_cast<uint8_t>(HeroParts::Body)].rotation_.y =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y +
+					T * EndPos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y +
+					T * EndPos[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y;
+			}
+			else if (AnimationCount == 3) {
+				partsTransform_[static_cast<uint8_t>(HeroParts::Body)].rotation_.y =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y +
+					T * EndPos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y +
+					T * EndPos[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.y;
+
+			}
+
 
 			if (AnimationNum > 1.00f) {
-				Magnification *= -1.0f;
+				AnimationCount++;
+				AnimationNum = 0.0f;
 			}
-			else if (AnimationNum < 0.00f) {
-				Magnification *= -1.0f;
+			if (AnimationCount>3){
+				AnimationCount = 0;
 			}
 
 		}
@@ -204,7 +305,8 @@ void Hero::DrawImgui(){
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("位置確認用SRT切り替え")) {
-			ImGui::RadioButton("始点", &SetStart, Position::Start);			
+			ImGui::RadioButton("始点", &SetStart, Position::Start);		
+			ImGui::RadioButton("中間点", &SetStart, Position::Middle);
 			ImGui::RadioButton("終点", &SetStart, Position::End);
 			ImGui::RadioButton("アニメーション", &SetStart, Position::Animation);
 			if (SetStart == Position::Animation) {
@@ -222,7 +324,7 @@ void Hero::DrawImgui(){
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("位置確認用SRT切り替え")) {
-			ImGui::DragFloat("腕の振りの速さ", &AnimationSpeed, 0.01f, 0.01f, 1.0f, "%.2f");
+			ImGui::DragFloat("腕の振りの速さ", &AnimationSpeed, 0.001f, 0.001f, 1.0f, "%.3f");
 			ImGui::EndMenu();
 		}
 
@@ -237,6 +339,12 @@ void Hero::DrawImgui(){
 			ImGui::DragFloat3("Translate", &startPos[static_cast<uint8_t>(HeroParts::Body)].translation_.x, 0.1f);
 			ImGui::DragFloat3("Scale", &startPos[static_cast<uint8_t>(HeroParts::Body)].scale_.x, 0.1f);
 			ImGui::DragFloat3("Rotate", &startPos[static_cast<uint8_t>(HeroParts::Body)].rotation_.x, AngleToRadian(1.0f));
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Middle")) {
+			ImGui::DragFloat3("Translate", &middlePos[static_cast<uint8_t>(HeroParts::Body)].translation_.x, 0.1f);
+			ImGui::DragFloat3("Scale", &middlePos[static_cast<uint8_t>(HeroParts::Body)].scale_.x, 0.1f);
+			ImGui::DragFloat3("Rotate", &middlePos[static_cast<uint8_t>(HeroParts::Body)].rotation_.x, AngleToRadian(1.0f));
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("End")) {
@@ -255,6 +363,12 @@ void Hero::DrawImgui(){
 			ImGui::DragFloat3("Rotate", &startPos[static_cast<uint8_t>(HeroParts::Head)].rotation_.x, AngleToRadian(1.0f));
 			ImGui::TreePop();
 		}
+		if (ImGui::TreeNode("Middle")) {
+			ImGui::DragFloat3("Translate", &middlePos[static_cast<uint8_t>(HeroParts::Head)].translation_.x, 0.1f);
+			ImGui::DragFloat3("Scale", &middlePos[static_cast<uint8_t>(HeroParts::Head)].scale_.x, 0.1f);
+			ImGui::DragFloat3("Rotate", &middlePos[static_cast<uint8_t>(HeroParts::Head)].rotation_.x, AngleToRadian(1.0f));
+			ImGui::TreePop();
+		}
 		if (ImGui::TreeNode("End")) {
 			ImGui::DragFloat3("Translate", &EndPos[static_cast<uint8_t>(HeroParts::Head)].translation_.x, 0.1f);
 			ImGui::DragFloat3("Scale", &EndPos[static_cast<uint8_t>(HeroParts::Head)].scale_.x, 0.1f);
@@ -269,6 +383,12 @@ void Hero::DrawImgui(){
 			ImGui::DragFloat3("Translate", &startPos[static_cast<uint8_t>(HeroParts::Waist)].translation_.x, 0.1f);
 			ImGui::DragFloat3("Scale", &startPos[static_cast<uint8_t>(HeroParts::Waist)].scale_.x, 0.1f);
 			ImGui::DragFloat3("Rotate", &startPos[static_cast<uint8_t>(HeroParts::Waist)].rotation_.x, AngleToRadian(1.0f));
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Middle")) {
+			ImGui::DragFloat3("Translate", &middlePos[static_cast<uint8_t>(HeroParts::Waist)].translation_.x, 0.1f);
+			ImGui::DragFloat3("Scale", &middlePos[static_cast<uint8_t>(HeroParts::Waist)].scale_.x, 0.1f);
+			ImGui::DragFloat3("Rotate", &middlePos[static_cast<uint8_t>(HeroParts::Waist)].rotation_.x, AngleToRadian(1.0f));
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("End")) {
@@ -287,6 +407,12 @@ void Hero::DrawImgui(){
 			ImGui::DragFloat3("Rotate", &startPos[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.x, AngleToRadian(1.0f));
 			ImGui::TreePop();
 		}
+		if (ImGui::TreeNode("Middle")) {
+			ImGui::DragFloat3("Translate", &middlePos[static_cast<uint8_t>(HeroParts::RightUpperArm)].translation_.x, 0.1f);
+			ImGui::DragFloat3("Scale", &middlePos[static_cast<uint8_t>(HeroParts::RightUpperArm)].scale_.x, 0.1f);
+			ImGui::DragFloat3("Rotate", &middlePos[static_cast<uint8_t>(HeroParts::RightUpperArm)].rotation_.x, AngleToRadian(1.0f));
+			ImGui::TreePop();
+		}
 		if (ImGui::TreeNode("End")) {
 			ImGui::DragFloat3("Translate", &EndPos[static_cast<uint8_t>(HeroParts::RightUpperArm)].translation_.x, 0.1f);
 			ImGui::DragFloat3("Scale", &EndPos[static_cast<uint8_t>(HeroParts::RightUpperArm)].scale_.x, 0.1f);
@@ -301,6 +427,12 @@ void Hero::DrawImgui(){
 			ImGui::DragFloat3("Translate", &startPos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].translation_.x, 0.1f);
 			ImGui::DragFloat3("Scale", &startPos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].scale_.x, 0.1f);
 			ImGui::DragFloat3("Rotate", &startPos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x, AngleToRadian(1.0f));
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Middle")) {
+			ImGui::DragFloat3("Translate", &middlePos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].translation_.x, 0.1f);
+			ImGui::DragFloat3("Scale", &middlePos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].scale_.x, 0.1f);
+			ImGui::DragFloat3("Rotate", &middlePos[static_cast<uint8_t>(HeroParts::LeftUpperArm)].rotation_.x, AngleToRadian(1.0f));
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("End")) {
@@ -319,6 +451,12 @@ void Hero::DrawImgui(){
 			ImGui::DragFloat3("Rotate", &startPos[static_cast<uint8_t>(HeroParts::RightBottomArm)].rotation_.x, AngleToRadian(1.0f));
 			ImGui::TreePop();
 		}
+		if (ImGui::TreeNode("Middle")) {
+			ImGui::DragFloat3("Translate", &middlePos[static_cast<uint8_t>(HeroParts::RightBottomArm)].translation_.x, 0.1f);
+			ImGui::DragFloat3("Scale", &middlePos[static_cast<uint8_t>(HeroParts::RightBottomArm)].scale_.x, 0.1f);
+			ImGui::DragFloat3("Rotate", &middlePos[static_cast<uint8_t>(HeroParts::RightBottomArm)].rotation_.x, AngleToRadian(1.0f));
+			ImGui::TreePop();
+		}
 		if (ImGui::TreeNode("End")) {
 			ImGui::DragFloat3("Translate", &EndPos[static_cast<uint8_t>(HeroParts::RightBottomArm)].translation_.x, 0.1f);
 			ImGui::DragFloat3("Scale", &EndPos[static_cast<uint8_t>(HeroParts::RightBottomArm)].scale_.x, 0.1f);
@@ -333,6 +471,12 @@ void Hero::DrawImgui(){
 			ImGui::DragFloat3("Translate", &startPos[static_cast<uint8_t>(HeroParts::LeftBottomArm)].translation_.x, 0.1f);
 			ImGui::DragFloat3("Scale", &startPos[static_cast<uint8_t>(HeroParts::LeftBottomArm)].scale_.x, 0.1f);
 			ImGui::DragFloat3("Rotate", &startPos[static_cast<uint8_t>(HeroParts::LeftBottomArm)].rotation_.x, AngleToRadian(1.0f));
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Middle")) {
+			ImGui::DragFloat3("Translate", &middlePos[static_cast<uint8_t>(HeroParts::LeftBottomArm)].translation_.x, 0.1f);
+			ImGui::DragFloat3("Scale", &middlePos[static_cast<uint8_t>(HeroParts::LeftBottomArm)].scale_.x, 0.1f);
+			ImGui::DragFloat3("Rotate", &middlePos[static_cast<uint8_t>(HeroParts::LeftBottomArm)].rotation_.x, AngleToRadian(1.0f));
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("End")) {
@@ -351,6 +495,12 @@ void Hero::DrawImgui(){
 			ImGui::DragFloat3("Rotate", &startPos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x, AngleToRadian(1.0f));
 			ImGui::TreePop();
 		}
+		if (ImGui::TreeNode("Middle")) {
+			ImGui::DragFloat3("Translate", &middlePos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].translation_.x, 0.1f);
+			ImGui::DragFloat3("Scale", &middlePos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].scale_.x, 0.1f);
+			ImGui::DragFloat3("Rotate", &middlePos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].rotation_.x, AngleToRadian(1.0f));
+			ImGui::TreePop();
+		}
 		if (ImGui::TreeNode("End")) {
 			ImGui::DragFloat3("Translate", &EndPos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].translation_.x, 0.1f);
 			ImGui::DragFloat3("Scale", &EndPos[static_cast<uint8_t>(HeroParts::RightUpperLeg)].scale_.x, 0.1f);
@@ -365,6 +515,12 @@ void Hero::DrawImgui(){
 			ImGui::DragFloat3("Translate", &startPos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].translation_.x, 0.1f);
 			ImGui::DragFloat3("Scale", &startPos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].scale_.x, 0.1f);
 			ImGui::DragFloat3("Rotate", &startPos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x, AngleToRadian(1.0f));
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Middle")) {
+			ImGui::DragFloat3("Translate", &middlePos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].translation_.x, 0.1f);
+			ImGui::DragFloat3("Scale", &middlePos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].scale_.x, 0.1f);
+			ImGui::DragFloat3("Rotate", &middlePos[static_cast<uint8_t>(HeroParts::LeftUpperLeg)].rotation_.x, AngleToRadian(1.0f));
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("End")) {
@@ -383,6 +539,12 @@ void Hero::DrawImgui(){
 			ImGui::DragFloat3("Rotate", &startPos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x, AngleToRadian(1.0f));
 			ImGui::TreePop();
 		}
+		if (ImGui::TreeNode("Middle")) {
+			ImGui::DragFloat3("Translate", &middlePos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].translation_.x, 0.1f);
+			ImGui::DragFloat3("Scale", &middlePos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].scale_.x, 0.1f);
+			ImGui::DragFloat3("Rotate", &middlePos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].rotation_.x, AngleToRadian(1.0f));
+			ImGui::TreePop();
+		}
 		if (ImGui::TreeNode("End")) {
 			ImGui::DragFloat3("Translate", &EndPos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].translation_.x, 0.1f);
 			ImGui::DragFloat3("Scale", &EndPos[static_cast<uint8_t>(HeroParts::RightBottomLeg)].scale_.x, 0.1f);
@@ -397,6 +559,12 @@ void Hero::DrawImgui(){
 			ImGui::DragFloat3("Translate", &startPos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].translation_.x, 0.1f);
 			ImGui::DragFloat3("Scale", &startPos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].scale_.x, 0.1f);
 			ImGui::DragFloat3("Rotate", &startPos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x, AngleToRadian(1.0f));
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Middle")) {
+			ImGui::DragFloat3("Translate", &middlePos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].translation_.x, 0.1f);
+			ImGui::DragFloat3("Scale", &middlePos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].scale_.x, 0.1f);
+			ImGui::DragFloat3("Rotate", &middlePos[static_cast<uint8_t>(HeroParts::LeftBottomLeg)].rotation_.x, AngleToRadian(1.0f));
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("End")) {
@@ -498,7 +666,9 @@ void Hero::DrawImgui(){
 	ImGui::Text("moveArmの合計 = %.2f", AnimationNum);
 	ImGui::Text("中に入っている要素数 = %d", fileName.size());
 	ImGui::Text("中に入っている要素数 = %d", startPos.size());
+	ImGui::Text("中に入っている要素数 = %d", middlePos.size());
 	ImGui::Text("中に入っている要素数 = %d", EndPos.size());
+	ImGui::Text("アニメーションカウント = %d", AnimationCount);
 	ImGui::End();
 }
 
@@ -529,6 +699,17 @@ void Hero::SaveFile(const std::string& kItemName) {
 			}
 
 			else if (j == 1) {
+				root[kItemName][partsName[i].c_str()][posName[j].c_str()][0] =
+					json::array({ middlePos[i].translation_.x,middlePos[i].translation_.y, middlePos[i].translation_.z });
+
+				root[kItemName][partsName[i].c_str()][posName[j].c_str()][1] =
+					json::array({ middlePos[i].rotation_.x,middlePos[i].rotation_.y, middlePos[i].rotation_.z });
+
+				root[kItemName][partsName[i].c_str()][posName[j].c_str()][2] =
+					json::array({ middlePos[i].scale_.x,middlePos[i].scale_.y, middlePos[i].scale_.z });
+			}
+
+			else if (j == 2) {
 				root[kItemName][partsName[i].c_str()][posName[j].c_str()][0] =
 					json::array({ EndPos[i].translation_.x,EndPos[i].translation_.y, EndPos[i].translation_.z });
 
@@ -713,7 +894,26 @@ void Hero::LoadFile(const std::string& groupName) {
 			}
 			count++;
 		}
-		EndPos[i] = baseTrans2;
+		middlePos[i] = baseTrans2;
+
+		count = 0;
+		HeroTransform baseTrans3{};
+		for (const auto& root_ : root[groupName][partsName[i].c_str()][posName[2].c_str()]) {
+			Vector3 v{};
+			from_json(root_, v);
+			if (count == 0) {
+				baseTrans3.translation_ = v;
+			}
+			else if (count == 1) {
+				baseTrans3.rotation_ = v;
+			}
+			else if (count == 2) {
+				baseTrans3.scale_ = v;
+			}
+			count++;
+		}
+		EndPos[i] = baseTrans3;
+
 	}
 	std::string message = std::format("{}.json Loading successful.", groupName);
 	MessageBoxA(nullptr, message.c_str(), "Animetion", 0);

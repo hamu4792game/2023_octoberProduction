@@ -27,6 +27,7 @@ public:
 private:
 	enum Position {
 		Start = 0,
+		Middle,
 		End,
 		kMaxCount,
 		Animation
@@ -48,11 +49,15 @@ private:
 
 	std::vector<HeroTransform> startPos;
 
+	std::vector<HeroTransform> middlePos;
+
 	std::vector<HeroTransform> EndPos;
 
 	int chackOnlyNumber = 0;
 
 	int fileNumber = 0;
+
+	int AnimationCount = 0;
 
 	int SetStart = Position::Start;
 
