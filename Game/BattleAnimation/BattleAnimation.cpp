@@ -26,7 +26,7 @@ void BattleAnimation::Initialize() {
 	stageCount = 0u;
 
 	stage_.clear();
-	for (uint8_t i = 0; i < 4; i++) {
+	for (uint8_t i = 0; i < 6; i++) {
 		stage_.push_back(std::make_unique<Stage>(stageModel_));
 		// 逆イテレーター z軸ステージサイズ * ステージの数
 		(*stage_.rbegin())->Initialize(Vector3(0.0f, 0.0f, 140.0f * stageCount));
@@ -44,7 +44,9 @@ void BattleAnimation::Update() {
 	ImGui::End();
 
 	ImGui::Begin("aaaaa");
-	ImGui::DragInt("type", &MultipathRendering::GetInstance()->cEffectParameters->type);
+	ImGui::DragFloat2("pos", &MultipathRendering::GetInstance()->cEffectParameters->centerPosition.x);
+	ImGui::DragFloat("rate", &MultipathRendering::GetInstance()->cEffectParameters->parameterRate);
+	ImGui::SliderInt("type", &MultipathRendering::GetInstance()->cEffectParameters->type, 0, 5);
 	ImGui::End();
 
 	if (KeyInput::PushKey(DIK_SPACE)) {
