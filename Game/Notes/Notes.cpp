@@ -76,7 +76,7 @@ void Notes::Update() {
 	worldTransformInside_.translation_.x = judgeFrame_;
 	worldTransformLine_.scale_ = { judgeFrame_, judgeFrame_, judgeFrame_ };
 	worldTransformLine_.scale_ *= 1.0f / 2.0f;
-	worldTransformLine_.translation_ = worldTransform_.translation_;
+	worldTransformLine_.translation_ = player_->GetPosition();
 
 	worldTransform_.UpdateMatrix();
 	worldTransformLine_.UpdateMatrix();
