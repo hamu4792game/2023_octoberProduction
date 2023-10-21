@@ -32,7 +32,8 @@ Battle::Battle(std::shared_ptr<Camera> camera)
 	loopBGMs_[3]->SoundLoadWave("./Resources/loopBGM/tempo_04.wav");
 	loopBGMs_[4]->SoundLoadWave("./Resources/loopBGM/tempo_05.wav");
 	//	音の再生
-	
+	Notes::StaticInitialize();
+
 	//	音量の設定
 	
 
@@ -177,8 +178,6 @@ void Battle::Draw3D(const Matrix4x4& viewProjection) {
 	}
 
 	makeCatmull_->Draw(viewProjection);
-
-	notesModels_[3]->ModelDraw(worldTransformLine_, viewProjection, 0xffffffff, notesModels_[3]);
 
 	for (size_t i = 0; i < lines_.size(); i++){
 		lines_[i]->DrawLine(ControlPoints_[i] - EndPos, ControlPoints_[i] + EndPos, viewProjection, 0xff0000ff);

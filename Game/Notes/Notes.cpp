@@ -2,6 +2,8 @@
 
 //静的メンバ変数実体
 bool NoteLong::isHitStart_ = false;
+std::unique_ptr<AudioInput> Notes::notesSE_[3][8] = { nullptr };
+AudioInput* Notes::currentNotesSE_[8] = { nullptr };
 
 Notes::Notes() {
 
@@ -30,6 +32,18 @@ void Notes::UpdateFlag() {
 		//タッチしている間にプレイヤーがキーを押したらヒット判定
 		if (isTouch_ && player_->GetIsTap()) {
 			isHit_ = true;
+			size_t num = rand() % 8;
+			for (size_t i = 0; i < 8; i++) {
+
+				currentNotesSE_[i]->SoundStop();
+
+				if (i == num) {
+					currentNotesSE_[i]->SoundPlayWave();
+					currentNotesSE_[i]->SetVolume(0.2f);
+				}
+				
+			}
+		
 			player_->IsHit();
 		}
 
@@ -60,8 +74,9 @@ void Notes::Update() {
 
 	//判定フレーム更新
 	worldTransformInside_.translation_.x = judgeFrame_;
-	worldTransformLine_.scale_ = { 50.0f - judgeFrame_, 50.0f - judgeFrame_, 50.0f - judgeFrame_ };
-	worldTransformLine_.scale_ *= 1.0f / 10.0f;
+	worldTransformLine_.scale_ = { judgeFrame_, judgeFrame_, judgeFrame_ };
+	worldTransformLine_.scale_ *= 1.0f / 2.0f;
+	worldTransformLine_.translation_ = worldTransform_.translation_;
 
 	worldTransform_.UpdateMatrix();
 	worldTransformLine_.UpdateMatrix();
@@ -105,7 +120,7 @@ void Notes::Draw(const Matrix4x4& viewProjection) {
 
 	model_->ModelDraw(worldTransformInside_, viewProjection, 0xffffffff, model_);
 
-	if (judgeFrame_ <= 50.0f) {
+	if (judgeFrame_ <= 30.0f && judgeFrame_ >= 0.0f) {
 		modelList_[3]->ModelDraw(worldTransformLine_, viewProjection, 0xffffffff, modelList_[3]);
 	}
 
@@ -286,3 +301,43 @@ void NoteDamage::Update() {
 	worldTransformInside_.UpdateMatrix();
 
 }
+
+void Notes::StaticInitialize() {
+
+	for (int y = 0; y < 3; y++) {
+		for (int x = 0; x < 8; x++) {
+			notesSE_[y][x] = std::make_unique<AudioInput>();
+		}
+	}
+
+	notesSE_[0][0]->SoundLoadWave("./Resources/notesSE/notes_p_c3.wav");
+	notesSE_[0][1]->SoundLoadWave("./Resources/notesSE/notes_p_d3.wav");
+	notesSE_[0][2]->SoundLoadWave("./Resources/notesSE/notes_p_e3.wav");
+	notesSE_[0][3]->SoundLoadWave("./Resources/notesSE/notes_p_f3.wav");
+	notesSE_[0][4]->SoundLoadWave("./Resources/notesSE/notes_p_g3.wav");
+	notesSE_[0][5]->SoundLoadWave("./Resources/notesSE/notes_p_a3.wav");
+	notesSE_[0][6]->SoundLoadWave("./Resources/notesSE/notes_p_b3.wav");
+	notesSE_[0][7]->SoundLoadWave("./Resources/notesSE/notes_p_c4.wav");
+	notesSE_[1][0]->SoundLoadWave("./Resources/notesSE/notes_s_c3.wav");
+	notesSE_[1][1]->SoundLoadWave("./Resources/notesSE/notes_s_d3.wav");
+	notesSE_[1][2]->SoundLoadWave("./Resources/notesSE/notes_s_e3.wav");
+	notesSE_[1][3]->SoundLoadWave("./Resources/notesSE/notes_s_f3.wav");
+	notesSE_[1][4]->SoundLoadWave("./Resources/notesSE/notes_s_g3.wav");
+	notesSE_[1][5]->SoundLoadWave("./Resources/notesSE/notes_s_a3.wav");
+	notesSE_[1][6]->SoundLoadWave("./Resources/notesSE/notes_s_b3.wav");
+	notesSE_[1][7]->SoundLoadWave("./Resources/notesSE/notes_s_c4.wav");
+	notesSE_[2][0]->SoundLoadWave("./Resources/notesSE/notes_v_c3.wav");
+	notesSE_[2][1]->SoundLoadWave("./Resources/notesSE/notes_v_d3.wav");
+	notesSE_[2][2]->SoundLoadWave("./Resources/notesSE/notes_v_e3.wav");
+	notesSE_[2][3]->SoundLoadWave("./Resources/notesSE/notes_v_f3.wav");
+	notesSE_[2][4]->SoundLoadWave("./Resources/notesSE/notes_v_g3.wav");
+	notesSE_[2][5]->SoundLoadWave("./Resources/notesSE/notes_v_a3.wav");
+	notesSE_[2][6]->SoundLoadWave("./Resources/notesSE/notes_v_b3.wav");
+	notesSE_[2][7]->SoundLoadWave("./Resources/notesSE/notes_v_c4.wav");
+
+	for (int i = 0; i < 8; i++) {
+		currentNotesSE_[i] = notesSE_[2][i].get();
+	}
+
+}
+

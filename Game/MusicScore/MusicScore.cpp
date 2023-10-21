@@ -261,8 +261,8 @@ void MusicScore::SetNoteNormal(const Vector3& position, uint32_t num, float judg
 	NoteNormal* newNote = new NoteNormal();
 	newNote->ModelLoad(notesModels_);
 	newNote->TextureLoad(noteTextures_[0]);
-	newNote->Initialize();
 	newNote->SetPlayer(player_);
+	newNote->Initialize();
 	newNote->SetStartPosition(position + Vector3{ 0.0f,0.0f,30.0f });
 	newNote->SetMiddlePosition(position);
 	newNote->SetGoalPosition(position + Vector3{ 0.0f,0.0f,-10.0f });
