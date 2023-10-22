@@ -15,7 +15,7 @@ public:
 
 	void SetParent(const WorldTransform* parent) { parent_ = parent, transform_.parent_ = parent; }
 
-	void SetFlag(const bool& flag) { attackFlag = flag; }
+	void SetFlag(const bool& flag) { attackFlag_ = flag; }
 
 	void SetBulletModel(Model* model) { bulletModel_ = model; }
 
