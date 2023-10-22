@@ -75,6 +75,7 @@ void GameScene::Initialize() {
 	battle->SetHeroModels(heroModel_);
 	battle->SetBossModels(bossModel_);
 	battle->SetStageModels(stageModel_);
+	battle->SetBossBulletModel(noteModels.at(0));
 
 	//	シーンの初期化
 	title->Initialize();

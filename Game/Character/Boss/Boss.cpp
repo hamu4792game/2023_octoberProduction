@@ -30,9 +30,42 @@ void Boss::Update() {
 	ImGui::DragFloat3("scale", &transform_.scale_.x);
 	ImGui::End();
 
+	//	弾1つ1つの更新
+	for (auto& i : bullets_) {
+		i.Update();
+	}
+
+	//	playerが攻撃するフラグが立ったら
+	if (bulletDieFlag_) {
+		bullets_.erase(bullets_.begin());
+		bulletDieFlag_ = false;
+	}
+
 	//	座標更新
 	transform_.UpdateMatrix();
 	for (auto& i : partsTransform_) {
 		i.UpdateMatrix();
 	}
+}
+
+void Boss::Attack() {
+	//	攻撃フラグが立たれたとき
+	if (attackFlag_) {
+
+		// アニメーションの実行
+		animeFlag_ = true;
+
+		// 座標の設定
+		// 弾の生成
+		bullets_.push_back(BossBullet(bulletModel_));
+
+		//フラグを折る
+		attackFlag_ = false;
+
+	}
+
+
+	// 弾の移動 1.0f/30.0fでイージング
+
+
 }

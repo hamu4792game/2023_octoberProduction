@@ -131,6 +131,9 @@
     <ClCompile Include="Engine\Base\MultipathRendering\MultipathRendering.cpp">
       <Filter>Engine\MultipathRendering</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Character\Boss\BossBullet\BossBullet.cpp">
+      <Filter>Game\Character\Boss\BossBullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h">
@@ -278,6 +281,9 @@
     <ClInclude Include="Engine\Base\MultipathRendering\MultipathRendering.h">
       <Filter>Engine\MultipathRendering</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Character\Boss\BossBullet\BossBullet.h">
+      <Filter>Game\Character\Boss\BossBullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -396,6 +402,9 @@
     </Filter>
     <Filter Include="Engine\MultipathRendering">
       <UniqueIdentifier>{eb481126-255d-48b2-8f4c-7ca5394421fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Character\Boss\BossBullet">
+      <UniqueIdentifier>{df2d8045-ff0a-4a07-b8c9-b0c2af6bf50a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
