@@ -73,6 +73,6 @@ public: // セッター
 	void SetHeroModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetHeroModels(model); }
 	void SetBossModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetBossModels(model); }
 	void SetStageModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetStageModels(model); }
-
+	void SetBossBulletModel(Model* model) { battleAnimation_->SetBossBulletModel(model); }
 
 };

@@ -49,16 +49,16 @@ void BattleAnimation::Update() {
 	ImGui::SliderInt("type", &MultipathRendering::GetInstance()->cEffectParameters->type, 0, 5);
 	ImGui::End();
 
-	if (KeyInput::PushKey(DIK_SPACE)) {
-		uint8_t handle = static_cast<uint32_t>(movepattern_);
-		handle++;
-		movepattern_ = static_cast<MovePattern>(handle);
-		if (movepattern_ == MovePattern::kMaxCount) {
-			movepattern_ = MovePattern::Run;
-		}
-		cameraMoveFlag = true;
-		SetCameraMove();
-	}
+	//if (KeyInput::PushKey(DIK_SPACE)) {
+	//	uint8_t handle = static_cast<uint32_t>(movepattern_);
+	//	handle++;
+	//	movepattern_ = static_cast<MovePattern>(handle);
+	//	if (movepattern_ == MovePattern::kMaxCount) {
+	//		movepattern_ = MovePattern::Run;
+	//	}
+	//	cameraMoveFlag = true;
+	//	SetCameraMove();
+	//}
 
 	switch (movepattern_) {
 	case MovePattern::Run:
@@ -103,7 +103,6 @@ void BattleAnimation::Update() {
 	}
 	
 	hero_->Move(static_cast<uint32_t>(movepattern_));
-
 
 	hero_->Update();
 	boss_->Update();

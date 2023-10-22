@@ -43,6 +43,7 @@ public: // セッター
 	void SetHeroModels(std::vector<std::shared_ptr<Model>> model) { hero_->SetModel(model); }
 	void SetBossModels(std::vector<std::shared_ptr<Model>> model) { boss_->SetModel(model); }
 	void SetStageModels(std::vector<std::shared_ptr<Model>> model) { stageModel_ = model; }
+	void SetBossBulletModel(Model* model) { boss_->SetBulletModel(model); }
 	
 public:
 	const WorldTransform& GetHeroTransform() { return hero_->GetTransform(); }

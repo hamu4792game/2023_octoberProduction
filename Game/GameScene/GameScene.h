@@ -70,12 +70,15 @@ private: // メンバ関数
 	bool flag = false;
 	void SceneChange();
 
+	WorldTransform test;
+
 private: // モデル変数
 	std::shared_ptr<Model> model_;
 	std::unique_ptr<Model> notesModelNormal_;
 	std::unique_ptr<Model> notesModelLong_;
 	std::unique_ptr<Model> notesModelDamage_;
 	std::shared_ptr<Texture2D> hud_;
+	std::shared_ptr<Texture2D> back_;
 
 	std::shared_ptr<Model> boxModel_;
 
