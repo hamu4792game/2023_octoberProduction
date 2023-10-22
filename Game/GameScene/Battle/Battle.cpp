@@ -99,8 +99,12 @@ void Battle::Update() {
 		if (loopCount_ >= 8) {
 			for (int i = 0; i < 5; i++) {
 				loopBGMs_[i]->SoundStop();
-				loopBGMs_[i]->SoundPlayWave();
-				loopBGMs_[i]->SetVolume(0.2f);
+
+				if (Notes::Combo >= i * 10) {
+					loopBGMs_[i]->SoundPlayWave();
+					loopBGMs_[i]->SetVolume(0.2f);
+				}
+
 			}
 			loopCount_ = 0;
 			frameCounter_ = 0;

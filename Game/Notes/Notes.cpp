@@ -4,6 +4,7 @@
 bool NoteLong::isHitStart_ = false;
 std::unique_ptr<AudioInput> Notes::notesSE_[3][8] = { nullptr };
 AudioInput* Notes::currentNotesSE_[8] = { nullptr };
+int Notes::Combo = 0;
 
 Notes::Notes() {
 
@@ -26,12 +27,14 @@ void Notes::UpdateFlag() {
 		//ノーツに触れる前に早めに押してしまったらミス
 		if (judgeFrame_ <= 15.0f && !isTouch_ && player_->GetIsTap()) {
 			isMiss_ = true;
+			Combo = 0;
 			player_->IsMiss();
 		}
 
 		//タッチしている間にプレイヤーがキーを押したらヒット判定
 		if (isTouch_ && player_->GetIsTap()) {
 			isHit_ = true;
+			Combo++;
 			size_t num = rand() % 8;
 			for (size_t i = 0; i < 8; i++) {
 
@@ -63,6 +66,7 @@ void Notes::Update() {
 	//プレイヤーがノーツをスルーしたらミス
 	if (isTouch_ && judgeFrame_ <= -10.0f) {
 		isMiss_ = true;
+		Combo = 0;
 		player_->IsMiss();
 	}
 

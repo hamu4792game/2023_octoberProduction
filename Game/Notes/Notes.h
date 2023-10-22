@@ -21,6 +21,8 @@ public:
 
 	};
 
+	static int Combo;
+
 	static void StaticInitialize();
 
 	virtual void Initialize();
