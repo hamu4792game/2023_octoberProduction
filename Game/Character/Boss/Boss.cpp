@@ -82,7 +82,4 @@ void Boss::Attack() {
 		attackFlag_ = false;
 
 	}
-
-	// 弾の移動 1.0f/30.0fでイージング
-
 }

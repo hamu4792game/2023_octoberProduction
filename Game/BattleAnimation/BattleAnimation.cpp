@@ -104,7 +104,6 @@ void BattleAnimation::Update() {
 	
 	hero_->Move(static_cast<uint32_t>(movepattern_));
 
-
 	hero_->Update();
 	boss_->Update();
 	for (auto& i : stage_) {

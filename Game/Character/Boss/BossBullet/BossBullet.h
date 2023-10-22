@@ -15,8 +15,11 @@ public:
 
 private:
 
+	const WorldTransform* parent_;
 	WorldTransform transform_;
 	Model* model_;
+	Vector3 start_;
+	float nowFrame_;
 
 
 public:
