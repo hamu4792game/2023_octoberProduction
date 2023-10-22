@@ -13,6 +13,8 @@ public:
 
 	void Update() override;
 
+	void Draw3D(const Matrix4x4& viewProjectionMat) override;
+
 	void SetParent(const WorldTransform* parent) { parent_ = parent, transform_.parent_ = parent; }
 
 	void SetFlag(const bool& flag) { attackFlag_ = flag; }
@@ -31,7 +33,7 @@ private:
 
 	Model* bulletModel_;
 
-	std::vector<BossBullet> bullets_;
+	std::vector<std::shared_ptr<BossBullet>> bullets_;
 
 	void Attack();
 

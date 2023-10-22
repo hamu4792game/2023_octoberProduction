@@ -20,6 +20,6 @@ private:
 
 
 public:
-	void SetPosition(const Vector3& pos) { transform_.translation_ = pos; }
+	void SetTransform(const WorldTransform* trans);
 
 };

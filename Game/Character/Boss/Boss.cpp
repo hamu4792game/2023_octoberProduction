@@ -1,6 +1,7 @@
 #include "Boss.h"
 #include "Game/PartsEnum.h"
 #include "externals/imgui/imgui.h"
+#include "Engine/Input/KeyInput/KeyInput.h"
 
 void Boss::Initialize() {
 	partsTransform_.resize(parts_.size());
@@ -30,9 +31,15 @@ void Boss::Update() {
 	ImGui::DragFloat3("scale", &transform_.scale_.x);
 	ImGui::End();
 
+	if (KeyInput::PushKey(DIK_SPACE)) {
+		attackFlag_ = true;
+	}
+
+	Attack();
+
 	//	弾1つ1つの更新
 	for (auto& i : bullets_) {
-		i.Update();
+		i->Update();
 	}
 
 	//	playerが攻撃するフラグが立ったら
@@ -48,6 +55,17 @@ void Boss::Update() {
 	}
 }
 
+void Boss::Draw3D(const Matrix4x4& viewProjectionMat) {
+	//	描画
+	for (uint8_t i = 0; i < parts_.size(); i++) {
+		Model::ModelDraw(partsTransform_[i], viewProjectionMat, 0xffffffff, parts_[i].get());
+	}
+	//	弾の描画
+	for (auto& i : bullets_) {
+		i->Draw3D(viewProjectionMat);
+	}
+}
+
 void Boss::Attack() {
 	//	攻撃フラグが立たれたとき
 	if (attackFlag_) {
@@ -57,15 +75,14 @@ void Boss::Attack() {
 
 		// 座標の設定
 		// 弾の生成
-		bullets_.push_back(BossBullet(bulletModel_));
+		bullets_.push_back(std::make_shared<BossBullet>(bulletModel_));
+		(*bullets_.rbegin())->SetTransform(&transform_);
 
 		//フラグを折る
 		attackFlag_ = false;
 
 	}
 
-
 	// 弾の移動 1.0f/30.0fでイージング
-
 
 }
