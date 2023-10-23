@@ -4,6 +4,7 @@
 #include "Engine/Easing/Ease.h"
 #include <algorithm>
 #include "Game/PartsEnum.h"
+#include "Engine/Base/MultipathRendering/MultipathRendering.h"
 
 GameScene* GameScene::GetInstance() {
 	static GameScene instance;
@@ -94,7 +95,12 @@ void GameScene::Update() {
 	ImGui::DragFloat3("translate", &camera->transform.translation_.x, 1.0f);
 	ImGui::DragFloat3("rotate", &camera->transform.rotation_.x, AngleToRadian(1.0f));
 	ImGui::DragFloat3("scale", &camera->transform.scale_.x, 0.1f);
+	ImGui::End();
 
+	ImGui::Begin("aaaaa");
+	ImGui::DragFloat2("pos", &MultipathRendering::GetInstance()->cEffectParameters->centerPosition.x);
+	ImGui::DragFloat("rate", &MultipathRendering::GetInstance()->cEffectParameters->parameterRate);
+	ImGui::SliderInt("type", &MultipathRendering::GetInstance()->cEffectParameters->type, 0, 6);
 	ImGui::End();
 #endif // _DEBUG
 
