@@ -296,6 +296,11 @@
     <ClInclude Include="Engine\Texture\Particle\Particle.h">
       <Filter>Engine\Resources\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="FrameCount.h" />
+    <ClInclude Include="math\Rand.h" />
+    <ClInclude Include="math\Billboard\Billboard.h">
+      <Filter>math\Billboard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -420,6 +425,9 @@
     </Filter>
     <Filter Include="Engine\Resources\Particle">
       <UniqueIdentifier>{66889ca0-2e8a-4295-9a61-1e1fc1b11a72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="math\Billboard">
+      <UniqueIdentifier>{7ead2d24-7937-4d07-bee0-1148d3edd616}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
