@@ -43,4 +43,8 @@ private:
 	std::unique_ptr<Model> back_;
 	WorldTransform backTrans_;
 
+private:
+	std::unique_ptr<Model> back_;
+	WorldTransform backTrans_;
+
 };
