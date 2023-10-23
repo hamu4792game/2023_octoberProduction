@@ -1,11 +1,12 @@
 #include "Particle.h"
 #include "Engine/Base/GraphicsPipeline/GraphicsPipeline.h"
+#include "Engine/Manager/TextureManager.h"
 
 //	便利なtmpみたいなやつ
-//decltype(Particle::rootSignature) Particle::rootSignature;
-//decltype(Particle::graphicsPipelineState) Particle::graphicsPipelineState;
-//decltype(Particle::vertexShader) Particle::vertexShader;
-//decltype(Particle::pixelShader) Particle::pixelShader;
+decltype(Particle::rootSignature) Particle::rootSignature;
+decltype(Particle::graphicsPipelineState) Particle::graphicsPipelineState;
+decltype(Particle::vertexShader) Particle::vertexShader;
+decltype(Particle::pixelShader) Particle::pixelShader;
 
 Particle::~Particle()
 {
@@ -13,7 +14,42 @@ Particle::~Particle()
 		instancingResource->Release();
 		instancingResource.Reset();
 	}
+
+	if (SRVHeap) {
+		SRVHeap->Release();
+		SRVHeap.Reset();
+	}
+	if (depthStencilResource) {
+		depthStencilResource->Release();
+		depthStencilResource.Reset();
+	}
+	if (vertexResource) {
+		vertexResource->Release();
+		vertexResource.Reset();
+	}
+	if (resource[0]) {
+		resource[0]->Release();
+		resource[0].Reset();
+	}
 	
+	if (rootSignature) {
+		rootSignature->Release();
+		rootSignature.Reset();
+	}
+	for (uint16_t i = 0; i < static_cast<uint16_t>(BlendMode::BlendCount); i++) {
+		if (graphicsPipelineState[i]) {
+			graphicsPipelineState[i]->Release();
+			graphicsPipelineState[i].Reset();
+		}
+	}
+	if (vertexShader) {
+		vertexShader->Release();
+		vertexShader.Reset();
+	}
+	if (pixelShader) {
+		pixelShader->Release();
+		pixelShader.Reset();
+	}
 }
 
 void Particle::Finalize() {
@@ -76,7 +112,7 @@ void Particle::Texture(const std::string& filePath, const std::string& vsFileNam
 
 
 	if (!rootSignature) {
-		rootSignature = GraphicsPipeline::GetInstance()->CreateRootSignature(rootParameter, 4);
+		rootSignature = GraphicsPipeline::GetInstance()->CreateRootSignature(rootParameter, 3);
 	}
 	for (uint16_t i = 0; i < static_cast<uint16_t>(BlendMode::BlendCount); i++) {
 		if (!graphicsPipelineState[i]) {
@@ -104,14 +140,14 @@ void Particle::CreateDescriptor(const std::string& filePath)
 	//	モデル読み込み
 	modelData = TextureManager::LoadObjFile(filePath);
 
-	DirectX::ScratchImage mipImages = TextureManager::LoadTexture("./Resources/" + modelData.material.textureFilePath);
+	DirectX::ScratchImage mipImages = TextureManager::LoadTexture(modelData.material.textureFilePath);
 	//DirectX::ScratchImage mipImages = TextureManager::LoadTexture("./Resources/uvChecker.png");
 	const DirectX::TexMetadata& metaData = mipImages.GetMetadata();
 	resource[0] = Engine::CreateTextureResource(Engine::GetDevice(), metaData);
 	TextureManager::UploadTextureData(resource[0].Get(), mipImages);
 
 	//	デスクリプタヒープを生成
-	SRVHeap = CreateDescriptorHeap(Engine::GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 10, true);
+	SRVHeap = CreateDescriptorHeap(Engine::GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, kNumInstance, true);
 
 	//	設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
@@ -158,7 +194,7 @@ void Particle::CreateVertexResource()
 
 }
 
-void Particle::ParticleDraw(std::vector<WorldTransform> worldTransform, const Matrix4x4& viewProjectionMat, uint32_t color, Particle* particle)
+void Particle::ParticleDraw(WorldTransform* worldTransform, const Matrix4x4& viewProjectionMat, uint32_t color, Particle* particle)
 {
 	//*worldTransform.cMat = worldTransform.worldMatrix * viewProjectionMat;
 	*worldTransform[0].cColor = ChangeColor(color);
@@ -167,8 +203,7 @@ void Particle::ParticleDraw(std::vector<WorldTransform> worldTransform, const Ma
 	Matrix4x4* instancingData = nullptr;
 	particle->instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&instancingData));
 	//	念のため単位行列を書き込んでおく
-	uint16_t num = static_cast<uint16_t>(worldTransform.size());
-	for (uint8_t i = 0; i < num; i++) {
+	for (uint8_t i = 0; i < particle->kNumInstance; i++) {
 		instancingData[i] = worldTransform[i].worldMatrix * viewProjectionMat;
 	}
 	particle->instancingResource->Unmap(0, nullptr);
@@ -190,6 +225,6 @@ void Particle::ParticleDraw(std::vector<WorldTransform> worldTransform, const Ma
 	Engine::GetList()->SetGraphicsRootConstantBufferView(1, worldTransform[0].cColor.GetGPUVirtualAddress());
 	Engine::GetList()->SetGraphicsRootConstantBufferView(2, worldTransform[0].cMono.GetGPUVirtualAddress());
 
-	Engine::GetList()->DrawInstanced(UINT(particle->modelData.vertices.size()), num, 0, 0);
+	Engine::GetList()->DrawInstanced(UINT(particle->modelData.vertices.size()), particle->kNumInstance, 0, 0);
 }
 

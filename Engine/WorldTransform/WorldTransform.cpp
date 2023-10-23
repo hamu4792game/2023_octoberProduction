@@ -46,3 +46,11 @@ Matrix4x4 WorldTransform::UpdateMatrix()
 
 	return this->worldMatrix;
 }
+
+void WorldTransform::Reset() {
+	scale_ = Vector3(1.0f, 1.0f, 1.0f);
+	rotation_ = Vector3(0.0f, 0.0f, 0.0f);
+	translation_ = Vector3(0.0f, 0.0f, 0.0f);
+	parent_ = nullptr;
+	worldMatrix = MakeIdentity4x4();
+}
