@@ -140,6 +140,9 @@
     <ClCompile Include="math\Rand.cpp">
       <Filter>math</Filter>
     </ClCompile>
+    <ClCompile Include="math\Billboard\Billboard.cpp">
+      <Filter>math\Billboard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h">
@@ -293,10 +296,6 @@
     <ClInclude Include="Engine\Texture\Particle\Particle.h">
       <Filter>Engine\Resources\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="math\Rand.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="FrameCount.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
