@@ -35,6 +35,7 @@ float4 main(Output input) : SV_Target{
     float4 textureColor = gTexture.Sample(gSampler, input.uv);
     float4 result;
     float Y;
+    int levels = 8;
     
     switch(type) {
     case 1: // グレースケール
@@ -51,15 +52,23 @@ float4 main(Output input) : SV_Target{
     case 4: // ネガポジ反転
         result.rgb = float3(1.0f - textureColor.r,1.0f - textureColor.g,1.0f - textureColor.b);
         break;
-    case 5: // ネガポジ反転
+    case 5: // ノイズフィルター
         Y = SimplexNoise(input.position.xyz);
         Y = (Y - 0.5f) * 2.0f;
         result = gTexture.Sample(gSampler,input.uv + Y * 0.01f);
+        break;
+    case 6: // ポスタライズフィルター
+        result.rgb = round(textureColor.rgb * levels) / levels;
+        result.a = textureColor.a;
+        break;
+    case 7: 
+        
         break;
     default:
         result = textureColor;
         break;
     }
+
         
     float v = pow(input.position.x - centerPosition.x,2) + 
     pow(input.position.y - centerPosition.y,2);
@@ -69,3 +78,4 @@ float4 main(Output input) : SV_Target{
 
     return textureColor;
 }
+

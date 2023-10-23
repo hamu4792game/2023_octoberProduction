@@ -158,7 +158,7 @@ void Particle::CreateVertexResource()
 
 }
 
-void Particle::ParticleDraw(WorldTransform* worldTransform, const Matrix4x4& viewProjectionMat, uint32_t color, Particle* particle)
+void Particle::ParticleDraw(std::vector<WorldTransform> worldTransform, const Matrix4x4& viewProjectionMat, uint32_t color, Particle* particle)
 {
 	//*worldTransform.cMat = worldTransform.worldMatrix * viewProjectionMat;
 	*worldTransform[0].cColor = ChangeColor(color);
@@ -167,7 +167,8 @@ void Particle::ParticleDraw(WorldTransform* worldTransform, const Matrix4x4& vie
 	Matrix4x4* instancingData = nullptr;
 	particle->instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&instancingData));
 	//	念のため単位行列を書き込んでおく
-	for (uint8_t i = 0; i < particle->kNumInstance; i++) {
+	uint16_t num = static_cast<uint16_t>(worldTransform.size());
+	for (uint8_t i = 0; i < num; i++) {
 		instancingData[i] = worldTransform[i].worldMatrix * viewProjectionMat;
 	}
 	particle->instancingResource->Unmap(0, nullptr);
@@ -189,6 +190,6 @@ void Particle::ParticleDraw(WorldTransform* worldTransform, const Matrix4x4& vie
 	Engine::GetList()->SetGraphicsRootConstantBufferView(1, worldTransform[0].cColor.GetGPUVirtualAddress());
 	Engine::GetList()->SetGraphicsRootConstantBufferView(2, worldTransform[0].cMono.GetGPUVirtualAddress());
 
-	Engine::GetList()->DrawInstanced(UINT(particle->modelData.vertices.size()), particle->kNumInstance, 0, 0);
+	Engine::GetList()->DrawInstanced(UINT(particle->modelData.vertices.size()), num, 0, 0);
 }
 

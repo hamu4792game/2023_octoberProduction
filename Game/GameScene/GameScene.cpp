@@ -27,7 +27,6 @@ void GameScene::Initialize() {
 	notesModelLong_ = std::make_unique<Model>();
 	notesModelDamage_ = std::make_unique<Model>();
 	hud_ = std::make_shared<Texture2D>();
-	back_ = std::make_shared<Texture2D>();
 
 	box = std::make_shared<Texture2D>();
 
@@ -96,9 +95,6 @@ void GameScene::Update() {
 	ImGui::DragFloat3("rotate", &camera->transform.rotation_.x, AngleToRadian(1.0f));
 	ImGui::DragFloat3("scale", &camera->transform.scale_.x, 0.1f);
 
-	ImGui::DragFloat3("testtranslate", &test.translation_.x, 1.0f);
-	ImGui::DragFloat3("testrotate", &test.rotation_.x, AngleToRadian(1.0f));
-	ImGui::DragFloat3("testscale", &test.scale_.x, 0.1f);
 	ImGui::End();
 #endif // _DEBUG
 
@@ -132,8 +128,6 @@ void GameScene::Update() {
 	case GameScene::Scene::RESULT:
 		break;
 	}
-
-	test.UpdateMatrix();
 
 	//if (KeyInput::PushKey(DIK_S)) {
 	//	sceneChangeFlag = true;
@@ -171,7 +165,6 @@ void GameScene::Draw() {
 		break;
 	case GameScene::Scene::BATTLE:
 		battle->Draw2D(viewProjectionMatrix2d);
-		Texture2D::TextureDraw(test, viewProjectionMatrix2d, 0xffffffaa, back_.get());
 		break;
 	case GameScene::Scene::RESULT:
 		break;
@@ -193,7 +186,6 @@ void GameScene::Finalize() {
 void GameScene::ModelLoad() {
 	model_->Texture("Resources/eatRamen/eatRamen.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	hud_->Texture("Resources/uvChecker.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
-	back_->Texture("Resources/hud/test.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
 	box->Texture("Resources/block.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
