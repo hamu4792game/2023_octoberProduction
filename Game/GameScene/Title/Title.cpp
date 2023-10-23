@@ -22,12 +22,15 @@ void Title::Initialize() {
 		//dustTrans_[i].translation_.y = 2.0f * i;
 		dustTrans_[i].translation_.x = RandNum(-640.0f, 640.0f);
 		dustTrans_[i].translation_.y = RandNum(-360.0f, 360.0f);
+		//dustTrans_[i].scale_ = Vector3(0.5f, 0.5f, 1.0f);
 	}
+	particleResources_->SetBlend(BlendMode::Screen);
+
 }
 
 void Title::Update() {
 
-	//BackParticle();
+	BackParticle();
 
 	//	座標の更新
 	modelTrans.UpdateMatrix();
@@ -48,7 +51,7 @@ void Title::Draw2D(const Matrix4x4& viewProjection) {
 	//Texture2D::TextureDraw(hudTrans, viewProjection, 0xffffffff, hud_.get());
 	//Texture2D::TextureDraw(hudTrans, viewProjection, 0xffffffff, particleResources_.get());
 	for (auto& i : dustTrans_) {
-		Texture2D::TextureDraw(i, viewProjection, 0xffffffff, particleResources_.get());
+		Texture2D::TextureDraw(i, viewProjection, 0x0000ccaa, particleResources_.get());
 	}
 }
 
@@ -60,13 +63,14 @@ void Title::ModelLoad() {
 
 void Title::BackParticle() {
 	for (uint8_t i = 0; i < _countof(dustTrans_); i++) {
-		dustTrans_[i].translation_.x += 0.1f;
-		dustTrans_[i].translation_.y -= 0.1f;
+		dustTrans_[i].translation_.x += 0.5f;
+		dustTrans_[i].translation_.y -= 0.5f;
 
-		if (dustTrans_[i].translation_.y < -10.0f)	{
-			dustTrans_[i].translation_.x = -10.0f;
-			dustTrans_[i].translation_.y = 10.0f;
-
+		if (dustTrans_[i].translation_.y < -360.0f)	{
+			dustTrans_[i].translation_.y = 360.0f;
+		}
+		if (dustTrans_[i].translation_.x > 640.0f)	{
+			dustTrans_[i].translation_.x = -640.0f;
 		}
 	}
 }
