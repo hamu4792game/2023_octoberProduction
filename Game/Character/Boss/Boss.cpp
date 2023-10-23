@@ -3,6 +3,11 @@
 #include "externals/imgui/imgui.h"
 #include "Engine/Input/KeyInput/KeyInput.h"
 
+Boss::Boss() {
+	back_ = std::make_unique<Model>();
+	back_->Texture("Resources/plane/plane.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/hud/test.png");
+}
+
 void Boss::Initialize() {
 	partsTransform_.resize(parts_.size());
 	partsTransform_[static_cast<uint8_t>(BossParts::Body)].parent_ = &transform_;
@@ -22,6 +27,12 @@ void Boss::Initialize() {
 
 	transform_.translation_ = Vector3(2.0f, 2.0f, 35.0f);
 	partsTransform_[static_cast<uint8_t>(BossParts::Head)].translation_.y = 2.0f;
+
+	backTrans_.parent_ = &transform_;
+	backTrans_.translation_.z = 3.0f;
+	backTrans_.scale_ = Vector3(5.0f, 1.0f, 5.0f);
+	backTrans_.rotation_.x = AngleToRadian(-90.0f);
+	back_->blendType = BlendMode::Subtract;
 }
 
 void Boss::Update() {
@@ -29,6 +40,9 @@ void Boss::Update() {
 	ImGui::Begin("Boss");
 	ImGui::DragFloat3("trans", &transform_.translation_.x);
 	ImGui::DragFloat3("scale", &transform_.scale_.x);
+	ImGui::DragFloat3("backtrans", &backTrans_.translation_.x);
+	ImGui::DragFloat3("backscale", &backTrans_.scale_.x);
+	ImGui::DragFloat3("backrotate", &backTrans_.rotation_.x);
 	ImGui::End();
 
 	if (KeyInput::PushKey(DIK_SPACE)) {
@@ -53,6 +67,7 @@ void Boss::Update() {
 	for (auto& i : partsTransform_) {
 		i.UpdateMatrix();
 	}
+	backTrans_.UpdateMatrix();
 }
 
 void Boss::Draw3D(const Matrix4x4& viewProjectionMat) {
@@ -64,6 +79,7 @@ void Boss::Draw3D(const Matrix4x4& viewProjectionMat) {
 	for (auto& i : bullets_) {
 		i->Draw3D(viewProjectionMat);
 	}
+	Model::ModelDraw(backTrans_, viewProjectionMat, 0xffffff99, back_.get());
 }
 
 void Boss::Attack() {

@@ -134,6 +134,9 @@
     <ClCompile Include="Game\Character\Boss\BossBullet\BossBullet.cpp">
       <Filter>Game\Character\Boss\BossBullet</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Texture\Particle\Particle.cpp">
+      <Filter>Engine\Resources\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h">
@@ -284,6 +287,9 @@
     <ClInclude Include="Game\Character\Boss\BossBullet\BossBullet.h">
       <Filter>Game\Character\Boss\BossBullet</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Texture\Particle\Particle.h">
+      <Filter>Engine\Resources\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -405,6 +411,9 @@
     </Filter>
     <Filter Include="Game\Character\Boss\BossBullet">
       <UniqueIdentifier>{df2d8045-ff0a-4a07-b8c9-b0c2af6bf50a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Resources\Particle">
+      <UniqueIdentifier>{66889ca0-2e8a-4295-9a61-1e1fc1b11a72}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

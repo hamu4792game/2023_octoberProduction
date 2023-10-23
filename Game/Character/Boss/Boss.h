@@ -2,11 +2,12 @@
 #include "Game/Character/BaseCharacter/BaseCharacter.h"
 #include "Game/Character/Boss/BossBullet/BossBullet.h"
 #include <vector>
+#include "Engine/Texture/Model.h"
 
 class Boss : public BaseCharacter
 {
 public:
-	Boss() = default;
+	Boss();
 	~Boss() = default;
 
 	void Initialize() override;
@@ -36,5 +37,9 @@ private:
 	std::vector<std::shared_ptr<BossBullet>> bullets_;
 
 	void Attack();
+
+private:
+	std::unique_ptr<Model> back_;
+	WorldTransform backTrans_;
 
 };

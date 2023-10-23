@@ -46,7 +46,7 @@ void BattleAnimation::Update() {
 	ImGui::Begin("aaaaa");
 	ImGui::DragFloat2("pos", &MultipathRendering::GetInstance()->cEffectParameters->centerPosition.x);
 	ImGui::DragFloat("rate", &MultipathRendering::GetInstance()->cEffectParameters->parameterRate);
-	ImGui::SliderInt("type", &MultipathRendering::GetInstance()->cEffectParameters->type, 0, 5);
+	ImGui::SliderInt("type", &MultipathRendering::GetInstance()->cEffectParameters->type, 0, 6);
 	ImGui::End();
 
 	//if (KeyInput::PushKey(DIK_SPACE)) {
@@ -112,12 +112,12 @@ void BattleAnimation::Update() {
 }
 
 void BattleAnimation::Draw3D(const Matrix4x4& viewProjectionMat) {
-	hero_->Draw3D(viewProjectionMat);
-	boss_->Draw3D(viewProjectionMat);
-
 	for (auto& i : stage_) {
 		i->Draw3D(viewProjectionMat);
 	}
+	hero_->Draw3D(viewProjectionMat);
+	boss_->Draw3D(viewProjectionMat);
+
 }
 
 void BattleAnimation::SetCameraMove() {
