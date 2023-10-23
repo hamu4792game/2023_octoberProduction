@@ -3,7 +3,8 @@
 
 BossBullet::BossBullet(Model* model) {
 	model_ = model;
-	transform_.translation_ = Vector3(3.0f, 0.0f, 0.0f);
+	//transform_.translation_ = Vector3(3.0f, 0.0f, 0.0f);
+	transform_.translation_ = Vector3(RandNum(-3.0f, 3.0f), RandNum(-0.5f, 0.5f), 0.0f);
 	transform_.scale_ = Vector3(1.0f, 1.0f, 1.0f);
 	start_ = transform_.translation_;
 	nowFrame_ = 0.0f;
@@ -17,7 +18,7 @@ void BossBullet::Update() {
 		isDead_ = true;
 	}
 
-	transform_.translation_ = Ease::UseEase(start_, parent_->translation_ - (parent_->translation_ * 2.0f), nowFrame_, 1.0f, Ease::EaseType::EaseIn);
+	transform_.translation_ = Ease::UseEase(start_, parent_->translation_ - (parent_->translation_ * 2.0f), nowFrame_, 1.0f, Ease::EaseType::EaseInSine);
 	transform_.UpdateMatrix();
 }
 
