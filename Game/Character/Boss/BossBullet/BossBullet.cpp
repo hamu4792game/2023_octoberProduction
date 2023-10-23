@@ -11,7 +11,7 @@ BossBullet::BossBullet(Model* model) {
 
 void BossBullet::Update() {
 	
-	nowFrame_ += 0.02f;
+	nowFrame_ += 1.0f / 60.0f;
 
 	if (notes_->GetIsHit() || notes_->GetIsMiss()) {
 		isDead_ = true;

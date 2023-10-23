@@ -78,7 +78,7 @@ void Notes::Update() {
 			float((40.0f - (judgeFrame_ + 10.0f)) / 40.0f));
 	}
 
-	if (judgeFrame_ <= 50.0f && !isAttack_) {
+	if (judgeFrame_ <= 60.0f && !isAttack_) {
 
 		boss_->SetFlag(true);
 		boss_->Attack(this);
