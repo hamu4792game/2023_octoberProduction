@@ -66,7 +66,7 @@ private:
 	//動きの速度に掛ける倍率
 	float Magnification = 1.0f;
 	//アニメーションスピード
-	float AnimationSpeed = 0.01f;
+	float AnimationSpeed;
 
 	float AnimationNum = 0.0f;
 

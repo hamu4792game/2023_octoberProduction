@@ -65,7 +65,11 @@ void Hero::Initialize() {
 	}
 
 	ChackFiles();
+	
 	//LoadFiles();
+
+
+	AnimationSpeed = 0.2f;
 }
 
 void Hero::Update() {
@@ -96,8 +100,24 @@ void Hero::Update() {
 	else if (SetStart ==Position::Animation){
 		if (isAnimation){
 			AnimationNum += AnimationSpeed * Magnification;
-			T = Easing::EaseInOutExpo(AnimationNum);
+			T = Easing::EaseOutSine(AnimationNum);
 			if (AnimationCount ==0){
+				partsTransform_[static_cast<uint8_t>(HeroParts::Body)].translation_.y =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::Body)].translation_.y +
+					T * middlePos[static_cast<uint8_t>(HeroParts::Body)].translation_.y;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::Head)].translation_.x =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::Head)].translation_.x +
+					T * middlePos[static_cast<uint8_t>(HeroParts::Head)].translation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::Head)].translation_.y =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::Head)].translation_.y +
+					T * middlePos[static_cast<uint8_t>(HeroParts::Head)].translation_.y;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::Waist)].translation_.y =
+					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::Waist)].translation_.y +
+					T * middlePos[static_cast<uint8_t>(HeroParts::Waist)].translation_.y;
+
 				partsTransform_[static_cast<uint8_t>(HeroParts::Body)].rotation_.y =
 					(1 - T) * startPos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y +
 					T * middlePos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y;
@@ -136,6 +156,22 @@ void Hero::Update() {
 
 			}
 			else if (AnimationCount == 1) {
+				partsTransform_[static_cast<uint8_t>(HeroParts::Body)].translation_.y =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::Body)].translation_.y +
+					T * EndPos[static_cast<uint8_t>(HeroParts::Body)].translation_.y;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::Head)].translation_.x =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::Head)].translation_.x +
+					T * EndPos[static_cast<uint8_t>(HeroParts::Head)].translation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::Head)].translation_.y =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::Head)].translation_.y +
+					T * EndPos[static_cast<uint8_t>(HeroParts::Head)].translation_.y;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::Waist)].translation_.y =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::Waist)].translation_.y +
+					T * EndPos[static_cast<uint8_t>(HeroParts::Waist)].translation_.y;
+
 				partsTransform_[static_cast<uint8_t>(HeroParts::Body)].rotation_.y =
 					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y +
 					T * EndPos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y;
@@ -172,7 +208,24 @@ void Hero::Update() {
 					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::RightBottomArm)].rotation_.z +
 					T * EndPos[static_cast<uint8_t>(HeroParts::RightBottomArm)].rotation_.z;
 
-			}else if (AnimationCount == 2) {
+			}
+			else if (AnimationCount == 2) {
+				partsTransform_[static_cast<uint8_t>(HeroParts::Body)].translation_.y =
+					(1 - T) * EndPos[static_cast<uint8_t>(HeroParts::Body)].translation_.y +
+					T * middlePos[static_cast<uint8_t>(HeroParts::Body)].translation_.y;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::Head)].translation_.x =
+					(1 - T) * EndPos[static_cast<uint8_t>(HeroParts::Head)].translation_.x +
+					T * middlePos[static_cast<uint8_t>(HeroParts::Head)].translation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::Head)].translation_.y =
+					(1 - T) * EndPos[static_cast<uint8_t>(HeroParts::Head)].translation_.y +
+					T * middlePos[static_cast<uint8_t>(HeroParts::Head)].translation_.y;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::Waist)].translation_.y =
+					(1 - T) * EndPos[static_cast<uint8_t>(HeroParts::Waist)].translation_.y +
+					T * middlePos[static_cast<uint8_t>(HeroParts::Waist)].translation_.y;
+
 				partsTransform_[static_cast<uint8_t>(HeroParts::Body)].rotation_.y =
 					(1 - T) * EndPos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y +
 					T * middlePos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y;
@@ -210,6 +263,22 @@ void Hero::Update() {
 					T * middlePos[static_cast<uint8_t>(HeroParts::RightBottomArm)].rotation_.z;
 			}
 			else if (AnimationCount == 3) {
+				partsTransform_[static_cast<uint8_t>(HeroParts::Body)].translation_.y =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::Body)].translation_.y +
+					T * startPos[static_cast<uint8_t>(HeroParts::Body)].translation_.y;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::Head)].translation_.x =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::Head)].translation_.x +
+					T * startPos[static_cast<uint8_t>(HeroParts::Head)].translation_.x;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::Head)].translation_.y =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::Head)].translation_.y +
+					T * startPos[static_cast<uint8_t>(HeroParts::Head)].translation_.y;
+
+				partsTransform_[static_cast<uint8_t>(HeroParts::Waist)].translation_.y =
+					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::Waist)].translation_.y +
+					T * startPos[static_cast<uint8_t>(HeroParts::Waist)].translation_.y;
+
 				partsTransform_[static_cast<uint8_t>(HeroParts::Body)].rotation_.y =
 					(1 - T) * middlePos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y +
 					T * startPos[static_cast<uint8_t>(HeroParts::Body)].rotation_.y;
