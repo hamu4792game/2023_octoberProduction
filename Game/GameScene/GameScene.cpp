@@ -61,7 +61,7 @@ void GameScene::Initialize() {
 	//bgm_->SetVolume(0.2f);
 	
 	//	シーンの生成
-	title = std::make_unique<Title>();
+	title = std::make_unique<Title>(camera.get());
 	battle = std::make_unique<Battle>(camera);
 
 
@@ -83,7 +83,7 @@ void GameScene::Initialize() {
 
 
 	//	変数の初期化
-	scene = Scene::BATTLE;
+	scene = Scene::TITLE;
 	oldscene = Scene::RESULT;
 
 }
@@ -104,9 +104,6 @@ void GameScene::Update() {
 		case GameScene::Scene::TITLE:
 			camera->SetParent(nullptr);
 			title->Initialize();
-			camera->transform.translation_.y = 15.0f;
-			camera->transform.translation_.z = -100.0f;
-			camera->transform.rotation_ = { 0.0f,0.0f,0.0f };
 			break;
 		case GameScene::Scene::BATTLE:
 			camera->SetParent(nullptr);
