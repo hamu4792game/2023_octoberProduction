@@ -1,4 +1,6 @@
 #include "Notes.h"
+#include "Game/Character/Hero/Hero.h"
+#include "Game/Character/Boss/Boss.h"
 
 //静的メンバ変数実体
 bool NoteLong::isHitStart_ = false;
@@ -76,11 +78,19 @@ void Notes::Update() {
 			float((40.0f - (judgeFrame_ + 10.0f)) / 40.0f));
 	}
 
+	if (judgeFrame_ <= 50.0f && !isAttack_) {
+
+		boss_->SetFlag(true);
+		boss_->Attack(this);
+		isAttack_ = true;
+
+	}
+
 	//判定フレーム更新
 	worldTransformInside_.translation_.x = judgeFrame_;
 	worldTransformLine_.scale_ = { judgeFrame_, judgeFrame_, judgeFrame_ };
 	worldTransformLine_.scale_ *= 1.0f / 2.0f;
-	worldTransformLine_.translation_ = player_->GetInsidePosition();
+	worldTransformLine_.translation_ = hero_->GetTransform().translation_;
 
 	worldTransform_.UpdateMatrix();
 	worldTransformLine_.UpdateMatrix();
@@ -118,11 +128,11 @@ void Notes::RestoreSize() {
 
 void Notes::Draw(const Matrix4x4& viewProjection) {
 
-	if (judgeFrame_ <= 30.0f) {
+	/*if (judgeFrame_ <= 30.0f) {
 		model_->ModelDraw(worldTransform_, viewProjection, 0xffffffff, model_);
 	}
 
-	model_->ModelDraw(worldTransformInside_, viewProjection, 0xffffffff, model_);
+	model_->ModelDraw(worldTransformInside_, viewProjection, 0xffffffff, model_);*/
 
 	if (judgeFrame_ <= 30.0f && judgeFrame_ >= 0.0f) {
 		modelList_[3]->ModelDraw(worldTransformLine_, viewProjection, 0xffffffff, modelList_[3]);

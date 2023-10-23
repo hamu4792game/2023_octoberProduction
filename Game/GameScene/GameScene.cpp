@@ -77,6 +77,7 @@ void GameScene::Initialize() {
 	battle->SetHeroModels(heroModel_);
 	battle->SetBossModels(bossModel_);
 	battle->SetStageModels(stageModel_);
+	battle->SetBossBulletModel(noteModels.at(0));
 
 	//	シーンの初期化
 	title->Initialize();
@@ -95,10 +96,9 @@ void GameScene::Update() {
 	ImGui::DragFloat3("translate", &camera->transform.translation_.x, 1.0f);
 	ImGui::DragFloat3("rotate", &camera->transform.rotation_.x, AngleToRadian(1.0f));
 	ImGui::DragFloat3("scale", &camera->transform.scale_.x, 0.1f);
+
 	ImGui::End();
 #endif // _DEBUG
-
-	
 
 	//	シーン切替わり時の初期化
 	if (oldscene != scene) {
@@ -131,9 +131,9 @@ void GameScene::Update() {
 		break;
 	}
 
-	if (KeyInput::PushKey(DIK_S)) {
-		sceneChangeFlag = true;
-	}
+	//if (KeyInput::PushKey(DIK_S)) {
+	//	sceneChangeFlag = true;
+	//}
 
 	//	シーンチェンジの処理
 	if (sceneChangeFlag) {
@@ -224,8 +224,8 @@ void GameScene::ModelLoad() {
 	bossModel_[static_cast<uint8_t>(HeroParts::LeftBottomLeg)] = heroModel_[static_cast<uint8_t>(HeroParts::RightUpperArm)];
 
 	//	ステージモデル
-	stageModel_[0]->Texture("Resources/plane/plane.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
-	stageModel_[1]->Texture("Resources/box/box.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
+	stageModel_[0]->Texture("Resources/plane/plane.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/stage/Road.png");
+	stageModel_[1]->Texture("Resources/box/box.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/stage/building1.png");
 	stageModel_[2] = stageModel_[1];
 	stageModel_[3] = stageModel_[1];
 	stageModel_[4] = stageModel_[1];

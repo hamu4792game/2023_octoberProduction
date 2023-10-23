@@ -10,7 +10,7 @@
 
 #include "Engine/Base/ConstantBuffer.h"
 #include "Engine/Base/GraphicsPipeline/GraphicsPipeline.h"
-
+#include "Engine/Base/MultipathRendering/MultipathRendering.h"
 
 //	imguiのinclude
 #include "externals/imgui/imgui.h"
@@ -52,6 +52,9 @@ void CommandDirectX::Initialize(WinApp* winApp, int32_t bufferWidth, int32_t buf
 
 	//	Audioの初期化処理
 	AudioManager::Initialize();
+
+	//	マルチパスレンダリング用の定数バッファ変数の初期化
+	MultipathRendering::GetInstance()->Initialize();
 }
 
 void CommandDirectX::PreDraw()
@@ -183,6 +186,8 @@ void CommandDirectX::PostDraw()
 	commandList->SetGraphicsRootDescriptorTable(0, handle);
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	commandList->IASetVertexBuffers(0, 1, &peraVBV);
+	commandList->SetGraphicsRootConstantBufferView(1, MultipathRendering::GetInstance()->cEffectParameters.GetGPUVirtualAddress());
+
 	commandList->DrawInstanced(4, 1, 0, 0);
 
 	//	ImGuiの内部コマンドを生成
@@ -257,9 +262,10 @@ void CommandDirectX::Finalize()
 	rtvDescriptorHeap->Release();
 
 	peraVB->Release();
-	//peraResource->Release();
+	peraResource->Release();
 	peraRTVHeap->Release();
 	peraSRVHeap->Release();
+	peraRootSignature->Release();
 
 	swapChain->Release();
 	commandList->Release();
@@ -438,7 +444,7 @@ void CommandDirectX::CreateMultipathRendering()
 	auto resDesc = backbuffer->GetDesc();
 	D3D12_HEAP_PROPERTIES heapProp = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 	//	レンダリング時のクリア値と同じ値
-	float clearColor[4] = { 0.0f,0.0f,0.0f,1.0f };
+	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//	青っぽい色、RGBA
 	D3D12_CLEAR_VALUE clearValue = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
 
 	HRESULT result = device->CreateCommittedResource(
@@ -549,37 +555,17 @@ void CommandDirectX::CreatePeraPipeline()
 	range.NumDescriptors = 1;
 	range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	D3D12_ROOT_PARAMETER rp{};
-	rp.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rp.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rp.DescriptorTable.pDescriptorRanges = &range;
-	rp.DescriptorTable.NumDescriptorRanges = 1;
+	D3D12_ROOT_PARAMETER rp[2] = {};
+	rp[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rp[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rp[0].DescriptorTable.pDescriptorRanges = &range;
+	rp[0].DescriptorTable.NumDescriptorRanges = 1;
 
-	D3D12_STATIC_SAMPLER_DESC sampler = CD3DX12_STATIC_SAMPLER_DESC(0);
+	rp[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV; // b
+	rp[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rp[1].Descriptor.ShaderRegister = 0;
 
-	D3D12_ROOT_SIGNATURE_DESC rootSigDesc = {};
-	rootSigDesc.NumParameters = 1;
-	rootSigDesc.NumStaticSamplers = 1;
-	rootSigDesc.pParameters = &rp;
-	rootSigDesc.pStaticSamplers = &sampler;
-	rootSigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-
-	//	シリアライズしてバイナリにする
-	ID3DBlob* signatureBlob = nullptr;
-	ID3DBlob* errorBlob = nullptr;
-	HRESULT result = D3D12SerializeRootSignature(&rootSigDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob, &errorBlob);
-	if (FAILED(result)) {
-		Log(reinterpret_cast<char*>(errorBlob->GetBufferPointer()));
-		assert(false);
-	}
-	//	バイナリを元に生成
-	result = device->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&peraRootSignature));
-	assert(SUCCEEDED(result));
-	if (errorBlob)
-	{
-		errorBlob->Release();
-	}
-	signatureBlob->Release();
+	peraRootSignature = GraphicsPipeline::GetInstance()->CreateRootSignature(rp, 2);
 
 #pragma endregion
 
@@ -650,7 +636,7 @@ void CommandDirectX::CreatePeraPipeline()
 	};
 
 	//	実際に生成
-	result = device->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(peraPipeline.ReleaseAndGetAddressOf()));
+	HRESULT result = device->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(peraPipeline.ReleaseAndGetAddressOf()));
 	assert(SUCCEEDED(result));
 
 
@@ -674,8 +660,8 @@ void CommandDirectX::ClearRenderTarget(D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapPointe
 	/*UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();*/
 
 	//	指定した色で画面全体をクリアする
-	//float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//	青っぽい色、RGBA
-	float clearColor[] = { 0.0f,0.0f,0.0f,1.0f };	//	青っぽい色、RGBA
+	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//	青っぽい色、RGBA
+	//float clearColor[] = { 0.0f,0.0f,0.0f,1.0f };	//	青っぽい色、RGBA
 	commandList->ClearRenderTargetView(rtvHeapPointer, clearColor, 0, nullptr);
 }
 

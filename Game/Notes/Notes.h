@@ -7,6 +7,10 @@
 #include "math/Vector3.h"
 #include "Engine/Texture/Texture2D.h"
 
+class Boss;
+
+class Hero;
+
 class Notes
 {
 public:
@@ -58,6 +62,10 @@ public:
 	}
 
 	void SetPlayer(Player* player) { player_ = player; }
+
+	void SetBoss(Boss* boss) { boss_ = boss; }
+
+	void SetHero(Hero* hero) { hero_ = hero; }
 
 	void SetNoteType(NoteType type) { type_ = type; }
 
@@ -133,6 +141,10 @@ protected:
 
 	Player* player_;
 
+	Boss* boss_;
+
+	Hero* hero_;
+
 	//元のサイズ
 	const float kNormalSize = 1.0f;
 
@@ -153,6 +165,9 @@ protected:
 
 	//サイズを戻す演出
 	void RestoreSize();
+
+	//攻撃命令を出したかどうかのフラグ
+	bool isAttack_ = false;
 
 };
 

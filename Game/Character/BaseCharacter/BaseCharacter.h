@@ -14,11 +14,13 @@ public:
 
 	virtual void Update();
 
-	void Draw3D(const Matrix4x4& viewProjectionMat);
+	virtual void Draw3D(const Matrix4x4& viewProjectionMat);
 
 	void SetModel(std::vector<std::shared_ptr<Model>> model) { parts_ = model; };
 
 	const WorldTransform& GetTransform() { return transform_; }
+
+	void TransformUpdate();
 
 protected:
 	

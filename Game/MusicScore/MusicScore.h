@@ -4,6 +4,8 @@
 #include <list>
 #include "Game/Player/Player.h"
 #include <memory>
+#include "Game/Character/Boss/Boss.h"
+#include "Game/Character/Hero/Hero.h"
 
 class MusicScore
 {
@@ -41,6 +43,10 @@ public:
 
 	void SetPlayer(Player* player) { player_ = player; }
 
+	void SetBoss(Boss* boss) { boss_ = boss; }
+
+	void SetHero(Hero* hero) { hero_ = hero; }
+
 	void SetNotes(ScoreType type, std::vector<Vector3> position, int32_t offset);
 
 	bool IsEmpty() { return notes_.empty(); }
@@ -70,6 +76,10 @@ public:
 private:
 
 	Player* player_;
+
+	Boss* boss_;
+
+	Hero* hero_;
 
 	std::list<Notes*> notes_;
 

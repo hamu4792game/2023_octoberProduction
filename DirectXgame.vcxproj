@@ -102,6 +102,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="Engine\Base\CommandDirectX.cpp" />
     <ClCompile Include="Engine\Base\GraphicsPipeline\GraphicsPipeline.cpp" />
+    <ClCompile Include="Engine\Base\MultipathRendering\MultipathRendering.cpp" />
     <ClCompile Include="Engine\Base\WinApp.cpp" />
     <ClCompile Include="Engine\Camera\Camera.cpp" />
     <ClCompile Include="Engine\Camera\DebugCamera\DebugCamera.cpp" />
@@ -114,6 +115,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Manager\TextureManager.cpp" />
     <ClCompile Include="Engine\Texture\Line\Line.cpp" />
     <ClCompile Include="Engine\Texture\Model.cpp" />
+    <ClCompile Include="Engine\Texture\Particle\Particle.cpp" />
     <ClCompile Include="Engine\Texture\Texture2D.cpp" />
     <ClCompile Include="Engine\TimeBaseLoopExecuter\TimeBaseLoopExecuter.cpp" />
     <ClCompile Include="Engine\WorldTransform\WorldTransform.cpp" />
@@ -127,6 +129,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\BattleAnimation\BattleAnimation.cpp" />
     <ClCompile Include="Game\Character\BaseCharacter\BaseCharacter.cpp" />
     <ClCompile Include="Game\Character\Boss\Boss.cpp" />
+    <ClCompile Include="Game\Character\Boss\BossBullet\BossBullet.cpp" />
     <ClCompile Include="Game\Character\Hero\Hero.cpp" />
     <ClCompile Include="Game\GameScene\Battle\Battle.cpp" />
     <ClCompile Include="Game\GameScene\GameScene.cpp" />
@@ -149,6 +152,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Base\CommandDirectX.h" />
     <ClInclude Include="Engine\Base\ConstantBuffer.h" />
     <ClInclude Include="Engine\Base\GraphicsPipeline\GraphicsPipeline.h" />
+    <ClInclude Include="Engine\Base\MultipathRendering\MultipathRendering.h" />
     <ClInclude Include="Engine\Base\WinApp.h" />
     <ClInclude Include="Engine\Camera\Camera.h" />
     <ClInclude Include="Engine\Camera\DebugCamera\DebugCamera.h" />
@@ -163,6 +167,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Manager\TextureManager.h" />
     <ClInclude Include="Engine\Texture\Line\Line.h" />
     <ClInclude Include="Engine\Texture\Model.h" />
+    <ClInclude Include="Engine\Texture\Particle\Particle.h" />
     <ClInclude Include="Engine\Texture\Texture2D.h" />
     <ClInclude Include="Engine\TimeBaseLoopExecuter\TimeBaseLoopExecuter.h" />
     <ClInclude Include="Engine\WorldTransform\WorldTransform.h" />
@@ -178,6 +183,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\BattleAnimation\BattleAnimation.h" />
     <ClInclude Include="Game\Character\BaseCharacter\BaseCharacter.h" />
     <ClInclude Include="Game\Character\Boss\Boss.h" />
+    <ClInclude Include="Game\Character\Boss\BossBullet\BossBullet.h" />
     <ClInclude Include="Game\Character\Hero\Hero.h" />
     <ClInclude Include="Game\GameScene\Battle\Battle.h" />
     <ClInclude Include="Game\GameScene\GameScene.h" />

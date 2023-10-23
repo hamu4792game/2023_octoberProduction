@@ -262,6 +262,8 @@ void MusicScore::SetNoteNormal(const Vector3& position, uint32_t num, float judg
 	newNote->ModelLoad(notesModels_);
 	newNote->TextureLoad(noteTextures_[0]);
 	newNote->SetPlayer(player_);
+	newNote->SetHero(hero_);
+	newNote->SetBoss(boss_);
 	newNote->Initialize();
 	newNote->SetStartPosition(position + Vector3{ 0.0f,0.0f,30.0f });
 	newNote->SetMiddlePosition(position);
@@ -280,6 +282,8 @@ void MusicScore::SetNoteLStart(const Vector3& position, uint32_t num, float judg
 	newNote->Initialize();
 	newNote->SetLongNoteType(NoteLong::Start);
 	newNote->SetPlayer(player_);
+	newNote->SetHero(hero_);
+	newNote->SetBoss(boss_);
 	newNote->SetStartPosition(position);
 	newNote->SetNumber(num);
 	newNote->SetJudgeFrame(judgeline);
@@ -295,6 +299,8 @@ void MusicScore::SetNoteLEnd(const Vector3& position, uint32_t num, float judgel
 	newNote->Initialize();
 	newNote->SetLongNoteType(NoteLong::End);
 	newNote->SetPlayer(player_);
+	newNote->SetHero(hero_);
+	newNote->SetBoss(boss_);
 	newNote->SetStartPosition(position);
 	newNote->SetNumber(num);
 	newNote->SetJudgeFrame(judgeline);
@@ -309,6 +315,8 @@ void MusicScore::SetNoteDamage(const Vector3& position, uint32_t num, float judg
 	newNote->TextureLoad(noteTextures_[0]);
 	newNote->Initialize();
 	newNote->SetPlayer(player_);
+	newNote->SetHero(hero_);
+	newNote->SetBoss(boss_);
 	newNote->SetStartPosition(position);
 	newNote->SetNumber(num);
 	newNote->SetJudgeFrame(judgeline);

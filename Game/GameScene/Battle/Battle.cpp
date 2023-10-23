@@ -36,6 +36,8 @@ Battle::Battle(std::shared_ptr<Camera> camera)
 
 	//	音量の設定
 	
+	//	天球の親設定
+	skydome_->SetParent(battleAnimation_->GetHeroTransform());
 
 }
 
@@ -57,6 +59,8 @@ void Battle::Initialize() {
 		std::unique_ptr<MusicScore> tmpScore = std::make_unique<MusicScore>();
 		tmpScore->ModelLoad(notesModels_, noteTextures_);
 		tmpScore->SetPlayer(player_.get());
+		tmpScore->SetBoss(battleAnimation_->GetBoss());
+		tmpScore->SetHero(battleAnimation_->GetHero());
 		tmpScore->SetBPM(BPM_);
 		if (i <= 1) {
 			tmpScore->SetNotes(MusicScore::Rest, makeCatmull_->GetControlPoints(), i);
@@ -69,6 +73,7 @@ void Battle::Initialize() {
 	}
 
 	//battleAnimation_->Initialize();
+	battleAnimation_->Initialize();
 
 	worldTransformLine_.scale_ = { 1.0f,1.0f,1.0f };
 	worldTransformLine_.scale_ *= 5.0f;
@@ -165,7 +170,7 @@ void Battle::UpdateObjects() {
 	}
 
 	//makeCatmull_->Update();
-	//battleAnimation_->Update();
+	battleAnimation_->Update();
 
 	worldTransformLine_.UpdateMatrix();
 
@@ -175,19 +180,19 @@ void Battle::Draw3D(const Matrix4x4& viewProjection) {
 
 	skydome_->Draw(viewProjection);
 
-	player_->Draw(viewProjection);
+	//player_->Draw(viewProjection);
 
 	for (const auto& score : musicScoreList_) {
 		score->Draw(viewProjection);
 	}
 
-	makeCatmull_->Draw(viewProjection);
+	//makeCatmull_->Draw(viewProjection);
 
-	for (size_t i = 0; i < lines_.size(); i++){
-		lines_[i]->DrawLine(ControlPoints_[i] - EndPos, ControlPoints_[i] + EndPos, viewProjection, 0xff0000ff);
-	}
+	//for (size_t i = 0; i < lines_.size(); i++){
+	//	lines_[i]->DrawLine(ControlPoints_[i] - EndPos, ControlPoints_[i] + EndPos, viewProjection, 0xff0000ff);
+	//}
 
-	//battleAnimation_->Draw3D(viewProjection);
+	battleAnimation_->Draw3D(viewProjection);
 }
 
 void Battle::Draw2D(const Matrix4x4& viewProjection) {
