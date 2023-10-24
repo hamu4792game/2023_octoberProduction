@@ -79,6 +79,11 @@ void Camera::TargetRotate(const WorldTransform& target) {
 	if (KeyInput::GetKey(DIK_LEFTARROW)) {
 		transform.rotation_.y -= AngleToRadian(1.0f);
 	}
+	if (KeyInput::GetInstance()->GetPadConnect()) {
+		transform.rotation_.x = KeyInput::GetInstance()->GetPadRStick().x;
+		transform.rotation_.y = KeyInput::GetInstance()->GetPadRStick().y;
+	}
+
 
 	Vector3 offset(0.0f, 2.0f, -20.0f);
 	Matrix4x4 rotMat = MakeRotateMatrix(transform.rotation_);
