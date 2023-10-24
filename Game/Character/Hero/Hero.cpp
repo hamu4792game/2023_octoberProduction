@@ -82,8 +82,8 @@ void Hero::Update() {
 			partsTransform_[i].rotation_ =	  startPos[i].rotation_;
 			partsTransform_[i].scale_ =		  startPos[i].scale_;
 		}
-		SetStart = Position::Animation;
-		isAnimation = true;
+		//SetStart = Position::Animation;
+		//isAnimation = true;
 
 	}
 	else if (SetStart == Position::Middle) {
