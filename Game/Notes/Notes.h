@@ -27,6 +27,8 @@ public:
 
 	static int Combo;
 
+	static bool isUpSE;
+
 	static void StaticInitialize();
 
 	virtual void Initialize();
@@ -106,7 +108,7 @@ protected:
 	//ノーツのSE(全ノーツで共有)
 	static std::unique_ptr<AudioInput> notesSE_[3][8];
 
-	static AudioInput* currentNotesSE_[8];
+	static AudioInput* currentNotesSE_[2][8];
 
 	NoteType type_ = Normal;
 

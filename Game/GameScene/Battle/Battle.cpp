@@ -510,6 +510,14 @@ void Battle::SetNextGoalNotes() {
 		}
 		//それ以外は現在の状態を継続
 
+		//ステージの状態に応じてノーツの音域を変化
+		if (currentStage_ >= 2) {
+			Notes::isUpSE = true;
+		}
+		else {
+			Notes::isUpSE = false;
+		}
+
 	}
 	//最終ステージの場合
 	else if(currentStage_ >= 5) {
