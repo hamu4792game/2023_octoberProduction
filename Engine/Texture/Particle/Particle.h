@@ -57,11 +57,11 @@ public:
 	/// <param name="filePath">objファイルのパス</param>
 	/// <param name="vsFileName">vsShaderのパス</param>
 	/// <param name="psFileName">psShaderのパス</param>
-	void Texture(const std::string& filePath, const std::string& vsFileName, const std::string& psFileName, uint16_t num = 1);
+	void Texture(const std::string& filePath, const std::string& vsFileName, const std::string& psFileName, const std::string& textureFilePath, uint16_t num = 1);
 
 private:
 	void CreateInstancingResource();
-	void CreateDescriptor(const std::string& filePath);
+	void CreateDescriptor(const std::string& filePath, const std::string& textureFilePath);
 
 	void CreateVertexResource();
 
