@@ -67,6 +67,7 @@ void GameScene::Initialize() {
 	//	シーンの生成
 	title = std::make_unique<Title>(camera.get());
 	battle = std::make_unique<Battle>(camera);
+	result = std::make_unique<Result>(camera.get());
 
 	std::vector<Model*> noteModels{ notesModelNormal_.get(), notesModelLong_.get(), notesModelDamage_.get(), notesModelHitLine_.get() };
 	std::vector<Texture2D*> noteTextures{ hitLine_.get() };
@@ -82,7 +83,7 @@ void GameScene::Initialize() {
 	//	シーンの初期化
 	title->Initialize();
 	battle->Initialize();
-
+	result->Initialize();
 
 	//	変数の初期化
 	scene = Scene::TITLE;
@@ -117,6 +118,8 @@ void GameScene::Update() {
 			battle->Initialize();
 			break;
 		case GameScene::Scene::RESULT:
+			camera->SetParent(nullptr);
+			result->Initialize();
 			break;
 		}
 	}
@@ -130,6 +133,7 @@ void GameScene::Update() {
 		battle->Update();
 		break;
 	case GameScene::Scene::RESULT:
+		result->Update();
 		break;
 	}
 
@@ -159,6 +163,7 @@ void GameScene::Draw() {
 		battle->Draw3D(viewProjectionMatrix);
 		break;
 	case GameScene::Scene::RESULT:
+		result->Draw3D(viewProjectionMatrix);
 		break;
 	}
 
@@ -171,6 +176,7 @@ void GameScene::Draw() {
 		battle->Draw2D(viewProjectionMatrix2d);
 		break;
 	case GameScene::Scene::RESULT:
+		result->Draw2D(viewProjectionMatrix2d);
 		break;
 	}
 

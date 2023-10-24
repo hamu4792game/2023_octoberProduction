@@ -8,6 +8,7 @@
 #include "Engine/WorldTransform/WorldTransform.h"
 #include "Game/GameScene/Title/Title.h"
 #include "Game/GameScene/Battle/Battle.h"
+#include"Game/GameScene/Result/Result.h"
 
 #include "Game/Stage/Stage.h"
 
@@ -44,6 +45,7 @@ private:
 	//	シーン用インスタンス
 	std::unique_ptr<Title> title;
 	std::unique_ptr<Battle> battle;
+	std::unique_ptr<Result> result;
 
 public: // 基本処理関数
 
