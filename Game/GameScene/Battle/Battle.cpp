@@ -106,9 +106,6 @@ void Battle::Initialize() {
 	//フラグを降ろす
 	MusicScore::isUpdateFlag_ = false;
 
-	//	初期化段階でチュートリアルフラグを立てる
-	tutorialFlag_ = true;
-
 	//	最初の一回
 	boxTrans_.scale_ = Vector3(80.0f, 45.0f, 1.0f);
 	boxTrans_.cMono->pibot.x = 300.0f;
@@ -124,16 +121,14 @@ void Battle::Update() {
 	ImGui::Begin("testNotes");
 	ImGui::Text("tutorialNotesCount : %d", tutorialNotesCount_);
 	ImGui::End();
-	if (tutorialFlag_) {
-		ImGui::Begin("box");
-		ImGui::DragFloat2("translate", &boxTrans_.translation_.x, 1.0f);
-		ImGui::DragFloat3("rotate", &boxTrans_.rotation_.x, AngleToRadian(1.0f));
-		ImGui::DragFloat3("scale", &boxTrans_.scale_.x, 0.1f);
-		ImGui::DragFloat2("pibot", &boxTrans_.cMono->pibot.x, 1.0f);
-		ImGui::DragFloat("rate", &boxTrans_.cMono->rate, 1.0f);
-		ImGui::End();
-	}
 
+	ImGui::Begin("box");
+	ImGui::DragFloat2("translate", &boxTrans_.translation_.x, 1.0f);
+	ImGui::DragFloat3("rotate", &boxTrans_.rotation_.x, AngleToRadian(1.0f));
+	ImGui::DragFloat3("scale", &boxTrans_.scale_.x, 0.1f);
+	ImGui::DragFloat2("pibot", &boxTrans_.cMono->pibot.x, 1.0f);
+	ImGui::DragFloat("rate", &boxTrans_.cMono->rate, 1.0f);
+	ImGui::End();
 #endif // _DEBUG
 
 
@@ -333,7 +328,7 @@ void Battle::Draw3D(const Matrix4x4& viewProjection) {
 void Battle::Draw2D(const Matrix4x4& viewProjection) {
 
 	/*currentMusicScore_->Draw2D(viewProjection);*/
-	if (!isPressed_) {
+	if (isStop_) {
 		Texture2D::TextureDraw(boxTrans_, viewProjection, boxColor_, boxtexture_);
 	}
 	Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleTexture_);

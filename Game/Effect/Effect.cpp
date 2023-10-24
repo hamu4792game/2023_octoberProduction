@@ -1,5 +1,4 @@
 #include "Effect.h"
-#include "math/Billboard/Billboard.h"
 #include "externals/imgui/imgui.h"
 
 Effect::Effect() {

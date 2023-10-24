@@ -102,10 +102,7 @@ private:
 	std::unique_ptr<BattleAnimation> battleAnimation_;
 
 private:
-	//	チュートリアル用フラグ
-	bool tutorialFlag_ = false;
-	//	入力確認フラグ
-	bool isPressed_ = false;
+	
 	//	箱用
 	WorldTransform boxTrans_;
 
