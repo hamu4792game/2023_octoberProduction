@@ -90,6 +90,9 @@ private: // モデル変数
 	//	ステージ用のモデル
 	std::vector<std::shared_ptr<Model>> stageModel_;
 
+	//	タイトルテキスト
+	std::shared_ptr <Texture2D> titleResources_;
+
 private: // 音源
 	std::unique_ptr<AudioInput> bgm_;
 
