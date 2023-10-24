@@ -132,6 +132,10 @@ private:
 	Texture2D* titleTexture_;
 	WorldTransform titleTrans_;
 
+	float easeFrame_ = 0.0f;
+	bool startFlag_ = false;
+	Vector3 titleStartPos_;
+	Vector3 titleEndPos_;
 
 
 public: // セッター
