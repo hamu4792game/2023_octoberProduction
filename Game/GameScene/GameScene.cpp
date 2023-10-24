@@ -51,6 +51,9 @@ void GameScene::Initialize() {
 	for (uint8_t i = 0; i < 6; i++) {
 		stageModel_.push_back(std::make_shared<Model>());
 	}
+
+	//	タイトルテクスチャの生成
+	titleResources_ = std::make_shared<Texture2D>();
 	
 	//	モデルのロード
 	ModelLoad();
@@ -72,13 +75,14 @@ void GameScene::Initialize() {
 	std::vector<Model*> noteModels{ notesModelNormal_.get(), notesModelLong_.get(), notesModelDamage_.get(), notesModelHitLine_.get() };
 	std::vector<Texture2D*> noteTextures{ hitLine_.get() };
 	title->SetModels(heroModel_);
-	title->SetHud(hud_);
 
 	battle->ModelLoad(noteModels, noteTextures);
 	battle->SetHeroModels(heroModel_);
 	battle->SetBossModels(bossModel_);
 	battle->SetStageModels(stageModel_);
 	battle->SetBossBulletModel(noteModels.at(0));
+	battle->SetBoxTexture(box.get());
+	battle->SetTitleTexture(titleResources_.get());
 
 	//	シーンの初期化
 	title->Initialize();
@@ -86,7 +90,7 @@ void GameScene::Initialize() {
 	result->Initialize();
 
 	//	変数の初期化
-	scene = Scene::TITLE;
+	scene = Scene::BATTLE;
 	oldscene = Scene::RESULT;
 
 }
@@ -102,8 +106,9 @@ void GameScene::Update() {
 	ImGui::Begin("aaaaa");
 	ImGui::DragFloat2("pos", &MultipathRendering::GetInstance()->cEffectParameters->centerPosition.x);
 	ImGui::DragFloat("rate", &MultipathRendering::GetInstance()->cEffectParameters->parameterRate);
-	ImGui::SliderInt("type", &MultipathRendering::GetInstance()->cEffectParameters->type, 0, 6);
+	ImGui::SliderInt("type", &MultipathRendering::GetInstance()->cEffectParameters->type, 0, 10);
 	ImGui::End();
+
 #endif // _DEBUG
 
 	//	シーン切替わり時の初期化
@@ -183,7 +188,7 @@ void GameScene::Draw() {
 	if (sceneChangeFlag) {
 		Texture2D::TextureDraw(boxtransform, viewProjectionMatrix2d, 0x000000ff, box.get());
 	}
-
+	
 }
 
 void GameScene::Finalize() {
@@ -238,6 +243,9 @@ void GameScene::ModelLoad() {
 	stageModel_[3] = stageModel_[1];
 	stageModel_[4] = stageModel_[1];
 	stageModel_[5] = stageModel_[1];
+
+	//	タイトルテキスト
+	titleResources_->Texture("Resources/hud/bugRhythm.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
 }
 

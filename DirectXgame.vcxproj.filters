@@ -140,8 +140,8 @@
     <ClCompile Include="math\Rand.cpp">
       <Filter>math</Filter>
     </ClCompile>
-    <ClCompile Include="math\Billboard\Billboard.cpp">
-      <Filter>math\Billboard</Filter>
+    <ClCompile Include="Game\Effect\Effect.cpp">
+      <Filter>Game\Effect</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameScene\Result\Result.cpp">
       <Filter>Game\GameScene\Result</Filter>
@@ -301,8 +301,8 @@
     </ClInclude>
     <ClInclude Include="FrameCount.h" />
     <ClInclude Include="math\Rand.h" />
-    <ClInclude Include="math\Billboard\Billboard.h">
-      <Filter>math\Billboard</Filter>
+    <ClInclude Include="Game\Effect\Effect.h">
+      <Filter>Game\Effect</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameScene\Result\Result.h">
       <Filter>Game\GameScene\Result</Filter>
@@ -432,8 +432,8 @@
     <Filter Include="Engine\Resources\Particle">
       <UniqueIdentifier>{66889ca0-2e8a-4295-9a61-1e1fc1b11a72}</UniqueIdentifier>
     </Filter>
-    <Filter Include="math\Billboard">
-      <UniqueIdentifier>{7ead2d24-7937-4d07-bee0-1148d3edd616}</UniqueIdentifier>
+    <Filter Include="Game\Effect">
+      <UniqueIdentifier>{42d8382d-86ea-4897-95f0-6d287fc8495c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\GameScene\Result">
       <UniqueIdentifier>{318a18b0-0e99-4a48-bba5-666343c09399}</UniqueIdentifier>

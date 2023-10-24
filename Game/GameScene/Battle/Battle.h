@@ -101,11 +101,29 @@ private:
 
 	std::unique_ptr<BattleAnimation> battleAnimation_;
 
+private:
+	//	チュートリアル用フラグ
+	bool tutorialFlag_ = false;
+	//	入力確認フラグ
+	bool isPressed_ = false;
+	//	箱用
+	WorldTransform boxTrans_;
+
+	Texture2D* boxtexture_;
+
+	uint32_t boxColor_;
+
+	//	タイトル
+	Texture2D* titleTexture_;
+	WorldTransform titleTrans_;
+
+
 
 public: // セッター
 	void SetHeroModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetHeroModels(model); }
 	void SetBossModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetBossModels(model); }
 	void SetStageModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetStageModels(model); }
 	void SetBossBulletModel(Model* model) { battleAnimation_->SetBossBulletModel(model); }
-
+	void SetBoxTexture(Texture2D* texture) { boxtexture_ = texture; }
+	void SetTitleTexture(Texture2D* texture) { titleTexture_ = texture; }
 };

@@ -27,6 +27,7 @@ private:
 	Matrix4x4 projectionMatrix{};
 	Matrix4x4 viewProjectionMatrix{};
 
+	void CreateBillboard();
 
 public:
 	WorldTransform transform;
@@ -34,6 +35,7 @@ public:
 	Matrix4x4 GetViewProMat();
 
 	Vector3 position;	//カメラの座標
+	Matrix4x4 billboardMatrix;
 
 public:
 	

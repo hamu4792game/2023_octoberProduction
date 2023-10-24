@@ -5,6 +5,7 @@
 #include "Engine/Camera/Camera.h"
 #include "Engine/Texture/Particle/Particle.h"
 #include <vector>
+#include "Game/Effect/Effect.h"
 
 class Title
 {
@@ -27,9 +28,6 @@ private: // メンバ変数
 	std::vector <std::shared_ptr<Model>> model_;
 	std::vector<WorldTransform> modelTrans_;
 	//	タイトル
-	std::shared_ptr<Texture2D> hud_;
-	WorldTransform hudTrans_;
-
 	Camera* camera_ = nullptr;
 
 	std::unique_ptr<Model> cloudResources_;
@@ -38,17 +36,17 @@ private: // メンバ変数
 	std::vector<WorldTransform> particleTrans_;
 
 	std::unique_ptr<Texture2D> titleResources_;
-	WorldTransform titleTrans_;
 
 	std::unique_ptr<Particle> dust_;
 	WorldTransform dustTrans_[30];
+
+	std::unique_ptr<Effect> eff;
 
 private: // メンバ関数
 	void BackParticle();
 
 public: // モデルのセット
 	void SetModels(std::vector<std::shared_ptr<Model>> model) { model_ = model; };
-	void SetHud(std::shared_ptr<Texture2D> hud) { hud_ = hud; };
 
 
 

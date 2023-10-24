@@ -73,7 +73,7 @@ void Particle::Finalize() {
 	}
 }
 
-void Particle::Texture(const std::string& filePath, const std::string& vsFileName, const std::string& psFileName, uint16_t num)
+void Particle::Texture(const std::string& filePath, const std::string& vsFileName, const std::string& psFileName, const std::string& textureFilePath, uint16_t num)
 {
 	//	個数の設定
 	kNumInstance = num;
@@ -81,7 +81,7 @@ void Particle::Texture(const std::string& filePath, const std::string& vsFileNam
 	CreateInstancingResource();
 
 	//	モデルのロードとデスクリプタヒープの生成
-	CreateDescriptor(filePath);
+	CreateDescriptor(filePath, textureFilePath);
 
 	vertexShader = GraphicsPipeline::GetInstance()->CreateVSShader(vsFileName);
 	pixelShader = GraphicsPipeline::GetInstance()->CreatePSShader(psFileName);
@@ -135,12 +135,12 @@ void Particle::CreateInstancingResource()
 	instancingResource->Unmap(0, nullptr);
 }
 
-void Particle::CreateDescriptor(const std::string& filePath)
+void Particle::CreateDescriptor(const std::string& filePath,const std::string& textureFilePath)
 {
 	//	モデル読み込み
 	modelData = TextureManager::LoadObjFile(filePath);
 
-	DirectX::ScratchImage mipImages = TextureManager::LoadTexture(modelData.material.textureFilePath);
+	DirectX::ScratchImage mipImages = TextureManager::LoadTexture(textureFilePath);
 	//DirectX::ScratchImage mipImages = TextureManager::LoadTexture("./Resources/uvChecker.png");
 	const DirectX::TexMetadata& metaData = mipImages.GetMetadata();
 	resource[0] = Engine::CreateTextureResource(Engine::GetDevice(), metaData);
