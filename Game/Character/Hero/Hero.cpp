@@ -1021,8 +1021,8 @@ void Hero::LoadFile(const std::string& groupName) {
 
 	}
 #ifdef DEBUG
-	std::string message = std::format("{}.json Loading successful.", groupName);
-	MessageBoxA(nullptr, message.c_str(), "Animetion", 0);
+	/*std::string message = std::format("{}.json Loading successful.", groupName);
+	MessageBoxA(nullptr, message.c_str(), "Animetion", 0);*/
 #endif // DEBUG
 
 	
