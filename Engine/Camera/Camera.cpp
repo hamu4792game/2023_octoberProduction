@@ -71,3 +71,19 @@ bool Camera::CameraWork(const Vector3& startTrans, const Vector3& endTrans, cons
 	transform.rotation_.z = (1 - T) * startRotate.z + T * endRotate.z;
 	return true;
 }
+
+void Camera::TargetRotate(const WorldTransform& target) {
+	if (KeyInput::GetKey(DIK_RIGHTARROW)) {
+		transform.rotation_.y += AngleToRadian(1.0f);
+	}
+	if (KeyInput::GetKey(DIK_LEFTARROW)) {
+		transform.rotation_.y -= AngleToRadian(1.0f);
+	}
+
+	Vector3 offset(0.0f, 2.0f, -20.0f);
+	Matrix4x4 rotMat = MakeRotateMatrix(transform.rotation_);
+	offset = TransformNormal(offset, rotMat);
+
+	transform.translation_ = target.translation_ + offset;
+	transform.UpdateMatrix();
+}

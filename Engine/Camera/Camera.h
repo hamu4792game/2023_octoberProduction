@@ -50,5 +50,7 @@ public:
 	/// <returns>true = 動いて入る false = 動いていない</returns>
 	bool CameraWork(const Vector3& startTrans, const Vector3& endTrans,const Vector3& startRotate, const Vector3& endRotate, const float& t);
 
+	void TargetRotate(const WorldTransform& target);
+
 };
 
