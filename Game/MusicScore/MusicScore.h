@@ -31,6 +31,8 @@ public:
 		Normal_04, //四分1つ、八分6つ : 1010 1010 1010 1000
 		Normal_05, //八分8つ : 1010 1010 1010 1010
 		Rest, //全休符 : 0000 0000 0000 0000
+		TUTORIAL_01, //チュートリアル用ノーツの配置
+		TUTORIAL_02, 
 	};
 
 	void Initialize();
@@ -61,6 +63,8 @@ public:
 
 	void SetNoteDamage(const Vector3& position, uint32_t num, float judgeline);
 
+	void SetNoteTutorial(const Vector3& position, uint32_t num, float judgeline);
+
 	void SetBPM(float tempo) { 
 		BPM_ = tempo;
 		beat_ = int(7200 / BPM_);
@@ -72,6 +76,12 @@ public:
 
 	//全てのMusicScoreから一つのノーツだけ判定を取るための変数
 	static bool isUpdateFlag_;
+
+	std::list<Notes*> GetNotes() { return notes_; }
+
+	void SetIsStop(bool flag) { isStop_ = flag; }
+
+	static bool isStopAll;
 
 private:
 
@@ -102,6 +112,8 @@ private:
 
 	//一ノーツ間の長さ(デフォルトは四分音符)
 	float noteLength_ = scoreLength_ / 4.0f;
+
+	bool isStop_ = false;
 
 };
 

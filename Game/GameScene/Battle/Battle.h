@@ -47,6 +47,8 @@ private:
 
 	std::unique_ptr<AudioInput> loopBGMs_[5];
 
+	std::list<std::unique_ptr<MusicScore>> tutorialMusicScoreList_;
+
 	std::list<std::unique_ptr<MusicScore>> musicScoreList_;
 
 	std::unique_ptr<MusicScore> musicScores_[1];
@@ -79,14 +81,21 @@ private:
 	//フレーム確認
 	int frameCounter_ = 0;
 
+	//チュートリアル完了フラグ
+	bool endTutorial_ = false;
+
+	//ストップフラグ
+	bool isStop_ = false;
+
+	//チュートリアルでノーツを叩いた数
+	int tutorialNotesCount_ = 0;
+
 private:
 	std::vector<std::unique_ptr<Line>> lines_;
 
 	std::vector<Vector3> ControlPoints_;
 
 	std::unique_ptr<MakeCatmull> makeCatmull_;
-
-	std::unique_ptr<AudioInput> drumLoop_;
 
 	Vector3 EndPos;
 

@@ -98,6 +98,9 @@ public:
 
 	void MoveJudgeFrame() { judgeFrame_ -= noteSpeed_; }
 
+	//チュートリアルノーツにする
+	void SetTutorialNotes() { isTutorialNotes_ = true; }
+
 protected:
 
 	//ノーツのSE(全ノーツで共有)
@@ -168,6 +171,9 @@ protected:
 
 	//攻撃命令を出したかどうかのフラグ
 	bool isAttack_ = false;
+
+	//チュートリアルノーツかどうか
+	bool isTutorialNotes_ = false;
 
 };
 

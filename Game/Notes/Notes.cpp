@@ -26,15 +26,15 @@ void Notes::UpdateFlag() {
 	//プレイヤーに当たってから、キーを押す、又はスルーするまで処理
 	if (!isHit_ || !isMiss_) {
 
-		//ノーツに触れる前に早めに押してしまったらミス
-		if (judgeFrame_ <= 15.0f && !isTouch_ && player_->GetIsTap()) {
+		//ノーツに触れる前に早めに押してしまったらミス(チュートリアルでは無効)
+		if (!isTutorialNotes_ && judgeFrame_ <= 15.0f && !isTouch_ && player_->GetIsTap()) {
 			isMiss_ = true;
 			Combo = 0;
 			player_->IsMiss();
 		}
 
 		//タッチしている間にプレイヤーがキーを押したらヒット判定
-		if (isTouch_ && player_->GetIsTap()) {
+		if (!isTutorialNotes_ && isTouch_ && player_->GetIsTap()) {
 			isHit_ = true;
 			Combo++;
 			size_t num = rand() % 8;
@@ -49,6 +49,23 @@ void Notes::UpdateFlag() {
 				
 			}
 		
+			player_->IsHit();
+		}
+		//タッチしている間にプレイヤーがキーを押したらヒット判定(チュートリアルではコンボ無効)
+		else if (isTouch_ && player_->GetIsTap()) {
+			isHit_ = true;
+			size_t num = rand() % 8;
+			for (size_t i = 0; i < 8; i++) {
+
+				currentNotesSE_[i]->SoundStop();
+
+				if (i == num) {
+					currentNotesSE_[i]->SoundPlayWave();
+					currentNotesSE_[i]->SetVolume(0.2f);
+				}
+
+			}
+
 			player_->IsHit();
 		}
 

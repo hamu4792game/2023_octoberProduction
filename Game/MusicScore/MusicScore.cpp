@@ -2,6 +2,7 @@
 
 //静的メンバ変数実体
 bool MusicScore::isUpdateFlag_ = false;
+bool MusicScore::isStopAll = false;
 
 MusicScore::MusicScore() {
 
@@ -38,14 +39,16 @@ void MusicScore::Update(std::vector<Vector3> position) {
 
 	});
 
-	if (++countBeat_ >= beat_) {
+	if (player_->GetIsMove()) {
+		if (++countBeat_ >= beat_) {
 
-		for (Notes* note : notes_) {
-			note->SetSize(1.5f);
+			for (Notes* note : notes_) {
+				note->SetSize(1.5f);
+			}
+
+			countBeat_ = 0;
+
 		}
-
-		countBeat_ = 0;
-
 	}
 
 	//判定更新
@@ -78,7 +81,7 @@ void MusicScore::Update(std::vector<Vector3> position) {
 				isUpdateFlag_ = true;
 			}
 
-			if (player_->GetIsMove()) {
+			if (player_->GetIsMove() && !isStopAll) {
 				note->MoveJudgeFrame();
 			}
 			note->Update();
@@ -244,6 +247,29 @@ void MusicScore::SetNotes(ScoreType type, std::vector<Vector3> position, int32_t
 	default:
 	case MusicScore::Rest:
 		break;
+	case TUTORIAL_01:
+
+		for (int i = 0; i < position.size() - 1; i++) {
+			if (i % 8 == 0) {
+
+				SetNoteTutorial(position[i], i, judgeLine * i + offset * maxCountMeasure_);
+
+			}
+		}
+
+		break;
+	case TUTORIAL_02:
+
+		for (int i = 0; i < position.size() - 1; i++) {
+			if (i % 4 == 0) {
+
+				SetNoteTutorial(position[i], i, judgeLine * i + offset * maxCountMeasure_);
+
+			}
+		}
+
+		break;
+
 	}
 
 }
@@ -320,6 +346,25 @@ void MusicScore::SetNoteDamage(const Vector3& position, uint32_t num, float judg
 	newNote->SetStartPosition(position);
 	newNote->SetNumber(num);
 	newNote->SetJudgeFrame(judgeline);
+	notes_.push_back(newNote);
+
+}
+
+void MusicScore::SetNoteTutorial(const Vector3& position, uint32_t num, float judgeline) {
+
+	NoteNormal* newNote = new NoteNormal();
+	newNote->ModelLoad(notesModels_);
+	newNote->TextureLoad(noteTextures_[0]);
+	newNote->SetPlayer(player_);
+	newNote->SetHero(hero_);
+	newNote->SetBoss(boss_);
+	newNote->Initialize();
+	newNote->SetStartPosition(position + Vector3{ 0.0f,0.0f,30.0f });
+	newNote->SetMiddlePosition(position);
+	newNote->SetGoalPosition(position + Vector3{ 0.0f,0.0f,-10.0f });
+	newNote->SetNumber(num);
+	newNote->SetJudgeFrame(judgeline);
+	newNote->SetTutorialNotes();
 	notes_.push_back(newNote);
 
 }
