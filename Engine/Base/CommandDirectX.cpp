@@ -262,7 +262,7 @@ void CommandDirectX::Finalize()
 	rtvDescriptorHeap->Release();
 
 	peraVB->Release();
-	peraResource->Release();
+	//peraResource->Release();
 	peraRTVHeap->Release();
 	peraSRVHeap->Release();
 	peraRootSignature->Release();
