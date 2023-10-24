@@ -4,6 +4,7 @@
 #include "Engine/Easing/Ease.h"
 #include <algorithm>
 #include "Game/PartsEnum.h"
+#include "Engine/Base/MultipathRendering/MultipathRendering.h"
 
 GameScene* GameScene::GetInstance() {
 	static GameScene instance;
@@ -64,13 +65,13 @@ void GameScene::Initialize() {
 	//bgm_->SetVolume(0.2f);
 	
 	//	シーンの生成
-	title = std::make_unique<Title>();
+	title = std::make_unique<Title>(camera.get());
 	battle = std::make_unique<Battle>(camera);
+	result = std::make_unique<Result>(camera.get());
 
 	std::vector<Model*> noteModels{ notesModelNormal_.get(), notesModelLong_.get(), notesModelDamage_.get(), notesModelHitLine_.get() };
 	std::vector<Texture2D*> noteTextures{ hitLine_.get() };
-
-	title->SetModels(model_);
+	title->SetModels(heroModel_);
 	title->SetHud(hud_);
 
 	battle->ModelLoad(noteModels, noteTextures);
@@ -82,10 +83,10 @@ void GameScene::Initialize() {
 	//	シーンの初期化
 	title->Initialize();
 	battle->Initialize();
-
+	result->Initialize();
 
 	//	変数の初期化
-	scene = Scene::BATTLE;
+	scene = Scene::TITLE;
 	oldscene = Scene::RESULT;
 
 }
@@ -96,7 +97,12 @@ void GameScene::Update() {
 	ImGui::DragFloat3("translate", &camera->transform.translation_.x, 1.0f);
 	ImGui::DragFloat3("rotate", &camera->transform.rotation_.x, AngleToRadian(1.0f));
 	ImGui::DragFloat3("scale", &camera->transform.scale_.x, 0.1f);
+	ImGui::End();
 
+	ImGui::Begin("aaaaa");
+	ImGui::DragFloat2("pos", &MultipathRendering::GetInstance()->cEffectParameters->centerPosition.x);
+	ImGui::DragFloat("rate", &MultipathRendering::GetInstance()->cEffectParameters->parameterRate);
+	ImGui::SliderInt("type", &MultipathRendering::GetInstance()->cEffectParameters->type, 0, 6);
 	ImGui::End();
 #endif // _DEBUG
 
@@ -106,15 +112,14 @@ void GameScene::Update() {
 		case GameScene::Scene::TITLE:
 			camera->SetParent(nullptr);
 			title->Initialize();
-			camera->transform.translation_.y = 15.0f;
-			camera->transform.translation_.z = -100.0f;
-			camera->transform.rotation_ = { 0.0f,0.0f,0.0f };
 			break;
 		case GameScene::Scene::BATTLE:
 			camera->SetParent(nullptr);
 			battle->Initialize();
 			break;
 		case GameScene::Scene::RESULT:
+			camera->SetParent(nullptr);
+			result->Initialize();
 			break;
 		}
 	}
@@ -128,12 +133,13 @@ void GameScene::Update() {
 		battle->Update();
 		break;
 	case GameScene::Scene::RESULT:
+		result->Update();
 		break;
 	}
 
-	//if (KeyInput::PushKey(DIK_S)) {
-	//	sceneChangeFlag = true;
-	//}
+	if (KeyInput::PushKey(DIK_S) && KeyInput::GetKey(DIK_LSHIFT)) {
+		sceneChangeFlag = true;
+	}
 
 	//	シーンチェンジの処理
 	if (sceneChangeFlag) {
@@ -157,6 +163,7 @@ void GameScene::Draw() {
 		battle->Draw3D(viewProjectionMatrix);
 		break;
 	case GameScene::Scene::RESULT:
+		result->Draw3D(viewProjectionMatrix);
 		break;
 	}
 
@@ -169,6 +176,7 @@ void GameScene::Draw() {
 		battle->Draw2D(viewProjectionMatrix2d);
 		break;
 	case GameScene::Scene::RESULT:
+		result->Draw2D(viewProjectionMatrix2d);
 		break;
 	}
 

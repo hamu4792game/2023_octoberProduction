@@ -62,3 +62,7 @@ float Distance(const Vector3& v1, const Vector3& v2);
 Vector3 Multiply(float scalar, const Vector3& Vec);
 
 Vector3 makeCatmullRom(const Vector3& controlPoint0, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& controlPoint3, float t);
+
+int RandNum(int min, int max);
+float RandNum(float min, float max);
+

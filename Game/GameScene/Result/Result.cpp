@@ -1,7 +1,6 @@
-#include "Title.h"
-#include "externals/imgui/imgui.h"
+#include "Result.h"
 
-Title::Title(Camera* camera) {
+Result::Result(Camera* camera){
 	camera_ = camera;
 
 	dust_ = std::make_unique<Particle>();
@@ -9,11 +8,11 @@ Title::Title(Camera* camera) {
 	particleResources_ = std::make_unique<Texture2D>();
 	titleResources_ = std::make_unique<Texture2D>();
 	cloudResources_ = std::make_unique<Model>();
-	
+
 	ModelLoad();
 }
 
-void Title::Initialize() {
+void Result::Initialize(){
 	camera_->transform.Reset();
 	camera_->transform.translation_ = Vector3(0.0f, 2.0f, -10.0f);
 	camera_->transform.rotation_ = Vector3(AngleToRadian(10.0f), 0.0f, 0.0f);
@@ -31,8 +30,7 @@ void Title::Initialize() {
 	modelTrans_.resize(model_.size());
 }
 
-void Title::Update() {
-
+void Result::Update(){
 	BackParticle();
 
 	//	座標の更新
@@ -46,7 +44,7 @@ void Title::Update() {
 	titleTrans_.UpdateMatrix();
 }
 
-void Title::Draw3D(const Matrix4x4& viewProjection) {
+void Result::Draw3D(const Matrix4x4& viewProjection){
 	for (uint8_t i = 0; i < model_.size(); i++) {
 		Model::ModelDraw(modelTrans_[i], viewProjection, 0xffffffff, model_[i].get());
 	}
@@ -54,31 +52,29 @@ void Title::Draw3D(const Matrix4x4& viewProjection) {
 	Model::ModelDraw(cloudTrans_, viewProjection, 0xffffffff, cloudResources_.get());
 }
 
-void Title::Draw2D(const Matrix4x4& viewProjection) {
-	//Texture2D::TextureDraw(hudTrans, viewProjection, 0xffffffff, hud_.get());
-	//Texture2D::TextureDraw(hudTrans, viewProjection, 0xffffffff, particleResources_.get());
+void Result::Draw2D(const Matrix4x4& viewProjection){
 	Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleResources_.get());
 	for (auto& i : dustTrans_) {
 		Texture2D::TextureDraw(i, viewProjection, 0x0000ccaa, particleResources_.get());
 	}
 }
 
-void Title::ModelLoad() {
+void Result::ModelLoad(){
 	dust_->Texture("Resources/eatRamen/eatRamen.obj", "./Resources/Shader/Particle.VS.hlsl", "./Resources/Shader/Particle.PS.hlsl", _countof(dustTrans_));
 	particleResources_->Texture("Resources/hud/particle.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	titleResources_->Texture("Resources/hud/bugRhythm.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	cloudResources_->Texture("Resources/plane/plane.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/hud/cloud.png");
 }
 
-void Title::BackParticle() {
+void Result::BackParticle(){
 	for (uint8_t i = 0; i < _countof(dustTrans_); i++) {
 		dustTrans_[i].translation_.x += 0.5f;
 		dustTrans_[i].translation_.y -= 0.5f;
 
-		if (dustTrans_[i].translation_.y < -360.0f)	{
+		if (dustTrans_[i].translation_.y < -360.0f) {
 			dustTrans_[i].translation_.y = 360.0f;
 		}
-		if (dustTrans_[i].translation_.x > 640.0f)	{
+		if (dustTrans_[i].translation_.x > 640.0f) {
 			dustTrans_[i].translation_.x = -640.0f;
 		}
 	}

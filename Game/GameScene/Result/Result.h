@@ -6,11 +6,11 @@
 #include "Engine/Texture/Particle/Particle.h"
 #include <vector>
 
-class Title
+class Result
 {
 public:
-	Title(Camera* camera);
-	~Title() = default;
+	Result(Camera* camera);
+	~Result() = default;
 
 	//	初期化
 	void Initialize();
@@ -23,7 +23,7 @@ public:
 	void ModelLoad();
 
 private: // メンバ変数
-	
+
 	std::vector <std::shared_ptr<Model>> model_;
 	std::vector<WorldTransform> modelTrans_;
 	//	タイトル
@@ -53,4 +53,5 @@ public: // モデルのセット
 
 
 };
+
 

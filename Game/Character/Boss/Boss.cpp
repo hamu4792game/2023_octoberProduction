@@ -5,7 +5,7 @@
 
 Boss::Boss() {
 	back_ = std::make_unique<Model>();
-	back_->Texture("Resources/plane/plane.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/hud/test.png");
+	back_->Texture("Resources/floor/floor.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/hud/test.png");
 }
 
 void Boss::Initialize() {
