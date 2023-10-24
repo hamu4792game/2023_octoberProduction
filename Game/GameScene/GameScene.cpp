@@ -155,6 +155,8 @@ void GameScene::Update() {
 	viewProjectionMatrix = camera->GetViewProMat();
 	viewProjectionMatrix2d = camera2d->GetViewProMat();
 
+	camera->TargetRotate(boxtransform);
+
 }
 
 void GameScene::Draw() {

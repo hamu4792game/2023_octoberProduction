@@ -350,7 +350,7 @@ void Battle::Draw2D(const Matrix4x4& viewProjection) {
 	if (isStop_) {
 		Texture2D::TextureDraw(boxTrans_, viewProjection, boxColor_, boxtexture_);
 	}
-	Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleTexture_);
+	//Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleTexture_);
 
 }
 

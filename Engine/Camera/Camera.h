@@ -36,6 +36,7 @@ public:
 
 	Vector3 position;	//カメラの座標
 	Matrix4x4 billboardMatrix;
+	Vector3 offset;
 
 public:
 	

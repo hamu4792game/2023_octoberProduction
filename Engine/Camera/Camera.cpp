@@ -31,6 +31,7 @@ Camera::Camera(float farClip_, bool proType) {
 		transform.rotation_.z = AngleToRadian(0.0f);
 	}
 	//cameraMatrix = MakeAffineMatrix(transform.scale_, transform.rotation_, transform.translation_);
+	offset = Vector3(0.0f, 5.0f, -30.0f);
 
 }
 
@@ -80,15 +81,21 @@ void Camera::TargetRotate(const WorldTransform& target) {
 		transform.rotation_.y -= AngleToRadian(1.0f);
 	}
 	if (KeyInput::GetInstance()->GetPadConnect()) {
-		transform.rotation_.x = KeyInput::GetInstance()->GetPadRStick().x;
-		transform.rotation_.y = KeyInput::GetInstance()->GetPadRStick().y;
+		transform.rotation_.y += KeyInput::GetInstance()->GetPadRStick().x * 0.1f;
+		transform.rotation_.x += KeyInput::GetInstance()->GetPadRStick().y * 0.1f;
+		if (KeyInput::GetInstance()->GetPadButton(XINPUT_GAMEPAD_DPAD_UP)) {
+			offset.z -= 1.0f;
+		}
+		if (KeyInput::GetInstance()->GetPadButton(XINPUT_GAMEPAD_DPAD_DOWN)) {
+			offset.z += 1.0f;
+		}
 	}
 
 
-	Vector3 offset(0.0f, 2.0f, -20.0f);
+	Vector3 offset_ = offset;
 	Matrix4x4 rotMat = MakeRotateMatrix(transform.rotation_);
-	offset = TransformNormal(offset, rotMat);
+	offset_ = TransformNormal(offset_, rotMat);
 
-	transform.translation_ = target.translation_ + offset;
+	transform.translation_ = target.translation_ + offset_;
 	transform.UpdateMatrix();
 }
