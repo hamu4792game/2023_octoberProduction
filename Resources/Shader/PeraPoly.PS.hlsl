@@ -62,19 +62,28 @@ float4 main(Output input) : SV_Target{
         result.a = textureColor.a;
         break;
     case 7: 
-        
+        result.r = textureColor.g;
+        result.g = textureColor.b;
+        result.b = textureColor.r;
         break;
     default:
         result = textureColor;
         break;
     }
 
-        
+    // 円の衝突判定
     float v = pow(input.position.x - centerPosition.x,2) + 
     pow(input.position.y - centerPosition.y,2);
     if (v <= pow(parameterRate,2)) {
         return result;
     }
+
+    // ひし形の衝突判定
+    /*float v = abs(input.position.x - centerPosition.x)
+     + abs(input.position.y - centerPosition.y);
+    if (v <= parameterRate) {
+        return result;
+    }*/
 
     return textureColor;
 }
