@@ -70,8 +70,7 @@ void GameScene::Initialize() {
 
 	std::vector<Model*> noteModels{ notesModelNormal_.get(), notesModelLong_.get(), notesModelDamage_.get(), notesModelHitLine_.get() };
 	std::vector<Texture2D*> noteTextures{ hitLine_.get() };
-
-	title->SetModels(model_);
+	title->SetModels(heroModel_);
 	title->SetHud(hud_);
 
 	battle->ModelLoad(noteModels, noteTextures);
