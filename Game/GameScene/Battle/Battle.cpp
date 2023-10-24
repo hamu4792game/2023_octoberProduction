@@ -3,6 +3,7 @@
 #include "FrameCount.h"
 #include "Engine/Easing/Ease.h"
 #include "Engine/Input/KeyInput/KeyInput.h"
+#include "Engine/Base/MultipathRendering/MultipathRendering.h"
 
 Battle::Battle(std::shared_ptr<Camera> camera)
 {
@@ -129,7 +130,12 @@ void Battle::Initialize() {
 
 	easeFrame_ = 0.0f;
 	titleStartPos_ = titleTrans_.translation_;
-	titleEndPos_ = Vector3(0.0f, 400.0f, 0.0f);
+	titleEndPos_ = Vector3(0.0f, 500.0f, 0.0f);
+	startFlag_ = false;
+
+	MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(0.0f, 0.0f);
+	MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 0.0f;
+	MultipathRendering::GetInstance()->cEffectParameters->type = 0;
 
 }
 
@@ -156,15 +162,21 @@ void Battle::Update() {
 #endif // _DEBUG
 	if (KeyInput::PushKey(DIK_Z)) {
 		startFlag_ = true;
+		
+		MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 250.0f;
+		MultipathRendering::GetInstance()->cEffectParameters->type = 5;
 	}
 
 	if (startFlag_) {
 		easeFrame_++;
-		titleTrans_.translation_ = Ease::UseEase(titleStartPos_, titleEndPos_, easeFrame_, 180.0f, Ease::EaseInBounce);
+		titleTrans_.translation_ = Ease::UseEase(titleStartPos_, titleEndPos_, easeFrame_, 180.0f, Ease::EaseInOut);
 		titleTrans_.UpdateMatrix();
+		MultipathRendering::GetInstance()->cEffectParameters->centerPosition.x = 640.0f + titleTrans_.translation_.x;
+		MultipathRendering::GetInstance()->cEffectParameters->centerPosition.y = 360.0f - titleTrans_.translation_.y;
 		if (easeFrame_ >= 180.0f) {
 			easeFrame_ = 0.0f;
 			startFlag_ = false;
+			player_->SetIsMove(true);
 		}
 	}
 

@@ -44,6 +44,7 @@ public:
 	}
 
 	bool GetIsMove() { return isMove; }
+	void SetIsMove(const bool& flag) { isMove = flag; }
 
 	int GetLinePass() { return linePass; }
 
