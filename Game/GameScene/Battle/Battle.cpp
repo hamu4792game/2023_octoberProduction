@@ -1,6 +1,8 @@
 #include "Battle.h"
 #include "math/Rand.h"
 #include "FrameCount.h"
+#include "Engine/Easing/Ease.h"
+#include "Engine/Input/KeyInput/KeyInput.h"
 
 Battle::Battle(std::shared_ptr<Camera> camera)
 {
@@ -111,7 +113,12 @@ void Battle::Initialize() {
 	boxTrans_.cMono->pibot.x = 300.0f;
 	boxTrans_.cMono->pibot.y = 360.0f;
 	boxTrans_.cMono->rate = 300.0f;
-	boxColor_ = 0x00000088;
+	boxColor_ = 0x00000099;
+
+	easeFrame_ = 0.0f;
+	titleStartPos_ = titleTrans_.translation_;
+	titleEndPos_ = Vector3(0.0f, 400.0f, 0.0f);
+
 }
 
 void Battle::Update() {
@@ -130,7 +137,19 @@ void Battle::Update() {
 	ImGui::DragFloat("rate", &boxTrans_.cMono->rate, 1.0f);
 	ImGui::End();
 #endif // _DEBUG
+	if (KeyInput::PushKey(DIK_Z)) {
+		startFlag_ = true;
+	}
 
+	if (startFlag_) {
+		easeFrame_++;
+		titleTrans_.translation_ = Ease::UseEase(titleStartPos_, titleEndPos_, easeFrame_, 180.0f, Ease::EaseInBounce);
+		titleTrans_.UpdateMatrix();
+		if (easeFrame_ >= 180.0f) {
+			easeFrame_ = 0.0f;
+			startFlag_ = false;
+		}
+	}
 
 	//フラグを降ろす
 	MusicScore::isUpdateFlag_ = false;
