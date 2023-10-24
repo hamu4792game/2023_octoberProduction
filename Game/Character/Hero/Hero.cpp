@@ -65,9 +65,9 @@ void Hero::Initialize() {
 	}
 
 	ChackFiles();
-	
+	SetStart = Position::Start;
 	//LoadFiles();
-
+	LoadFile("run");
 
 	AnimationSpeed = 0.2f;
 }
@@ -82,6 +82,9 @@ void Hero::Update() {
 			partsTransform_[i].rotation_ =	  startPos[i].rotation_;
 			partsTransform_[i].scale_ =		  startPos[i].scale_;
 		}
+		SetStart = Position::Animation;
+		isAnimation = true;
+
 	}
 	else if (SetStart == Position::Middle) {
 		for (size_t i = 0; i < partsName.size(); i++) {
@@ -329,6 +332,7 @@ void Hero::Update() {
 		}
 
 	}
+	
 	
 
 	//	座標更新
@@ -1016,8 +1020,12 @@ void Hero::LoadFile(const std::string& groupName) {
 		EndPos[i] = baseTrans3;
 
 	}
+#ifdef DEBUG
 	std::string message = std::format("{}.json Loading successful.", groupName);
 	MessageBoxA(nullptr, message.c_str(), "Animetion", 0);
+#endif // DEBUG
+
+	
 }
 
 void Hero::from_json(const json& j, Vector3& v) {
