@@ -11,13 +11,16 @@ Player::Player() {
 
 void Player::Initialize(Vector3 pos) {
 
-	isTap_ = false;
 	velocity_ = { 0.0f,0.0f,0.0f };
 	SetPosition(pos);
 	SetInsidePosition({ 0.0f,0.0f,0.0f });
 	prePosition_ = worldTransform_.translation_;
 	worldTransformArrow_.parent_ = &worldTransform_;
 	worldTransformArrow_.translation_.z = 3.0f;
+	isTap_ = false;
+	isHold_ = false;
+	isRelease_ = false;
+	isMove = false;
 
 }
 

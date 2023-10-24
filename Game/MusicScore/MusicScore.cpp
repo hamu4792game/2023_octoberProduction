@@ -184,6 +184,61 @@ void MusicScore::SetNotes(ScoreType type, std::vector<Vector3> position, int32_t
 		}
 
 		break;
+	case MusicScore::Easy_06:
+
+		for (int i = 0; i < position.size() - 1; i++) {
+			if (i == 0 || i == 4 || i == 12) {
+
+				SetNoteNormal(position[i], i, judgeLine * i + offset * maxCountMeasure_);
+
+			}
+		}
+
+		break;
+	case MusicScore::Easy_07:
+
+		for (int i = 0; i < position.size() - 1; i++) {
+			if (i % 4 == 0 && i != 0) {
+
+				SetNoteNormal(position[i], i, judgeLine * i + offset * maxCountMeasure_);
+
+			}
+		}
+
+		break;
+	case MusicScore::Easy_08:
+
+		for (int i = 0; i < position.size() - 1; i++) {
+			if ((i % 2 == 0 && i < 6) || i == 12) {
+
+				SetNoteNormal(position[i], i, judgeLine * i + offset * maxCountMeasure_);
+
+			}
+		}
+
+		break;
+	case MusicScore::Easy_09:
+
+		for (int i = 0; i < position.size() - 1; i++) {
+			if ((i % 2 == 0 && i < 6) || i == 8) {
+
+				SetNoteNormal(position[i], i, judgeLine * i + offset * maxCountMeasure_);
+
+			}
+		}
+
+		break;
+	case MusicScore::Easy_10:
+
+		for (int i = 0; i < position.size() - 1; i++) {
+			if (i == 0 || (i % 2 == 0 && i < 14 && i >= 8)) {
+
+				SetNoteNormal(position[i], i, judgeLine * i + offset * maxCountMeasure_);
+
+			}
+		}
+
+		break;
 	case MusicScore::Normal_01:
 
 		for (int i = 0; i < position.size() - 1; i++) {
@@ -225,7 +280,7 @@ void MusicScore::SetNotes(ScoreType type, std::vector<Vector3> position, int32_t
 	case MusicScore::Normal_04:
 
 		for (int i = 0; i < position.size() - 1; i++) {
-			if (i % 2 == 0 && i < 14) {
+			if (i == 0 || i == 2 || i == 8 || i == 10) {
 
 				SetNoteNormal(position[i], i, judgeLine * i + offset * maxCountMeasure_);
 
@@ -236,7 +291,62 @@ void MusicScore::SetNotes(ScoreType type, std::vector<Vector3> position, int32_t
 	case MusicScore::Normal_05:
 
 		for (int i = 0; i < position.size() - 1; i++) {
-			if (i % 2 == 0) {
+			if (i % 2 == 0 && i != 2 && i != 10) {
+
+				SetNoteNormal(position[i], i, judgeLine * i + offset * maxCountMeasure_);
+
+			}
+		}
+
+		break;
+	case MusicScore::Normal_06:
+
+		for (int i = 0; i < position.size() - 1; i++) {
+			if (i % 2 == 0 && i != 4 && i != 10) {
+
+				SetNoteNormal(position[i], i, judgeLine * i + offset * maxCountMeasure_);
+
+			}
+		}
+
+		break;
+	case MusicScore::Normal_07:
+
+		for (int i = 0; i < position.size() - 1; i++) {
+			if ((i % 2 == 0 && i % 4 != 0) || i == 0) {
+
+				SetNoteNormal(position[i], i, judgeLine * i + offset * maxCountMeasure_);
+
+			}
+		}
+
+		break;
+	case MusicScore::Normal_08:
+
+		for (int i = 0; i < position.size() - 1; i++) {
+			if (i % 2 == 0 && i != 4 && i != 12) {
+
+				SetNoteNormal(position[i], i, judgeLine * i + offset * maxCountMeasure_);
+
+			}
+		}
+
+		break;
+	case MusicScore::Normal_09:
+
+		for (int i = 0; i < position.size() - 1; i++) {
+			if (i % 2 == 0 && i < 14) {
+
+				SetNoteNormal(position[i], i, judgeLine * i + offset * maxCountMeasure_);
+
+			}
+		}
+
+		break;
+	case MusicScore::Normal_10:
+
+		for (int i = 0; i < position.size() - 1; i++) {
+			if (i % 2 == 0 && i != 8) {
 
 				SetNoteNormal(position[i], i, judgeLine * i + offset * maxCountMeasure_);
 

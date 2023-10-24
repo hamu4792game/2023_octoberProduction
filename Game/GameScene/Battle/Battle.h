@@ -45,7 +45,7 @@ private:
 
 	std::unique_ptr<Player> player_;
 
-	std::unique_ptr<AudioInput> loopBGMs_[5];
+	std::unique_ptr<AudioInput> loopBGMs_[9];
 
 	std::list<std::unique_ptr<MusicScore>> tutorialMusicScoreList_;
 
@@ -89,6 +89,24 @@ private:
 
 	//チュートリアルでノーツを叩いた数
 	int tutorialNotesCount_ = 0;
+
+	int testScoreCount_ = 0;
+
+	//現在の進行度
+	int currentStage_ = 0;
+
+	//ノルマ数
+	int goalNotesCount_ = 0;
+
+	//現在のノーツ叩いた数
+	int currentNotesCount_ = 0;
+
+	void SetNextGoalNotes();
+
+	//ゲームクリアフラグ
+	bool isGameClear_ = false;
+	//ゲームオーバーフラグ
+	bool isGameOver_ = false;
 
 private:
 	std::vector<std::unique_ptr<Line>> lines_;

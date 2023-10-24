@@ -17,7 +17,7 @@ Battle::Battle(std::shared_ptr<Camera> camera)
 
 	battleAnimation_ = std::make_unique<BattleAnimation>(camera);
 	
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 9; i++) {
 		loopBGMs_[i] = std::make_unique<AudioInput>();
 	}
 
@@ -27,6 +27,10 @@ Battle::Battle(std::shared_ptr<Camera> camera)
 	loopBGMs_[2]->SoundLoadWave("./Resources/loopBGM/tempo_03.wav");
 	loopBGMs_[3]->SoundLoadWave("./Resources/loopBGM/tempo_04.wav");
 	loopBGMs_[4]->SoundLoadWave("./Resources/loopBGM/tempo_05.wav");
+	loopBGMs_[5]->SoundLoadWave("./Resources/loopBGM/tempo_06.wav");
+	loopBGMs_[6]->SoundLoadWave("./Resources/loopBGM/tempo_07.wav");
+	loopBGMs_[7]->SoundLoadWave("./Resources/loopBGM/tempo_08.wav");
+	loopBGMs_[8]->SoundLoadWave("./Resources/loopBGM/tempo_09.wav");
 	//	音の再生
 	Notes::StaticInitialize();
 
@@ -81,7 +85,7 @@ void Battle::Initialize() {
 			tmpScore->SetNotes(MusicScore::Rest, makeCatmull_->GetControlPoints(), i);
 		}
 		else {
-			tmpScore->SetNotes(MusicScore::Easy_04, makeCatmull_->GetControlPoints(), i);
+			tmpScore->SetNotes(MusicScore::ScoreType(rand() % 5), makeCatmull_->GetControlPoints(), i);
 		}
 		tmpScore->Initialize();
 		musicScoreList_.push_back(std::move(tmpScore));
@@ -105,7 +109,15 @@ void Battle::Initialize() {
 	tutorialNotesCount_ = 0;
 	//フラグを降ろす
 	MusicScore::isUpdateFlag_ = false;
-
+	//現在の進行度リセット
+	currentStage_ = 0;
+	//デバッグ用の変数リセット
+	testScoreCount_ = 0;
+	goalNotesCount_ = 25;
+	currentNotesCount_ = 0;
+	//遷移フラグリセット
+	isGameClear_ = false;
+	isGameOver_ = false;
 	//	最初の一回
 	boxTrans_.scale_ = Vector3(80.0f, 45.0f, 1.0f);
 	boxTrans_.cMono->pibot.x = 300.0f;
@@ -118,8 +130,13 @@ void Battle::Update() {
 
 #ifdef _DEBUG
 
-	ImGui::Begin("testNotes");
+	ImGui::Begin("ingame");
 	ImGui::Text("tutorialNotesCount : %d", tutorialNotesCount_);
+	ImGui::Text("currentStage : %d", currentStage_);
+	ImGui::Text("currentNotesCount : %d", currentNotesCount_);
+	ImGui::Text("goalNotesCount : %d", goalNotesCount_);
+	ImGui::Text("clear : %d", isGameClear_);
+	ImGui::Text("gameover : %d", isGameOver_);
 	ImGui::End();
 
 	ImGui::Begin("box");
@@ -163,12 +180,16 @@ void Battle::Update() {
 
 		//音楽ループ継続
 		if (loopCount_ >= 8) {
-			for (int i = 0; i < 5; i++) {
+
+			//次の目標をセット。届いてなかったら現在のノーツ獲得数に応じて処理を変化
+			SetNextGoalNotes();
+
+			for (int i = 0; i < 9; i++) {
 				loopBGMs_[i]->SoundStop();
 
-				if (Notes::Combo >= i * 10) {
+				if (currentStage_ > i - 4) {
 					loopBGMs_[i]->SoundPlayWave();
-					loopBGMs_[i]->SetVolume(0.2f);
+					loopBGMs_[i]->SetVolume(0.3f);
 				}
 
 			}
@@ -247,6 +268,32 @@ void Battle::UpdateObjects() {
 	if (endTutorial_) {
 		for (const auto& score : musicScoreList_) {
 			score->Update(makeCatmull_->GetControlPoints());
+
+			for (Notes* note : score->GetNotes()) {
+
+				if (!isGameClear_ && !isGameOver_) {
+					//叩いたらノーツカウント+
+					if (note->GetIsHit()) {
+						currentNotesCount_++;
+					}
+
+					//ミスした場合、カウントを多く下げる
+					if (note->GetIsMiss()) {
+
+						//初期段階のみ緩く設定
+						if (currentStage_ == 0) {
+							currentNotesCount_ -= 1;
+						}
+						else {
+							currentNotesCount_ -= 3;
+						}
+
+					}
+
+				}
+				
+			}
+
 		}
 	}
 	else {
@@ -342,14 +389,171 @@ void Battle::ModelLoad(std::vector<Model*> models, std::vector<Texture2D*> textu
 	/*currentMusicScore_->ModelLoad(notesModels_, noteTextures_);*/
 }
 
+void Battle::SetNextGoalNotes() {
+
+	if (currentStage_ < 5) {
+		
+		//ノルマを達成したら次のレベルに移行
+		if (currentNotesCount_ >= goalNotesCount_ && goalNotesCount_ != 0) {
+
+			//現在のノーツカウントリセット
+			currentNotesCount_ = 0;
+
+			//それぞれのレベルの目標を設定
+			switch (currentStage_)
+			{
+			default:
+			case 0:
+				goalNotesCount_ = 25;
+				break;
+			case 1:
+				goalNotesCount_ = 35;
+				break;
+			case 2:
+				goalNotesCount_ = 50;
+				break;
+			case 3: 
+				goalNotesCount_ = 65;
+				break;
+			case 4:
+				goalNotesCount_ = 80;
+				break;
+
+			}
+
+			//レベルアップ
+			currentStage_++;
+
+		}
+		//ゴールカウントが正常にリセットされていなかったとき用
+		else if (goalNotesCount_ == 0) {
+
+			//現在のノーツカウントリセット
+			currentNotesCount_ = 0;
+
+			//それぞれのレベルの目標を設定
+			switch (currentStage_)
+			{
+			default:
+			case 0:
+				goalNotesCount_ = 25;
+				break;
+			case 1:
+				goalNotesCount_ = 35;
+				break;
+			case 2:
+				goalNotesCount_ = 50;
+				break;
+			case 3:
+				goalNotesCount_ = 65;
+				break;
+			case 4:
+				goalNotesCount_ = 80;
+				break;
+
+			}
+
+		}
+		//ノーツカウントが0以下で更に一定値を下回ったらゲーム終了
+		else if (currentNotesCount_ < int(-goalNotesCount_ / 2)) {
+				isGameOver_ = true;
+		}
+		//現在のノーツが0以下ならステージを下げる
+		else if (currentNotesCount_ <= 0 && currentStage_ != 0) {
+
+			currentStage_--;
+
+			//現在のノーツカウントリセット
+			currentNotesCount_ = 0;
+
+			//それぞれのレベルの目標を設定
+			switch (currentStage_)
+			{
+			default:
+			case 0:
+				goalNotesCount_ = 25;
+				break;
+			case 1:
+				goalNotesCount_ = 35;
+				break;
+			case 2:
+				goalNotesCount_ = 50;
+				break;
+			case 3:
+				goalNotesCount_ = 65;
+				break;
+			case 4:
+				goalNotesCount_ = 80;
+				break;
+
+			}
+
+		}
+		//それ以外は現在の状態を継続
+
+	}
+	//最終ステージの場合
+	else if(currentStage_ >= 5) {
+
+		//ノルマ達成でクリア
+		if (currentNotesCount_ >= goalNotesCount_) {
+
+			isGameClear_ = true;
+
+		}
+		//ノーツカウントが0以下で更に一定値を下回ったらゲーム終了
+		else if (currentNotesCount_ < int(-goalNotesCount_ / 2)) {
+			isGameOver_ = true;
+		}
+		//現在のノーツが0以下ならステージを下げる
+		else if (currentNotesCount_ <= 0 && currentStage_ != 0) {
+
+			currentStage_--;
+
+			//現在のノーツカウントリセット
+			currentNotesCount_ = 0;
+
+			goalNotesCount_ = 65;
+
+		}
+
+	}
+
+}
+
 void Battle::UpdateScores() {
 
 	//空でない場合処理
 	if (!musicScoreList_.empty() && endTutorial_) {
+
+		/*if (++testScoreCount_ >= 20) {
+			testScoreCount_ = 0;
+		}*/
+
 		//最前列を後列に追加
 		musicScoreList_.push_back(std::move(musicScoreList_.front()));
 		musicScoreList_.pop_front();
-		musicScoreList_.back().get()->SetNotes(MusicScore::ScoreType(rand() % 10), makeCatmull_->GetControlPoints(), 3);
+
+		if (currentStage_ < 2) {
+			musicScoreList_.back().get()->SetNotes(MusicScore::ScoreType(rand() % ((currentStage_ + 1) * 5)), makeCatmull_->GetControlPoints(), 3);
+		}
+		else if(currentStage_ == 2){
+			musicScoreList_.back().get()->SetNotes(MusicScore::ScoreType(rand() % 15), makeCatmull_->GetControlPoints(), 3);
+		}
+		else {
+
+			// 3/4の確率で難しいノーツの配置に移行
+			int num = rand() % 4;
+
+			if (num == 0) {
+				musicScoreList_.back().get()->SetNotes(MusicScore::ScoreType(rand() % 5 + 5), makeCatmull_->GetControlPoints(), 3);
+			}
+			else {
+				musicScoreList_.back().get()->SetNotes(MusicScore::ScoreType(rand() % 10 + ((currentStage_ - 2) * 5)), makeCatmull_->GetControlPoints(), 3);
+			}
+
+		}
+		
 	}
 	else if (!tutorialMusicScoreList_.empty() && !endTutorial_) {
 
