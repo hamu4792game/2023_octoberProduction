@@ -1,9 +1,6 @@
 #include "Notes.h"
 #include "Game/Character/Hero/Hero.h"
 #include "Game/Character/Boss/Boss.h"
-#include "externals/imgui/imgui.h"
-#include "Engine/Camera/Camera.h"
-#include <algorithm>
 
 //静的メンバ変数実体
 bool NoteLong::isHitStart_ = false;
