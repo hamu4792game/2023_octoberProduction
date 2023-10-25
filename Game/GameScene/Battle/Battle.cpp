@@ -669,9 +669,6 @@ void Battle::Draw2D(const Matrix4x4& viewProjection) {
 		}
 	}
 
-	}
-
-
 }
 
 void Battle::ModelLoad(std::vector<Model*> models, std::vector<Texture2D*> textures) {
@@ -842,6 +839,17 @@ void Battle::SetNextGoalNotes() {
 
 		}
 
+		//レベルアップ
+		currentStage_++;
+
+		for (size_t i = 0; i < 6; i++) {
+
+			if (currentStage_ - 1 >= i) {
+				stageTrans_[i].scale_ = { 1.5f,1.5f,1.0f };
+			}
+
+		}
+
 	}
 
 }
@@ -867,18 +875,6 @@ void Battle::QuadRangle() {
 	}
 	else if (quadFlag_ == 3) {
 		camera_->transform.translation_.y += 0.01f;
-	}
-		//レベルアップ
-		currentStage_++;
-
-		for (size_t i = 0; i < 6; i++) {
-
-			if (currentStage_ - 1 >= i) {
-				stageTrans_[i].scale_ = { 1.5f,1.5f,1.0f };
-			}
-
-		}
-
 	}
 
 }
