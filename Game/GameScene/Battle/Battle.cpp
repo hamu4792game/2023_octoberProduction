@@ -541,6 +541,18 @@ void Battle::Draw2D(const Matrix4x4& viewProjection) {
 	// ゲームが始まっていなければタイトルの表示
 	if (!player_->GetIsMove()) {
 		Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleTexture_);
+		if (!titleFlag_) {
+			if (changeCount_ < 30) {
+				Texture2D::TextureDraw(BButtomTrans_, viewProjection, 0xffffffff, BButtomTexture_);
+			}
+			else {
+				Texture2D::TextureDraw(BButtomTrans_, viewProjection, 0xffffffff, pushBButtomTexture_);
+				if (changeCount_ > 60) {
+					changeCount_ = 0;
+				}
+			}
+			changeCount_++;
+		}
 	}
 
 }
