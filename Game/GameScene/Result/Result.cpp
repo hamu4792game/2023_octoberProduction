@@ -1,4 +1,8 @@
 #include "Result.h"
+#include "externals/imgui/imgui.h"
+#include"Engine/Easing/Ease.h"
+#include"Engine/Easing/Easing.h"
+
 
 Result::Result(Camera* camera){
 	camera_ = camera;
@@ -7,9 +11,13 @@ Result::Result(Camera* camera){
 
 	particleResources_ = std::make_unique<Texture2D>();
 	titleResources_ = std::make_unique<Texture2D>();
+	pressResources_= std::make_unique<Texture2D>();
+	BResources_= std::make_unique<Texture2D>();
+
 	cloudResources_ = std::make_unique<Model>();
 
 	ModelLoad();
+	TextureLoad();
 }
 
 void Result::Initialize(){
@@ -27,12 +35,61 @@ void Result::Initialize(){
 	particleResources_->SetBlend(BlendMode::Screen);
 	cloudTrans_.scale_ = Vector3(8.0f, 8.0f, 1.0f);
 	titleTrans_.scale_ = Vector3(2.0f, 2.0f, 1.0f);
+	pressTrans_.scale_ = { 1.0f,1.0f,1.0f };
+	pressTrans_.translation_ = { -116.0f,-236.0f,0.0f };
+	BTrans_.scale_ = { 1.0f,1.0f,1.0f };
+	BTrans_.translation_ = { 100.0f,-236.0f,0.0f };
+
+	clearEaseStart_ = { 0.0f,600.0f,0.0f };
+	clearEaseEnd_ = { 0.0f,250.0f,0.0f };
+	clearEaseSpeed_ = 0.02f;
+	isClearEase = true;
+
+	pressEaseStart_ = 125;
+	pressEaseEnd_ = 0x000000ff;
+	pressEaseSpeed_ = 0.02f;
+	pressMagnification = 1.0f;
+	isPressEase = true;
+
 	modelTrans_.resize(model_.size());
 }
 
 void Result::Update(){
 	BackParticle();
+	/*GUIの表示*/
+	DrawImgui();
+	/*イージング関連を記入する*/
+	if (isClearEase){
+		if (clearEaseNum_ < 1.0f) {
+			clearEaseNum_ += clearEaseSpeed_;
+		}
+		else {
+			isClearEase = false;
+		}
 
+		clearT_ = Easing::EaseInOutBack(clearEaseNum_);		
+	}
+	else {
+		clearEaseNum_ = 0.0f;
+	}
+	titleTrans_.translation_ =
+		Multiply((1 - clearT_), clearEaseStart_) +
+		Multiply(clearT_, clearEaseEnd_);
+
+	if (isPressEase) {
+		pressEaseNum_ += pressEaseSpeed_ * pressMagnification;	
+		if (pressEaseNum_ > 0.98f || pressEaseNum_ < 0.02f) {
+			pressMagnification *= -1;
+		}	
+
+		pressT_ = Easing::EaseInSine(pressEaseNum_);
+	}
+	pressColor = static_cast<int>((1 - pressT_) * pressEaseStart_ + pressT_ * pressEaseEnd_);
+	if (pressColor < pressEaseStart_) {
+		pressColor = pressEaseStart_;
+
+	}
+	
 	//	座標の更新
 	for (auto& i : modelTrans_) {
 		i.UpdateMatrix();
@@ -42,6 +99,8 @@ void Result::Update(){
 	}
 	cloudTrans_.UpdateMatrix();
 	titleTrans_.UpdateMatrix();
+	pressTrans_.UpdateMatrix();
+	BTrans_.UpdateMatrix();
 }
 
 void Result::Draw3D(const Matrix4x4& viewProjection){
@@ -54,6 +113,8 @@ void Result::Draw3D(const Matrix4x4& viewProjection){
 
 void Result::Draw2D(const Matrix4x4& viewProjection){
 	Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleResources_.get());
+	Texture2D::TextureDraw(pressTrans_, viewProjection, pressColor, pressResources_.get());
+	Texture2D::TextureDraw(BTrans_, viewProjection, 0xaa0000ff, BResources_.get());
 	for (auto& i : dustTrans_) {
 		Texture2D::TextureDraw(i, viewProjection, 0x0000ccaa, particleResources_.get());
 	}
@@ -61,9 +122,15 @@ void Result::Draw2D(const Matrix4x4& viewProjection){
 
 void Result::ModelLoad(){
 	dust_->Texture("Resources/eatRamen/eatRamen.obj", "./Resources/Shader/Particle.VS.hlsl", "./Resources/Shader/Particle.PS.hlsl","Resources/eatRamen/ramen.png", _countof(dustTrans_));
-	particleResources_->Texture("Resources/hud/particle.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
-	titleResources_->Texture("Resources/hud/bugRhythm.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	cloudResources_->Texture("Resources/plane/plane.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/hud/cloud.png");
+}
+
+void Result::TextureLoad(){
+	particleResources_->Texture("Resources/hud/particle.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	titleResources_->Texture("Resources/hud/GameClear.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	pressResources_->Texture("Resources/hud/Press.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	BResources_->Texture("Resources/hud/B.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+
 }
 
 void Result::BackParticle(){
@@ -78,4 +145,30 @@ void Result::BackParticle(){
 			dustTrans_[i].translation_.x = -640.0f;
 		}
 	}
+}
+
+void Result::DrawImgui(){
+	ImGui::Begin("位置座標");
+	ImGui::DragFloat3("ゲームクリア", &titleTrans_.translation_.x, 1.00f);
+	ImGui::DragFloat3("Press", &pressTrans_.translation_.x, 1.0f);
+	ImGui::DragFloat3("B", &BTrans_.translation_.x, 1.0f);
+	ImGui::End();
+
+	ImGui::Begin("イージング関連");
+	if (ImGui::TreeNode("ゲームクリア")) {
+		ImGui::DragFloat3("イージングの始点", &clearEaseStart_.x, 1.0f);
+		ImGui::DragFloat3("イージングの終点", &clearEaseEnd_.x, 1.0f);
+		ImGui::DragFloat("イージングスピード", &clearEaseSpeed_, 0.01f, 0.01f, 1.0f);
+		ImGui::Checkbox("イージング開始", &isClearEase);
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("Press")) {
+		ImGui::DragInt("イージングの始点", &pressEaseStart_, 1.0f);
+		ImGui::DragInt("イージングの終点", &pressEaseEnd_, 1.0f);
+		ImGui::DragFloat("イージングスピード", &pressEaseSpeed_, 0.01f, 0.01f, 1.0f);
+		ImGui::Checkbox("イージング開始", &isPressEase);
+		ImGui::DragInt("テキストの色", &pressColor);
+		ImGui::TreePop();
+	}
+	ImGui::End();
 }

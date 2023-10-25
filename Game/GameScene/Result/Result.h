@@ -21,6 +21,7 @@ public:
 	void Draw2D(const Matrix4x4& viewProjection);
 
 	void ModelLoad();
+	void TextureLoad();
 
 private: // メンバ変数
 
@@ -40,11 +41,35 @@ private: // メンバ変数
 	std::unique_ptr<Texture2D> titleResources_;
 	WorldTransform titleTrans_;
 
+	std::unique_ptr<Texture2D> pressResources_;
+	WorldTransform pressTrans_;
+
+	std::unique_ptr<Texture2D> BResources_;
+	WorldTransform BTrans_;
+
 	std::unique_ptr<Particle> dust_;
 	WorldTransform dustTrans_[30];
 
+	//イージング用
+	Vector3 clearEaseStart_;
+	Vector3 clearEaseEnd_;
+	float clearEaseNum_;
+	float clearT_;
+	float clearEaseSpeed_;
+	bool isClearEase;
+	//Bを押せー
+	int pressColor;
+	float pressMagnification;
+	int pressEaseStart_;
+	int pressEaseEnd_;
+	float pressEaseNum_;
+	float pressT_;
+	float pressEaseSpeed_;
+	bool isPressEase;
+
 private: // メンバ関数
 	void BackParticle();
+	void DrawImgui();
 
 public: // モデルのセット
 	void SetModels(std::vector<std::shared_ptr<Model>> model) { model_ = model; };
