@@ -63,11 +63,11 @@ bool Camera::CameraWork(const Vector3& startTrans, const Vector3& endTrans, cons
 	}
 
 	float T = Easing::EaseInSine(t);
-	transform.translation_.x = (1 - T) * startTrans.x + T * endTrans.x;
-	transform.translation_.y = (1 - T) * startTrans.y + T * endTrans.y;
-	transform.translation_.z = (1 - T) * startTrans.z + T * endTrans.z;
-	transform.rotation_.x = (1 - T) * startRotate.x + T * endRotate.x;
-	transform.rotation_.y = (1 - T) * startRotate.y + T * endRotate.y;
-	transform.rotation_.z = (1 - T) * startRotate.z + T * endRotate.z;
+	transform.translation_.x = (1.0f - T) * startTrans.x + T * endTrans.x;
+	transform.translation_.y = (1.0f - T) * startTrans.y + T * endTrans.y;
+	transform.translation_.z = (1.0f - T) * startTrans.z + T * endTrans.z;
+	transform.rotation_.x = (1.0f - T) * startRotate.x + T * endRotate.x;
+	transform.rotation_.y = (1.0f - T) * startRotate.y + T * endRotate.y;
+	transform.rotation_.z = (1.0f - T) * startRotate.z + T * endRotate.z;
 	return true;
 }

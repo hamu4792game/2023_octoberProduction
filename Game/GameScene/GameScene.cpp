@@ -100,6 +100,8 @@ void GameScene::Update() {
 	ImGui::Begin("camera");
 	ImGui::DragFloat3("translate", &camera->transform.translation_.x, 1.0f);
 	ImGui::DragFloat3("rotate", &camera->transform.rotation_.x, AngleToRadian(1.0f));
+	Vector3 handle = Vector3(RadianToAngle(camera->transform.rotation_.x), RadianToAngle(camera->transform.rotation_.y), RadianToAngle(camera->transform.rotation_.z));
+	ImGui::Text("%f : %f : %f", handle.x, handle.y, handle.z);
 	ImGui::DragFloat3("scale", &camera->transform.scale_.x, 0.1f);
 	ImGui::End();
 
@@ -107,6 +109,7 @@ void GameScene::Update() {
 	ImGui::DragFloat2("pos", &MultipathRendering::GetInstance()->cEffectParameters->centerPosition.x);
 	ImGui::DragFloat("rate", &MultipathRendering::GetInstance()->cEffectParameters->parameterRate);
 	ImGui::SliderInt("type", &MultipathRendering::GetInstance()->cEffectParameters->type, 0, 10);
+
 	ImGui::End();
 
 #endif // _DEBUG

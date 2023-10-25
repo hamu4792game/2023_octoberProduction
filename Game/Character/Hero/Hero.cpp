@@ -343,16 +343,8 @@ void Hero::Update() {
 	}*/
 }
 
-void Hero::Move(const int& pattern) {
-	switch (pattern) {
-	case static_cast<uint32_t>(MovePattern::Run):
-		transform_.translation_.z += 1.0f;
-		break;
-	case static_cast<uint32_t>(MovePattern::Stop):
-		transform_.translation_.y -= 1.0f;
-		break;
-
-	}
+void Hero::Move() {
+	transform_.translation_.z += 1.0f;
 }
 
 void Hero::DrawImgui(){
