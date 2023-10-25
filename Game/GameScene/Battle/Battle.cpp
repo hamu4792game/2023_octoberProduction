@@ -881,6 +881,18 @@ void Battle::SetNextGoalNotes() {
 
 			isGameClear_ = true;
 
+			//レベルアップ
+			currentStage_++;
+
+			for (size_t i = 0; i < 6; i++) {
+
+				if (currentStage_ - 1 >= i) {
+					stageTrans_[i].scale_ = { 1.5f,1.5f,1.0f };
+				}
+
+			}
+
+
 		}
 		//ノーツカウントが0以下で更に一定値を下回ったらゲーム終了
 		else if (currentNotesCount_ < int(-goalNotesCount_ / 2)) {
@@ -895,17 +907,6 @@ void Battle::SetNextGoalNotes() {
 			currentNotesCount_ = 0;
 
 			goalNotesCount_ = 65;
-
-		}
-
-		//レベルアップ
-		currentStage_++;
-
-		for (size_t i = 0; i < 6; i++) {
-
-			if (currentStage_ - 1 >= i) {
-				stageTrans_[i].scale_ = { 1.5f,1.5f,1.0f };
-			}
 
 		}
 
