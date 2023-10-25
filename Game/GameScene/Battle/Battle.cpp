@@ -519,29 +519,13 @@ void Battle::UpdateObjects() {
 	}
 	
 	//ゲージ処理
-	if (currentNotesCount_ < 0) {
 
-		float count = float(-currentNotesCount_);
-		float goal = float(goalNotesCount_ / 2);
+	if (endTutorial_) {
 
-		if (goalNotesCount_ != 0) {
-			gaugeTrans_.scale_.x = count / goal * 5.0f;
-		}
-		else {
-			gaugeTrans_.scale_.x = 0.0f;
-		}
+		if (currentNotesCount_ < 0) {
 
-		if (currentNotesCount_ < int(-goalNotesCount_ / 2)) {
-			gaugeTrans_.scale_.x = 5.0f;
-		}
-
-	}
-	else if (currentNotesCount_ <= goalNotesCount_) {
-
-		if (currentNotesCount_ > 0) {
-
-			float count = float(currentNotesCount_);
-			float goal = float(goalNotesCount_);
+			float count = float(-currentNotesCount_);
+			float goal = float(goalNotesCount_ / 2);
 
 			if (goalNotesCount_ != 0) {
 				gaugeTrans_.scale_.x = count / goal * 5.0f;
@@ -550,15 +534,65 @@ void Battle::UpdateObjects() {
 				gaugeTrans_.scale_.x = 0.0f;
 			}
 
+			if (currentNotesCount_ < int(-goalNotesCount_ / 2)) {
+				gaugeTrans_.scale_.x = 5.0f;
+			}
+
+		}
+		else if (currentNotesCount_ <= goalNotesCount_) {
+
+			if (currentNotesCount_ > 0) {
+
+				float count = float(currentNotesCount_);
+				float goal = float(goalNotesCount_);
+
+				if (goalNotesCount_ != 0) {
+					gaugeTrans_.scale_.x = count / goal * 5.0f;
+				}
+				else {
+					gaugeTrans_.scale_.x = 0.0f;
+				}
+
+			}
+			else {
+				gaugeTrans_.scale_.x = 0.0f;
+			}
+
 		}
 		else {
-			gaugeTrans_.scale_.x = 0.0f;
+			gaugeTrans_.scale_.x = 5.0f;
 		}
 
 	}
+	//チュートリアル時の処理
 	else {
-		gaugeTrans_.scale_.x = 5.0f;
+
+		if (tutorialNotesCount_ <= 10) {
+
+			if (tutorialNotesCount_ > 0) {
+
+				float count = float(tutorialNotesCount_);
+
+				if (goalNotesCount_ != 0) {
+					gaugeTrans_.scale_.x = count / 10.0f * 5.0f;
+				}
+				else {
+					gaugeTrans_.scale_.x = 0.0f;
+				}
+
+			}
+			else {
+				gaugeTrans_.scale_.x = 0.0f;
+			}
+
+		}
+		else {
+			gaugeTrans_.scale_.x = 5.0f;
+		}
+
 	}
+
+	
 
 	gaugeTrans_.UpdateMatrix();
 	gaugeFrameTrans_.UpdateMatrix();
@@ -617,8 +651,25 @@ void Battle::Draw2D(const Matrix4x4& viewProjection) {
 	if (!player_->GetIsMove()) {
 		Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleTexture_);
 	}
+	//チュートリアル中のUI
+	else if (!endTutorial_) {
+
+		Texture2D::TextureDraw(gaugeFrameTrans_, viewProjection, 0xffffffff, UITextures_[6]);
+
+		if (tutorialNotesCount_ >= 0) {
+
+			if (tutorialNotesCount_ >= 10) {
+				Texture2D::TextureDraw(gaugeTrans_, viewProjection, 0xffffffff, UITextures_[3]);
+			}
+			else {
+				Texture2D::TextureDraw(gaugeTrans_, viewProjection, 0xffffffff, UITextures_[2]);
+			}
+
+		}
+
+	}
 	//ゲームが始まったらUI表示
-	else {
+	else if (endTutorial_) {
 
 		for (int i = 0; i < 6; i++) {
 
@@ -655,7 +706,7 @@ void Battle::Draw2D(const Matrix4x4& viewProjection) {
 		}
 
 	
-		if (!titleFlag_) {
+		/*if (!titleFlag_) {
 			if (changeCount_ < 30) {
 				Texture2D::TextureDraw(BButtomTrans_, viewProjection, 0xffffffff, BButtomTexture_);
 			}
@@ -666,7 +717,7 @@ void Battle::Draw2D(const Matrix4x4& viewProjection) {
 				}
 			}
 			changeCount_++;
-		}
+		}*/
 	}
 
 }
