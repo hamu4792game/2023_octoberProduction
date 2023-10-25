@@ -54,6 +54,14 @@ void Boss::Update() {
 
 	Attack();*/
 
+	if (backTrans_.rotation_.z >= AngleToRadian(90.0f)) {
+		backTrans_.rotation_.z = AngleToRadian(0.0f);
+	}
+	else {
+		backTrans_.rotation_.z += AngleToRadian(1.0f);
+	}
+	
+
 	//	弾1つ1つの更新
 	for (auto& i : bullets_) {
 		i->Update();
@@ -76,6 +84,7 @@ void Boss::Update() {
 		i.UpdateMatrix();
 	}
 	backTrans_.UpdateMatrix();
+
 }
 
 void Boss::Draw3D(const Matrix4x4& viewProjectionMat) {
