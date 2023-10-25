@@ -1,6 +1,9 @@
 #include "Notes.h"
 #include "Game/Character/Hero/Hero.h"
 #include "Game/Character/Boss/Boss.h"
+#include "externals/imgui/imgui.h"
+#include "Engine/Camera/Camera.h"
+#include <algorithm>
 
 //静的メンバ変数実体
 bool NoteLong::isHitStart_ = false;
@@ -134,7 +137,15 @@ void Notes::Update() {
 	worldTransformInside_.translation_.x = judgeFrame_;
 	worldTransformLine_.scale_ = { judgeFrame_, judgeFrame_, judgeFrame_ };
 	worldTransformLine_.scale_ *= 1.0f / 2.0f;
+	//	最小まで縮まらないようにclamp
+	if (worldTransformLine_.scale_.x < 1.5f) {
+		worldTransformLine_.scale_.x = 1.5f;
+		worldTransformLine_.scale_.y = 1.5f;
+		worldTransformLine_.scale_.z = 1.5f;
+	}
 	worldTransformLine_.translation_ = hero_->GetTransform().translation_;
+	worldTransformLine_.translation_.y += 3.0f;
+	worldTransformLine_.translation_.z += 5.0f;
 
 	worldTransform_.UpdateMatrix();
 	worldTransformLine_.UpdateMatrix();
@@ -179,7 +190,8 @@ void Notes::Draw(const Matrix4x4& viewProjection) {
 	model_->ModelDraw(worldTransformInside_, viewProjection, 0xffffffff, model_);*/
 
 	if (judgeFrame_ <= 30.0f && judgeFrame_ >= 0.0f) {
-		modelList_[3]->ModelDraw(worldTransformLine_, viewProjection, 0xffffffff, modelList_[3]);
+		//modelList_[3]->ModelDraw(worldTransformLine_, viewProjection, 0xffffffff, modelList_[3]);
+		Model::ModelDraw(worldTransformLine_, viewProjection, 0xffffffff, modelList_[3]);
 	}
 
 }

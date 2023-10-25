@@ -133,6 +133,7 @@ private:
 	WorldTransform titleTrans_;
 
 	float easeFrame_ = 0.0f;
+	bool titleFlag_ = false;
 	bool startFlag_ = false;
 	Vector3 titleStartPos_;
 	Vector3 titleEndPos_;

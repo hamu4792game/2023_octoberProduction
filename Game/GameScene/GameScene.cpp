@@ -207,7 +207,7 @@ void GameScene::ModelLoad() {
 
 	notesModelNormal_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/normal.png");
 	notesModelLong_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/long.png");
-	notesModelDamage_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/damage.png");
+	notesModelDamage_->Texture("Resources/plane/plane.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/damage.png");
 	notesModelHitLine_->Texture("Resources/hitline/hitline.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/hitline/hitline.png");
 
 	boxModel_->Texture("Resources/box/box.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
@@ -272,7 +272,7 @@ void GameScene::SceneChange() {
 				scene = GameScene::Scene::RESULT;
 				break;
 			case GameScene::Scene::RESULT:
-				scene = GameScene::Scene::TITLE;
+				scene = GameScene::Scene::BATTLE;
 				break;
 			}
 		}

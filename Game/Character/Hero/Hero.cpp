@@ -82,8 +82,8 @@ void Hero::Update() {
 			partsTransform_[i].rotation_ =	  startPos[i].rotation_;
 			partsTransform_[i].scale_ =		  startPos[i].scale_;
 		}
-		//SetStart = Position::Animation;
-		//isAnimation = true;
+		SetStart = Position::Animation;
+		isAnimation = true;
 
 	}
 	else if (SetStart == Position::Middle) {
@@ -685,31 +685,32 @@ void Hero::DrawImgui(){
 	ImGui::End();
 
 #pragma region Parts
-	//ImGui::Begin("Hero");
-	//if (ImGui::TreeNode("Transform")) {
-	//	ImGui::DragFloat3("Translate", &transform_.translation_.x, 0.1f);
-	//	ImGui::DragFloat3("Scale", &transform_.scale_.x, 0.1f);
-	//	ImGui::DragFloat3("Rotate", &transform_.rotation_.x, AngleToRadian(1.0f));
-	//	ImGui::TreePop();
-	//}
-	//if (ImGui::TreeNode("Body")) {
-	//	ImGui::DragFloat3("Translate", &partsTransform_[static_cast<uint8_t>(HeroParts::Body)].translation_.x, 0.1f);
-	//	ImGui::DragFloat3("Scale", &partsTransform_[static_cast<uint8_t>(HeroParts::Body)].scale_.x, 0.1f);
-	//	ImGui::DragFloat3("Rotate", &partsTransform_[static_cast<uint8_t>(HeroParts::Body)].rotation_.x, AngleToRadian(1.0f));
-	//	ImGui::TreePop();
-	//}
-	//if (ImGui::TreeNode("Head")) {
-	//	ImGui::DragFloat3("Translate", &partsTransform_[static_cast<uint8_t>(HeroParts::Head)].translation_.x, 0.1f);
-	//	ImGui::DragFloat3("Scale", &partsTransform_[static_cast<uint8_t>(HeroParts::Head)].scale_.x, 0.1f);
-	//	ImGui::DragFloat3("Rotate", &partsTransform_[static_cast<uint8_t>(HeroParts::Head)].rotation_.x, AngleToRadian(1.0f));
-	//	ImGui::TreePop();
-	//}
-	//if (ImGui::TreeNode("Waist")) {
-	//	ImGui::DragFloat3("Translate", &partsTransform_[static_cast<uint8_t>(HeroParts::Waist)].translation_.x, 0.1f);
-	//	ImGui::DragFloat3("Scale", &partsTransform_[static_cast<uint8_t>(HeroParts::Waist)].scale_.x, 0.1f);
-	//	ImGui::DragFloat3("Rotate", &partsTransform_[static_cast<uint8_t>(HeroParts::Waist)].rotation_.x, AngleToRadian(1.0f));
-	//	ImGui::TreePop();
-	//}
+	ImGui::Begin("Hero");
+	if (ImGui::TreeNode("Transform")) {
+		ImGui::DragFloat3("Translate", &transform_.translation_.x, 0.1f);
+		ImGui::DragFloat3("Scale", &transform_.scale_.x, 0.1f);
+		ImGui::DragFloat3("Rotate", &transform_.rotation_.x, AngleToRadian(1.0f));
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("Body")) {
+		ImGui::DragFloat3("Translate", &partsTransform_[static_cast<uint8_t>(HeroParts::Body)].translation_.x, 0.1f);
+		ImGui::DragFloat3("Scale", &partsTransform_[static_cast<uint8_t>(HeroParts::Body)].scale_.x, 0.1f);
+		ImGui::DragFloat3("Rotate", &partsTransform_[static_cast<uint8_t>(HeroParts::Body)].rotation_.x, AngleToRadian(1.0f));
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("Head")) {
+		ImGui::DragFloat3("Translate", &partsTransform_[static_cast<uint8_t>(HeroParts::Head)].translation_.x, 0.1f);
+		ImGui::DragFloat3("Scale", &partsTransform_[static_cast<uint8_t>(HeroParts::Head)].scale_.x, 0.1f);
+		ImGui::DragFloat3("Rotate", &partsTransform_[static_cast<uint8_t>(HeroParts::Head)].rotation_.x, AngleToRadian(1.0f));
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("Waist")) {
+		ImGui::DragFloat3("Translate", &partsTransform_[static_cast<uint8_t>(HeroParts::Waist)].translation_.x, 0.1f);
+		ImGui::DragFloat3("Scale", &partsTransform_[static_cast<uint8_t>(HeroParts::Waist)].scale_.x, 0.1f);
+		ImGui::DragFloat3("Rotate", &partsTransform_[static_cast<uint8_t>(HeroParts::Waist)].rotation_.x, AngleToRadian(1.0f));
+		ImGui::TreePop();
+	}
+	ImGui::End();
 	//if (ImGui::TreeNode("RightUpperArm")) {
 	//	ImGui::DragFloat3("Translate", &partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperArm)].translation_.x, 0.1f);
 	//	ImGui::DragFloat3("Scale", &partsTransform_[static_cast<uint8_t>(HeroParts::RightUpperArm)].scale_.x, 0.1f);

@@ -1,5 +1,6 @@
 #include "BossBullet.h"
 #include "Engine/Easing/Ease.h"
+#include <externals/imgui/imgui.h>
 
 BossBullet::BossBullet(Model* model) {
 	model_ = model;
@@ -17,8 +18,11 @@ void BossBullet::Update() {
 	if (notes_->GetIsHit() || notes_->GetIsMiss()) {
 		isDead_ = true;
 	}
+	Vector3 end = parent_->translation_ - (parent_->translation_ * 2.0f);
+	end.y = 1.0f; end.z += 5.0f;
+	ImGui::DragFloat("ending", &end.z, 0.1f);
 
-	transform_.translation_ = Ease::UseEase(start_, parent_->translation_ - (parent_->translation_ * 2.0f), nowFrame_, 1.0f, Ease::EaseType::EaseInSine);
+	transform_.translation_ = Ease::UseEase(start_, end, nowFrame_, 1.0f, Ease::EaseType::EaseInSine);
 	transform_.UpdateMatrix();
 }
 

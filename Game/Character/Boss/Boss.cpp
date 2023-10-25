@@ -33,6 +33,9 @@ void Boss::Initialize() {
 	backTrans_.scale_ = Vector3(5.0f, 1.0f, 5.0f);
 	backTrans_.rotation_.x = AngleToRadian(-90.0f);
 	back_->blendType = BlendMode::Subtract;
+
+	bullets_.clear();
+
 }
 
 void Boss::Update() {

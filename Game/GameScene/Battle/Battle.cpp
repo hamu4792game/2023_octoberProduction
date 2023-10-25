@@ -4,6 +4,7 @@
 #include "Engine/Easing/Ease.h"
 #include "Engine/Input/KeyInput/KeyInput.h"
 #include "Engine/Base/MultipathRendering/MultipathRendering.h"
+#include "Game/GameScene/GameScene.h"
 
 Battle::Battle(std::shared_ptr<Camera> camera)
 {
@@ -123,15 +124,17 @@ void Battle::Initialize() {
 	isGameOver_ = false;
 	//	最初の一回
 	boxTrans_.scale_ = Vector3(80.0f, 45.0f, 1.0f);
-	boxTrans_.cMono->pibot.x = 300.0f;
+	boxTrans_.cMono->pibot.x = 470.0f;
 	boxTrans_.cMono->pibot.y = 360.0f;
-	boxTrans_.cMono->rate = 300.0f;
-	boxColor_ = 0x00000099;
+	boxTrans_.cMono->rate = 140.0f;
+	boxColor_ = 0x000000bb;
 
 	easeFrame_ = 0.0f;
+	titleTrans_.translation_ = Vector3(0.0f, 0.0f, 0.0f);
 	titleStartPos_ = titleTrans_.translation_;
 	titleEndPos_ = Vector3(0.0f, 500.0f, 0.0f);
 	startFlag_ = false;
+	titleFlag_ = false;
 
 	MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(0.0f, 0.0f);
 	MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 0.0f;
@@ -160,14 +163,16 @@ void Battle::Update() {
 	ImGui::DragFloat("rate", &boxTrans_.cMono->rate, 1.0f);
 	ImGui::End();
 #endif // _DEBUG
-	if (KeyInput::PushKey(DIK_Z)) {
+	//	タイトル遷移用のフラグ
+	if (KeyInput::PushKey(DIK_SPACE) && !startFlag_) {
+		titleFlag_ = true;
 		startFlag_ = true;
 		
 		MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 250.0f;
 		MultipathRendering::GetInstance()->cEffectParameters->type = 5;
 	}
-
-	if (startFlag_) {
+	//	タイトルの遷移
+	if (titleFlag_) {
 		easeFrame_++;
 		titleTrans_.translation_ = Ease::UseEase(titleStartPos_, titleEndPos_, easeFrame_, 180.0f, Ease::EaseInOut);
 		titleTrans_.UpdateMatrix();
@@ -175,8 +180,9 @@ void Battle::Update() {
 		MultipathRendering::GetInstance()->cEffectParameters->centerPosition.y = 360.0f - titleTrans_.translation_.y;
 		if (easeFrame_ >= 180.0f) {
 			easeFrame_ = 0.0f;
-			startFlag_ = false;
+			titleFlag_ = false;
 			player_->SetIsMove(true);
+			MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 0.0f;
 		}
 	}
 
@@ -290,6 +296,12 @@ void Battle::Update() {
 		for (int i = 0; i < 5; i++) {
 			loopBGMs_[i]->SoundStop();
 		}
+	}
+
+	if (isGameClear_) {
+		GameScene::GetInstance()->sceneChangeFlag = true;
+	}else if (isGameOver_) {
+		GameScene::GetInstance()->sceneChangeFlag = true;
 	}
 
 }
