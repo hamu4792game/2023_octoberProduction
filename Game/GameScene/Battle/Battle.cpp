@@ -164,7 +164,7 @@ void Battle::Update() {
 	ImGui::End();
 #endif // _DEBUG
 	//	タイトル遷移用のフラグ
-	if (KeyInput::PushKey(DIK_SPACE) && !startFlag_) {
+	if ((KeyInput::PushKey(DIK_SPACE) || KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B)) && !startFlag_) {
 		titleFlag_ = true;
 		startFlag_ = true;
 		

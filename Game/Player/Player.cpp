@@ -37,10 +37,8 @@ void Player::Update(std::vector<Vector3> ControlPoints, int lastLinePass) {
 	ImGui::Text("isMiss : %d", isMiss_);
 	ImGui::End();
 
-#endif // _DEBUG
-
 	if (KeyInput::PushKey(DIK_Q)) {
-		
+
 		if (isMove) {
 			isMove = false;
 		}
@@ -50,10 +48,12 @@ void Player::Update(std::vector<Vector3> ControlPoints, int lastLinePass) {
 
 	}
 
+#endif // _DEBUG
+
 	//キーを押した瞬間の判定
 	if (KeyInput::GetInstance()->GetPadConnect()) {
 
-		if (KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B)) {
+		if (KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B) || KeyInput::PushKey(DIK_SPACE)) {
 			isTap_ = true;
 			SE1_->SoundStop();
 			SE1_->SoundPlayWave();
