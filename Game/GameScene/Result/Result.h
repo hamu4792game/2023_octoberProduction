@@ -44,8 +44,8 @@ private: // メンバ変数
 	std::unique_ptr<Texture2D> pressResources_;
 	WorldTransform pressTrans_;
 
-	std::unique_ptr<Texture2D> BResources_;
-	WorldTransform BTrans_;
+	/*std::unique_ptr<Texture2D> BResources_;
+	WorldTransform BTrans_;*/
 
 	std::unique_ptr<Particle> dust_;
 	WorldTransform dustTrans_[30];

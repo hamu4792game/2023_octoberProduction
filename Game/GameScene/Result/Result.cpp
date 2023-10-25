@@ -13,7 +13,7 @@ Result::Result(Camera* camera){
 	particleResources_ = std::make_unique<Texture2D>();
 	titleResources_ = std::make_unique<Texture2D>();
 	pressResources_= std::make_unique<Texture2D>();
-	BResources_= std::make_unique<Texture2D>();
+	//BResources_= std::make_unique<Texture2D>();
 
 	cloudResources_ = std::make_unique<Model>();
 
@@ -36,10 +36,10 @@ void Result::Initialize(){
 	particleResources_->SetBlend(BlendMode::Screen);
 	cloudTrans_.scale_ = Vector3(8.0f, 8.0f, 1.0f);
 	titleTrans_.scale_ = Vector3(2.0f, 2.0f, 1.0f);
-	pressTrans_.scale_ = { 1.0f,1.0f,1.0f };
-	pressTrans_.translation_ = { -116.0f,-236.0f,0.0f };
-	BTrans_.scale_ = { 1.0f,1.0f,1.0f };
-	BTrans_.translation_ = { 100.0f,-236.0f,0.0f };
+	pressTrans_.scale_ = { 1.2f,1.2f,1.0f };
+	pressTrans_.translation_ = { 0.0f,-236.0f,0.0f };
+	//BTrans_.scale_ = { 1.0f,1.0f,1.0f };
+	//BTrans_.translation_ = { 100.0f,-236.0f,0.0f };
 
 	clearEaseStart_ = { 0.0f,600.0f,0.0f };
 	clearEaseEnd_ = { 0.0f,250.0f,0.0f };
@@ -101,7 +101,7 @@ void Result::Update(){
 	cloudTrans_.UpdateMatrix();
 	titleTrans_.UpdateMatrix();
 	pressTrans_.UpdateMatrix();
-	BTrans_.UpdateMatrix();
+	//BTrans_.UpdateMatrix();
 
 	if (KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B)){
 		GameScene::GetInstance()->sceneChangeFlag = true;
@@ -119,7 +119,7 @@ void Result::Draw3D(const Matrix4x4& viewProjection){
 void Result::Draw2D(const Matrix4x4& viewProjection){
 	Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleResources_.get());
 	Texture2D::TextureDraw(pressTrans_, viewProjection, pressColor, pressResources_.get());
-	Texture2D::TextureDraw(BTrans_, viewProjection, 0x000000ff, BResources_.get());
+	//Texture2D::TextureDraw(BTrans_, viewProjection, 0x00ff, BResources_.get());
 	for (auto& i : dustTrans_) {
 		Texture2D::TextureDraw(i, viewProjection, 0x0000ccaa, particleResources_.get());
 	}
@@ -134,7 +134,7 @@ void Result::TextureLoad(){
 	particleResources_->Texture("Resources/hud/particle.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	titleResources_->Texture("Resources/hud/GameClear.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	pressResources_->Texture("Resources/hud/Press.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
-	BResources_->Texture("Resources/hud/BButtom.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	//BResources_->Texture("Resources/hud/BButtom.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
 }
 
@@ -156,7 +156,7 @@ void Result::DrawImgui(){
 	ImGui::Begin("位置座標");
 	ImGui::DragFloat3("ゲームクリア", &titleTrans_.translation_.x, 1.00f);
 	ImGui::DragFloat3("Press", &pressTrans_.translation_.x, 1.0f);
-	ImGui::DragFloat3("B", &BTrans_.translation_.x, 1.0f);
+	//ImGui::DragFloat3("B", &BTrans_.translation_.x, 1.0f);
 	ImGui::End();
 
 	ImGui::Begin("イージング関連");
