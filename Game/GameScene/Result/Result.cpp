@@ -113,7 +113,7 @@ void Result::Update(){
 	pressTrans_.UpdateMatrix();
 	//BTrans_.UpdateMatrix();
 
-	if (KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B) && GameScene::GetInstance()->sceneChangeFlag == false){
+	if ((KeyInput::PushKey(DIK_SPACE) || KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B)) && GameScene::GetInstance()->sceneChangeFlag == false) {
 		GameScene::GetInstance()->sceneChangeFlag = true;
 		loopBGM_[1]->SoundStop();
 		selectSE_->SoundStop();
