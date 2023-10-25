@@ -103,7 +103,7 @@ void Result::Update(){
 	pressTrans_.UpdateMatrix();
 	//BTrans_.UpdateMatrix();
 
-	if (KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B)){
+	if (KeyInput::PushKey(DIK_SPACE) || KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B)){
 		GameScene::GetInstance()->sceneChangeFlag = true;
 	}
 }
