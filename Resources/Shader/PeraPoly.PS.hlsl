@@ -66,6 +66,11 @@ float4 main(Output input) : SV_Target{
         result.g = textureColor.b;
         result.b = textureColor.r;
         break;
+    case 8: 
+        result.r = textureColor.b;
+        result.g = textureColor.r;
+        result.b = textureColor.g;
+        break;
     default:
         result = textureColor;
         break;

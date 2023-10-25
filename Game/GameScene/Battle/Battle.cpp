@@ -169,6 +169,8 @@ void Battle::Initialize() {
 		quadFrame_ = 15;
 		quadFlag_ = 0;
 		quadMoveFlag = false;
+
+		isBoxFlag = false;
 	}
 
 }
@@ -370,6 +372,15 @@ void Battle::Update() {
 		if (!camera_->CameraWork(cameraMoveStart, cameraMoveEnd, cameraRotateStart, cameraRotateEnd, cameraT_)) {
 			cameraT_ = 0.0f;
 			cameraMoveFlag = false;
+			if (isBoxFlag) {
+				isBoxFlag = false;
+				cameraMoveFlag = true;
+				cameraTspeed_ = 0.01f;
+				camera_->transform.translation_ = Vector3(2.0f, 6.0f, 23.0f);
+				camera_->transform.rotation_ = Vector3(AngleToRadian(8.0f), 0.0f, 0.0f);
+				movepattern_ = MovePattern::Zoom;
+				SetCameraMove();
+			}
 		}
 	}
 	else if (quadMoveFlag) {
@@ -641,7 +652,7 @@ void Battle::Draw3D(const Matrix4x4& viewProjection) {
 void Battle::Draw2D(const Matrix4x4& viewProjection) {
 
 	/*currentMusicScore_->Draw2D(viewProjection);*/
-	if (isStop_) {
+	if (isStop_ || isBoxFlag) {
 		Texture2D::TextureDraw(boxTrans_, viewProjection, boxColor_, boxtexture_);
 
 		if (changeCount_<30){
@@ -770,6 +781,16 @@ void Battle::SetNextGoalNotes() {
 				break;
 			case 2:
 				goalNotesCount_ = 50;
+
+				boxTrans_.cMono->pibot.x = 0.0f;
+				boxTrans_.cMono->pibot.y = 0.0f;
+				boxTrans_.cMono->rate = 0.0f;
+				boxColor_ = 0x000000ff;
+				isBoxFlag = true;
+				cameraMoveFlag = true;
+				//	カメラのセット
+				
+				cameraTspeed_ = 0.1f;
 				
 				break;
 			case 3: 
@@ -949,6 +970,10 @@ void Battle::SetCameraMove() {
 	case MovePattern::LeftSide: // 左側視点
 		cameraMoveEnd = Vector3(-16.0f, 8.0f, -10.0f);
 		cameraRotateEnd = Vector3(AngleToRadian(12.0f), AngleToRadian(39.0f), 0.0f);
+		break;
+	case MovePattern::Zoom: // zoom視点?
+		cameraMoveEnd = Vector3(7.0f, 7.0f, -10.0f);
+		cameraRotateEnd = Vector3(AngleToRadian(8.0f), AngleToRadian(-18.0f), 0.0f);
 		break;
 	case MovePattern::Stop: // playerの前側視点
 		cameraMoveEnd = Vector3(-27.0f, 19.0f, 35.0f);
