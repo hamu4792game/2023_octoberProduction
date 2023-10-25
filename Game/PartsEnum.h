@@ -39,6 +39,7 @@ enum class BossParts {
 enum class MovePattern {
 	Run,
 	LeftSide,
+	Zoom,
 	Stop,
 
 	kMaxCount // 最大数用数

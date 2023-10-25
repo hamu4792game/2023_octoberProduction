@@ -169,6 +169,8 @@ void Battle::Initialize() {
 		quadFrame_ = 15;
 		quadFlag_ = 0;
 		quadMoveFlag = false;
+
+		isBoxFlag = false;
 	}
 
 }
@@ -370,6 +372,15 @@ void Battle::Update() {
 		if (!camera_->CameraWork(cameraMoveStart, cameraMoveEnd, cameraRotateStart, cameraRotateEnd, cameraT_)) {
 			cameraT_ = 0.0f;
 			cameraMoveFlag = false;
+			if (isBoxFlag) {
+				isBoxFlag = false;
+				cameraMoveFlag = true;
+				cameraTspeed_ = 0.01f;
+				camera_->transform.translation_ = Vector3(2.0f, 6.0f, 23.0f);
+				camera_->transform.rotation_ = Vector3(AngleToRadian(8.0f), 0.0f, 0.0f);
+				movepattern_ = MovePattern::Zoom;
+				SetCameraMove();
+			}
 		}
 	}
 	else if (quadMoveFlag) {
@@ -379,13 +390,14 @@ void Battle::Update() {
 	//	クリアフラグ
 	if (isGameClear_) {
 		GameScene::GetInstance()->sceneChangeFlag = true;
-
+		MultipathRendering::GetInstance()->Initialize();
 		for (int i = 0; i < 9; i++) {
 			loopBGMs_[i]->SoundStop();
 		}
 
 	}else if (isGameOver_) {
-		//GameScene::GetInstance()->sceneChangeFlag = true;
+		GameScene::GetInstance()->sceneChangeFlag = true;
+		MultipathRendering::GetInstance()->Initialize();
 		for (int i = 0; i < 9; i++) {
 			loopBGMs_[i]->SoundStop();
 		}
@@ -641,7 +653,7 @@ void Battle::Draw3D(const Matrix4x4& viewProjection) {
 void Battle::Draw2D(const Matrix4x4& viewProjection) {
 
 	/*currentMusicScore_->Draw2D(viewProjection);*/
-	if (isStop_) {
+	if (isStop_ || isBoxFlag) {
 		Texture2D::TextureDraw(boxTrans_, viewProjection, boxColor_, boxtexture_);
 
 		if (changeCount_<30){
@@ -758,6 +770,10 @@ void Battle::SetNextGoalNotes() {
 			case 0:
 				goalNotesCount_ = 25;
 				quadMoveFlag = true;
+				//	エフェクトの設定
+				MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(1400.0f, 0.0f);
+				MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 900.0f;
+				MultipathRendering::GetInstance()->cEffectParameters->type = 2;
 				break;
 			case 1:
 				goalNotesCount_ = 35;
@@ -767,13 +783,37 @@ void Battle::SetNextGoalNotes() {
 				movepattern_ = MovePattern::LeftSide;
 				SetCameraMove();
 				cameraTspeed_ = 0.02f;
+
+				//	エフェクトの設定
+				MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(640.0f, 360.0f);
+				MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 900.0f;
+				MultipathRendering::GetInstance()->cEffectParameters->type = 6;
 				break;
 			case 2:
 				goalNotesCount_ = 50;
+
+				boxTrans_.cMono->pibot.x = 0.0f;
+				boxTrans_.cMono->pibot.y = 0.0f;
+				boxTrans_.cMono->rate = 0.0f;
+				boxColor_ = 0x000000ff;
+				isBoxFlag = true;
+				cameraMoveFlag = true;
+				//	カメラのセット
+				
+				cameraTspeed_ = 0.1f;
+
+				//	エフェクトの設定
+				MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(640.0f, 360.0f);
+				MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 900.0f;
+				MultipathRendering::GetInstance()->cEffectParameters->type = 5;
 				
 				break;
 			case 3: 
 				goalNotesCount_ = 65;
+				//	エフェクトの設定
+				MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(640.0f, 360.0f);
+				MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 900.0f;
+				MultipathRendering::GetInstance()->cEffectParameters->type = 9;
 				break;
 			case 4:
 				goalNotesCount_ = 80;
@@ -782,6 +822,11 @@ void Battle::SetNextGoalNotes() {
 				movepattern_ = MovePattern::Stop;
 				SetCameraMove();
 				cameraTspeed_ = 0.03f;
+
+				//	エフェクトの設定
+				MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(640.0f, 360.0f);
+				MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 900.0f;
+				MultipathRendering::GetInstance()->cEffectParameters->type = 7;
 				break;
 
 			}
@@ -950,6 +995,10 @@ void Battle::SetCameraMove() {
 	case MovePattern::LeftSide: // 左側視点
 		cameraMoveEnd = Vector3(-16.0f, 8.0f, -10.0f);
 		cameraRotateEnd = Vector3(AngleToRadian(12.0f), AngleToRadian(39.0f), 0.0f);
+		break;
+	case MovePattern::Zoom: // zoom視点?
+		cameraMoveEnd = Vector3(7.0f, 7.0f, -10.0f);
+		cameraRotateEnd = Vector3(AngleToRadian(8.0f), AngleToRadian(-18.0f), 0.0f);
 		break;
 	case MovePattern::Stop: // playerの前側視点
 		cameraMoveEnd = Vector3(-27.0f, 19.0f, 35.0f);
