@@ -81,6 +81,13 @@ private: // モデル変数
 	std::unique_ptr<Model> notesModelEffect_;
 	std::shared_ptr<Texture2D> hud_;
 	std::unique_ptr<Texture2D> hitLine_;
+	std::unique_ptr<Texture2D> currentStage_;
+	std::unique_ptr<Texture2D> totalStage_;
+	std::unique_ptr<Texture2D> gauge_;
+	std::unique_ptr<Texture2D> gaugeFrame_;
+	std::unique_ptr<Texture2D> gaugeMax_;
+	std::unique_ptr<Texture2D> gaugeMinus_;
+	std::unique_ptr<Texture2D> gaugeOver_;
 
 	std::shared_ptr<Model> boxModel_;
 

@@ -138,6 +138,15 @@ void Battle::Initialize() {
 	startFlag_ = false;
 	titleFlag_ = false;
 
+	for (int i = 0; i < 6; i++) {
+		
+		stageTrans_[i].translation_ = { -250.0f + i * 100.0f,-200.0f,0.0f };
+	}
+
+	gaugeTrans_.translation_ = { 0.0f,-300.0f,0.0f };
+	gaugeFrameTrans_.translation_ = { 0.0f,-300.0f,0.0f };
+	gaugeFrameTrans_.scale_.x = 5.0f;
+
 	MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(0.0f, 0.0f);
 	MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 0.0f;
 	MultipathRendering::GetInstance()->cEffectParameters->type = 0;
@@ -414,7 +423,7 @@ void Battle::UpdateObjects() {
 		for (const auto& score : tutorialMusicScoreList_) {
 			score->Update(makeCatmull_->GetControlPoints());
 
-			if (tutorialNotesCount_ == 0) {
+			if (tutorialNotesCount_ <= 2) {
 
 				for (Notes* note : score->GetNotes()) {
 
@@ -431,7 +440,8 @@ void Battle::UpdateObjects() {
 				if (note->GetIsHit()) {
 					isStop_ = false;
 					tutorialNotesCount_++;
-
+					loopBGMs_[0]->SoundPlayWave();
+					loopBGMs_[0]->SetVolume(0.2f);
 					std::unique_ptr<NotesEffect> newEffect = std::make_unique<NotesEffect>();
 					newEffect->ModelLoad(notesEffectModel_);
 					newEffect->Initialize();
@@ -472,6 +482,71 @@ void Battle::UpdateObjects() {
 		battleAnimation_->Update();
 	}
 	
+	for (size_t i = 0; i < 6; i++) {
+
+		if (stageTrans_[i].scale_.x > 1.0f) {
+			stageTrans_[i].scale_.x -= 0.05f;
+		}
+
+		if (stageTrans_[i].scale_.y > 1.0f) {
+			stageTrans_[i].scale_.y -= 0.05f;
+		}
+
+		if (stageTrans_[i].scale_.x < 1.0f) {
+			stageTrans_[i].scale_.x = 1.0f;
+		}
+
+		if (stageTrans_[i].scale_.y < 1.0f) {
+			stageTrans_[i].scale_.y = 1.0f;
+		}
+
+		stageTrans_[i].UpdateMatrix();
+	}
+	
+	//ゲージ処理
+	if (currentNotesCount_ < 0) {
+
+		float count = float(-currentNotesCount_);
+		float goal = float(goalNotesCount_ / 2);
+
+		if (goalNotesCount_ != 0) {
+			gaugeTrans_.scale_.x = count / goal * 5.0f;
+		}
+		else {
+			gaugeTrans_.scale_.x = 0.0f;
+		}
+
+		if (currentNotesCount_ < int(-goalNotesCount_ / 2)) {
+			gaugeTrans_.scale_.x = 5.0f;
+		}
+
+	}
+	else if (currentNotesCount_ <= goalNotesCount_) {
+
+		if (currentNotesCount_ > 0) {
+
+			float count = float(currentNotesCount_);
+			float goal = float(goalNotesCount_);
+
+			if (goalNotesCount_ != 0) {
+				gaugeTrans_.scale_.x = count / goal * 5.0f;
+			}
+			else {
+				gaugeTrans_.scale_.x = 0.0f;
+			}
+
+		}
+		else {
+			gaugeTrans_.scale_.x = 0.0f;
+		}
+
+	}
+	else {
+		gaugeTrans_.scale_.x = 5.0f;
+	}
+
+	gaugeTrans_.UpdateMatrix();
+	gaugeFrameTrans_.UpdateMatrix();
 	worldTransformLine_.UpdateMatrix();
 
 }
@@ -516,6 +591,47 @@ void Battle::Draw2D(const Matrix4x4& viewProjection) {
 	if (!player_->GetIsMove()) {
 		Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleTexture_);
 	}
+	//ゲームが始まったらUI表示
+	else {
+
+		for (int i = 0; i < 6; i++) {
+
+			if (currentStage_ - 1 >= i) {
+				Texture2D::TextureDraw(stageTrans_[i], viewProjection, 0xffffffff, UITextures_[0]);
+			}
+			else {
+				Texture2D::TextureDraw(stageTrans_[i], viewProjection, 0xffffffff, UITextures_[1]);
+			}
+			
+		}
+
+		Texture2D::TextureDraw(gaugeFrameTrans_, viewProjection, 0xffffffff, UITextures_[6]);
+
+		if (currentNotesCount_ >= 0) {
+
+			if (currentNotesCount_ >= goalNotesCount_) {
+				Texture2D::TextureDraw(gaugeTrans_, viewProjection, 0xffffffff, UITextures_[3]);
+			}
+			else {
+				Texture2D::TextureDraw(gaugeTrans_, viewProjection, 0xffffffff, UITextures_[2]);
+			}
+
+		}
+		else {
+
+			if (currentNotesCount_ < int(-goalNotesCount_ / 2)) {
+				Texture2D::TextureDraw(gaugeTrans_, viewProjection, 0xffffffff, UITextures_[5]);
+			}
+			else {
+				Texture2D::TextureDraw(gaugeTrans_, viewProjection, 0xffffffff, UITextures_[4]);
+			}
+
+		}
+
+	
+
+	}
+
 
 }
 
@@ -536,19 +652,6 @@ void Battle::SetNextGoalNotes() {
 			//
 			//レベルアップの処理ここ
 			//
-
-			if (currentNotesCount_ >= goalNotesCount_) {
-				for (size_t i = 0; const auto & score : musicScoreList_) {
-
-					//次に流れるノーツをリセット
-					if (i == 1) {
-						score->ClearNotes();
-					}
-
-					i++;
-
-				}
-			}
 
 			//現在のノーツカウントリセット
 			currentNotesCount_ = 0;
@@ -577,6 +680,14 @@ void Battle::SetNextGoalNotes() {
 
 			//レベルアップ
 			currentStage_++;
+
+			for (size_t i = 0; i < 6; i++) {
+
+				if (currentStage_ - 1 >= i) {
+					stageTrans_[i].scale_ = { 1.5f,1.5f,1.0f };
+				}
+
+			}
 
 		}
 		//ゴールカウントが正常にリセットされていなかったとき用
@@ -679,6 +790,17 @@ void Battle::SetNextGoalNotes() {
 
 		}
 
+		//レベルアップ
+		currentStage_++;
+
+		for (size_t i = 0; i < 6; i++) {
+
+			if (currentStage_ - 1 >= i) {
+				stageTrans_[i].scale_ = { 1.5f,1.5f,1.0f };
+			}
+
+		}
+
 	}
 
 }
@@ -766,5 +888,11 @@ void Battle::UpdateScores() {
 		}
 		
 	}
+
+}
+
+void Battle::SetUI(std::vector<Texture2D*> textures) {
+
+	UITextures_ = textures;
 
 }

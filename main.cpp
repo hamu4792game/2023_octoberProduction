@@ -13,7 +13,7 @@ float FrameCount::currentFrameTime = 0.0f;
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR lpCmdLine, _In_ int nShowCmd) {
 	static D3DResourceLeakChecker leak;
 	int32_t windowWidth = 1280; int32_t windowHeight = 720;
-	Engine::Initialize("えとせとら", windowWidth, windowHeight);
+	Engine::Initialize("バグリズム", windowWidth, windowHeight);
 	//乱数追加
 	SetRandom();
 

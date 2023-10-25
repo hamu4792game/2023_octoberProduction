@@ -32,6 +32,13 @@ void GameScene::Initialize() {
 	notesModelEffect_ = std::make_unique<Model>();
 	hud_ = std::make_shared<Texture2D>();
 	hitLine_ = std::make_unique<Texture2D>();
+	currentStage_ = std::make_unique<Texture2D>();
+	totalStage_ = std::make_unique<Texture2D>();
+	gauge_ = std::make_unique<Texture2D>();
+	gaugeFrame_ = std::make_unique<Texture2D>();
+	gaugeMax_ = std::make_unique<Texture2D>();
+	gaugeMinus_ = std::make_unique<Texture2D>();
+	gaugeOver_ = std::make_unique<Texture2D>();
 
 	box = std::make_shared<Texture2D>();
 
@@ -85,6 +92,9 @@ void GameScene::Initialize() {
 	battle->SetNotesEffectModel(notesModelEffect_.get());
 	battle->SetBoxTexture(box.get());
 	battle->SetTitleTexture(titleResources_.get());
+	std::vector<Texture2D*> textures = { currentStage_.get(), totalStage_.get(), gauge_.get(), gaugeMax_.get(),
+		gaugeMinus_.get(),gaugeOver_.get(), gaugeFrame_.get() };
+	battle->SetUI(textures);
 
 	//	シーンの初期化
 	title->Initialize();
@@ -252,6 +262,15 @@ void GameScene::ModelLoad() {
 
 	//	タイトルテキスト
 	titleResources_->Texture("Resources/hud/bugRhythm.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+
+	//インゲームのUI
+	currentStage_->Texture("Resources/UI/currentstage.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	totalStage_->Texture("Resources/UI/totalstage.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	gauge_->Texture("Resources/UI/gauge.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	gaugeFrame_->Texture("Resources/UI/gaugeframe.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	gaugeMax_->Texture("Resources/UI/gaugemax.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	gaugeMinus_->Texture("Resources/UI/gaugeminus.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	gaugeOver_->Texture("Resources/UI/gaugeover.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
 }
 

@@ -63,6 +63,8 @@ private:
 
 	Model* notesEffectModel_;
 
+	std::vector<Texture2D*> UITextures_;
+
 	std::list<std::unique_ptr<NotesEffect>> notesEffects_;
 
 	std::vector<Texture2D*> noteTextures_;
@@ -102,7 +104,7 @@ private:
 	int currentStage_ = 0;
 
 	//ノルマ数
-	int goalNotesCount_ = 0;
+	int goalNotesCount_ =25;
 
 	//現在のノーツ叩いた数
 	int currentNotesCount_ = 0;
@@ -138,6 +140,10 @@ private:
 	Texture2D* titleTexture_;
 	WorldTransform titleTrans_;
 
+	WorldTransform stageTrans_[6];
+	WorldTransform gaugeTrans_;
+	WorldTransform gaugeFrameTrans_;
+
 	float easeFrame_ = 0.0f;
 	bool titleFlag_ = false;
 	bool startFlag_ = false;
@@ -163,4 +169,5 @@ public: // セッター
 	void SetBossBulletModel(Model* model) { battleAnimation_->SetBossBulletModel(model); }
 	void SetBoxTexture(Texture2D* texture) { boxtexture_ = texture; }
 	void SetTitleTexture(Texture2D* texture) { titleTexture_ = texture; }
+	void SetUI(std::vector<Texture2D*> textures);
 };
