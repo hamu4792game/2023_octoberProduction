@@ -138,6 +138,12 @@ private:
 	Texture2D* titleTexture_;
 	WorldTransform titleTrans_;
 
+	//ボタン
+	int changeCount_ = 0;
+	Texture2D* BButtomTexture_;
+	Texture2D* pushBButtomTexture_;
+	WorldTransform BButtomTrans_;
+
 	float easeFrame_ = 0.0f;
 	bool titleFlag_ = false;
 	bool startFlag_ = false;
@@ -163,4 +169,6 @@ public: // セッター
 	void SetBossBulletModel(Model* model) { battleAnimation_->SetBossBulletModel(model); }
 	void SetBoxTexture(Texture2D* texture) { boxtexture_ = texture; }
 	void SetTitleTexture(Texture2D* texture) { titleTexture_ = texture; }
+	void SetBButtomTexture(Texture2D* texture) { BButtomTexture_ = texture; }
+	void SetPushBButtomTexture(Texture2D* texture) { pushBButtomTexture_ = texture; }
 };

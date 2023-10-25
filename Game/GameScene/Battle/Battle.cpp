@@ -138,6 +138,11 @@ void Battle::Initialize() {
 	startFlag_ = false;
 	titleFlag_ = false;
 
+	//ボタンテクスチャ関連の初期化
+	changeCount_ = 0;
+	BButtomTrans_.scale_ = { 1.5f,1.5f,0.0f };
+	BButtomTrans_.translation_ = { 0.0f,-165.0f,0.0f };
+
 	MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(0.0f, 0.0f);
 	MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 0.0f;
 	MultipathRendering::GetInstance()->cEffectParameters->type = 0;
@@ -176,6 +181,8 @@ void Battle::Update() {
 	ImGui::DragFloat("rate", &boxTrans_.cMono->rate, 1.0f);
 
 	ImGui::DragFloat3("titlescale", &titleTrans_.scale_.x, 0.1f);
+
+	ImGui::DragFloat3("buttomTranslate", &BButtomTrans_.translation_.x, 1.0f);
 	ImGui::End();
 #endif // _DEBUG
 	//	タイトル遷移用のフラグ
@@ -511,6 +518,17 @@ void Battle::Draw2D(const Matrix4x4& viewProjection) {
 	/*currentMusicScore_->Draw2D(viewProjection);*/
 	if (isStop_) {
 		Texture2D::TextureDraw(boxTrans_, viewProjection, boxColor_, boxtexture_);
+
+		if (changeCount_<30){
+			Texture2D::TextureDraw(BButtomTrans_, viewProjection, 0xffffffff, BButtomTexture_);
+		}
+		else {
+			Texture2D::TextureDraw(BButtomTrans_, viewProjection, 0xffffffff, pushBButtomTexture_);
+			if (changeCount_>60){
+				changeCount_ = 0;
+			}
+		}
+		changeCount_++;
 	}
 	// ゲームが始まっていなければタイトルの表示
 	if (!player_->GetIsMove()) {
