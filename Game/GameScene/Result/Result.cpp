@@ -2,7 +2,8 @@
 #include "externals/imgui/imgui.h"
 #include"Engine/Easing/Ease.h"
 #include"Engine/Easing/Easing.h"
-
+#include"Engine/Input/KeyInput/KeyInput.h"
+#include"Game/GameScene/GameScene.h"
 
 Result::Result(Camera* camera){
 	camera_ = camera;
@@ -101,6 +102,10 @@ void Result::Update(){
 	titleTrans_.UpdateMatrix();
 	pressTrans_.UpdateMatrix();
 	BTrans_.UpdateMatrix();
+
+	if (KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B)){
+		GameScene::GetInstance()->sceneChangeFlag = true;
+	}
 }
 
 void Result::Draw3D(const Matrix4x4& viewProjection){
