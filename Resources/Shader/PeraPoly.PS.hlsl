@@ -30,6 +30,23 @@ float SimplexNoise(float3 x)
                      lerp(hash(n + 170.0), hash(n + 171.0), f.x), f.y), f.z);
 }
 
+float4 AverageBlur(Output input,float radius) {
+    float4 sum =  gTexture.Sample(gSampler,input.uv);
+    float offsetU = 5.0f / 1280.0f;
+    float offsetV = 5.0f / 720.0f;
+
+    sum += gTexture.Sample(gSampler,input.uv + float2(offsetU,0.0f));
+    sum += gTexture.Sample(gSampler,input.uv + float2(-offsetU,0.0f));
+    sum += gTexture.Sample(gSampler,input.uv + float2(0.0f,offsetV));
+    sum += gTexture.Sample(gSampler,input.uv + float2(0.0f,-offsetV));
+    sum += gTexture.Sample(gSampler,input.uv + float2(offsetU,offsetV));
+    sum += gTexture.Sample(gSampler,input.uv + float2(offsetU,-offsetV));
+    sum += gTexture.Sample(gSampler,input.uv + float2(-offsetU,offsetV));
+    sum += gTexture.Sample(gSampler,input.uv + float2(-offsetU,-offsetV));
+
+    return sum /= 9.0f;
+}
+
 //  ピクセルシェーダー
 float4 main(Output input) : SV_Target{
     float4 textureColor = gTexture.Sample(gSampler, input.uv);
@@ -70,6 +87,10 @@ float4 main(Output input) : SV_Target{
         result.r = textureColor.b;
         result.g = textureColor.r;
         result.b = textureColor.g;
+        break;
+    case 9: // 平均化ブラー 
+        result = AverageBlur(input,5.0f);
+        result.a = textureColor.a;
         break;
     default:
         result = textureColor;

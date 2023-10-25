@@ -15,6 +15,8 @@ public:
 
 	void Draw(const Matrix4x4& viewProjection);
 
+	void SetParent(const WorldTransform& parent);
+
 private:
 	std::unique_ptr<Particle> particleResources_;
 	//std::vector<WorldTransform> particleTrans_;

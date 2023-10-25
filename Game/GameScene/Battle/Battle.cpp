@@ -390,13 +390,14 @@ void Battle::Update() {
 	//	クリアフラグ
 	if (isGameClear_) {
 		GameScene::GetInstance()->sceneChangeFlag = true;
-
+		MultipathRendering::GetInstance()->Initialize();
 		for (int i = 0; i < 9; i++) {
 			loopBGMs_[i]->SoundStop();
 		}
 
 	}else if (isGameOver_) {
-		//GameScene::GetInstance()->sceneChangeFlag = true;
+		GameScene::GetInstance()->sceneChangeFlag = true;
+		MultipathRendering::GetInstance()->Initialize();
 		for (int i = 0; i < 9; i++) {
 			loopBGMs_[i]->SoundStop();
 		}
@@ -769,6 +770,10 @@ void Battle::SetNextGoalNotes() {
 			case 0:
 				goalNotesCount_ = 25;
 				quadMoveFlag = true;
+				//	エフェクトの設定
+				MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(1400.0f, 0.0f);
+				MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 900.0f;
+				MultipathRendering::GetInstance()->cEffectParameters->type = 2;
 				break;
 			case 1:
 				goalNotesCount_ = 35;
@@ -778,6 +783,11 @@ void Battle::SetNextGoalNotes() {
 				movepattern_ = MovePattern::LeftSide;
 				SetCameraMove();
 				cameraTspeed_ = 0.02f;
+
+				//	エフェクトの設定
+				MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(640.0f, 360.0f);
+				MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 900.0f;
+				MultipathRendering::GetInstance()->cEffectParameters->type = 6;
 				break;
 			case 2:
 				goalNotesCount_ = 50;
@@ -791,10 +801,19 @@ void Battle::SetNextGoalNotes() {
 				//	カメラのセット
 				
 				cameraTspeed_ = 0.1f;
+
+				//	エフェクトの設定
+				MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(640.0f, 360.0f);
+				MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 900.0f;
+				MultipathRendering::GetInstance()->cEffectParameters->type = 5;
 				
 				break;
 			case 3: 
 				goalNotesCount_ = 65;
+				//	エフェクトの設定
+				MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(640.0f, 360.0f);
+				MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 900.0f;
+				MultipathRendering::GetInstance()->cEffectParameters->type = 9;
 				break;
 			case 4:
 				goalNotesCount_ = 80;
@@ -803,6 +822,11 @@ void Battle::SetNextGoalNotes() {
 				movepattern_ = MovePattern::Stop;
 				SetCameraMove();
 				cameraTspeed_ = 0.03f;
+
+				//	エフェクトの設定
+				MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(640.0f, 360.0f);
+				MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 900.0f;
+				MultipathRendering::GetInstance()->cEffectParameters->type = 7;
 				break;
 
 			}
