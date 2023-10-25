@@ -6,6 +6,7 @@
 #include "Engine/Texture/Particle/Particle.h"
 #include <vector>
 #include "Engine/Input/AudioInput/AudioInput.h"
+#include "Game/Skydome/Skydome.h"
 
 class Result
 {
@@ -24,6 +25,8 @@ public:
 	void ModelLoad();
 	void TextureLoad();
 
+	bool isGameOver = false;
+
 private: // メンバ変数
 
 	std::vector <std::shared_ptr<Model>> model_;
@@ -40,10 +43,15 @@ private: // メンバ変数
 	std::vector<WorldTransform> particleTrans_;
 
 	std::unique_ptr<Texture2D> titleResources_;
+	std::unique_ptr<Texture2D> gameoverTex_;
 	WorldTransform titleTrans_;
 
 	std::unique_ptr<Texture2D> pressResources_;
 	WorldTransform pressTrans_;
+
+	std::unique_ptr<Skydome> skydome_;
+
+	std::unique_ptr<Skydome> skydomeGameOver_;
 
 	/*std::unique_ptr<Texture2D> BResources_;
 	WorldTransform BTrans_;*/

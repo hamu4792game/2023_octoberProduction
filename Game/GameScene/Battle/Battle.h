@@ -38,6 +38,11 @@ public:
 		maxCountMeasure_ = int(3600 / bpm * 4);
 	}
 
+	//ゲームクリアフラグ
+	bool isGameClear_ = false;
+	//ゲームオーバーフラグ
+	bool isGameOver_ = false;
+
 private:
 
 	void UpdateScores();
@@ -111,11 +116,6 @@ private:
 
 	void SetNextGoalNotes();
 
-
-	//ゲームクリアフラグ
-	bool isGameClear_ = false;
-	//ゲームオーバーフラグ
-	bool isGameOver_ = false;
 
 private:
 	std::vector<std::unique_ptr<Line>> lines_;

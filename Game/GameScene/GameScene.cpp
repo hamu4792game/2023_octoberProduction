@@ -151,6 +151,12 @@ void GameScene::Update() {
 		case GameScene::Scene::RESULT:
 			camera->SetParent(nullptr);
 			result->Initialize();
+			if (battle->isGameOver_) {
+				result->isGameOver = true;
+			}
+			else {
+				result->isGameOver = false;
+			}
 			break;
 		}
 	}

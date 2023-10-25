@@ -12,8 +12,14 @@ Result::Result(Camera* camera){
 
 	particleResources_ = std::make_unique<Texture2D>();
 	titleResources_ = std::make_unique<Texture2D>();
+	gameoverTex_ = std::make_unique<Texture2D>();
 	pressResources_= std::make_unique<Texture2D>();
 	//BResources_= std::make_unique<Texture2D>();
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->ModelLoad();
+
+	skydomeGameOver_ = std::make_unique<Skydome>();
+	skydomeGameOver_->ModelLoad();
 
 	cloudResources_ = std::make_unique<Model>();
 	loopBGM_[0] = std::make_unique<AudioInput>();
@@ -57,6 +63,9 @@ void Result::Initialize(){
 	isPressEase = true;
 
 	modelTrans_.resize(model_.size());
+
+	isGameOver = false;
+
 }
 
 void Result::Update(){
@@ -123,6 +132,14 @@ void Result::Update(){
 }
 
 void Result::Draw3D(const Matrix4x4& viewProjection){
+
+	if (isGameOver == false) {
+		skydome_->Draw(viewProjection);
+	}
+	else {
+		skydome_->DrawGameOver(viewProjection);
+	}
+
 	for (uint8_t i = 0; i < model_.size(); i++) {
 		Model::ModelDraw(modelTrans_[i], viewProjection, 0xffffffff, model_[i].get());
 	}
@@ -131,7 +148,15 @@ void Result::Draw3D(const Matrix4x4& viewProjection){
 }
 
 void Result::Draw2D(const Matrix4x4& viewProjection){
-	Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleResources_.get());
+
+	if (isGameOver == false) {
+		Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleResources_.get());
+	}
+	else {
+		Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, gameoverTex_.get());
+	}
+
+	
 	Texture2D::TextureDraw(pressTrans_, viewProjection, pressColor, pressResources_.get());
 	//Texture2D::TextureDraw(BTrans_, viewProjection, 0x00ff, BResources_.get());
 	for (auto& i : dustTrans_) {
@@ -147,6 +172,7 @@ void Result::ModelLoad(){
 void Result::TextureLoad(){
 	particleResources_->Texture("Resources/hud/particle.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	titleResources_->Texture("Resources/hud/GameClear.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	gameoverTex_->Texture("Resources/hud/gameOver.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	pressResources_->Texture("Resources/hud/Press.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	//BResources_->Texture("Resources/hud/BButtom.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 

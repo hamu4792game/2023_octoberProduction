@@ -173,6 +173,8 @@ void Battle::Initialize() {
 		isBoxFlag = false;
 	}
 
+
+
 }
 
 void Battle::Update() {
