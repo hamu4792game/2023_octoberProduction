@@ -119,7 +119,7 @@ void Result::Draw3D(const Matrix4x4& viewProjection){
 void Result::Draw2D(const Matrix4x4& viewProjection){
 	Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleResources_.get());
 	Texture2D::TextureDraw(pressTrans_, viewProjection, pressColor, pressResources_.get());
-	Texture2D::TextureDraw(BTrans_, viewProjection, 0x000000ff, BResources_.get());
+	Texture2D::TextureDraw(BTrans_, viewProjection, 0xffffffff, BResources_.get());
 	for (auto& i : dustTrans_) {
 		Texture2D::TextureDraw(i, viewProjection, 0x0000ccaa, particleResources_.get());
 	}
