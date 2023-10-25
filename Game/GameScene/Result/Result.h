@@ -5,6 +5,7 @@
 #include "Engine/Camera/Camera.h"
 #include "Engine/Texture/Particle/Particle.h"
 #include <vector>
+#include "Engine/Input/AudioInput/AudioInput.h"
 
 class Result
 {
@@ -67,6 +68,10 @@ private: // メンバ変数
 	float pressEaseSpeed_;
 	bool isPressEase;
 
+	AudioInput* selectSE_;
+
+	std::unique_ptr<AudioInput> loopBGM_[2];
+
 private: // メンバ関数
 	void BackParticle();
 	void DrawImgui();
@@ -74,7 +79,7 @@ private: // メンバ関数
 public: // モデルのセット
 	void SetModels(std::vector<std::shared_ptr<Model>> model) { model_ = model; };
 	void SetHud(std::shared_ptr<Texture2D> hud) { hud_ = hud; };
-
+	void SetSE(AudioInput* se) { selectSE_ = se; }
 
 
 };

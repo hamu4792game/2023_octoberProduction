@@ -16,6 +16,10 @@ Result::Result(Camera* camera){
 	//BResources_= std::make_unique<Texture2D>();
 
 	cloudResources_ = std::make_unique<Model>();
+	loopBGM_[0] = std::make_unique<AudioInput>();
+	loopBGM_[0]->SoundLoadWave("./Resources/loopBGM/tempo_06.wav");
+	loopBGM_[1] = std::make_unique<AudioInput>();
+	loopBGM_[1]->SoundLoadWave("./Resources/loopBGM/tempo_09.wav");
 
 	ModelLoad();
 	TextureLoad();
@@ -59,6 +63,12 @@ void Result::Update(){
 	BackParticle();
 	/*GUIの表示*/
 	DrawImgui();
+
+	if (GameScene::GetInstance()->sceneChangeFlag == false) {
+		loopBGM_[1]->SoundPlayWave(true);
+		loopBGM_[1]->SetVolume(0.3f);
+	}
+
 	/*イージング関連を記入する*/
 	if (isClearEase){
 		if (clearEaseNum_ < 1.0f) {
@@ -103,8 +113,12 @@ void Result::Update(){
 	pressTrans_.UpdateMatrix();
 	//BTrans_.UpdateMatrix();
 
-	if (KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B)){
+	if (KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B) && GameScene::GetInstance()->sceneChangeFlag == false){
 		GameScene::GetInstance()->sceneChangeFlag = true;
+		loopBGM_[1]->SoundStop();
+		selectSE_->SoundStop();
+		selectSE_->SoundPlayWave();
+		selectSE_->SetVolume(0.3f);
 	}
 }
 

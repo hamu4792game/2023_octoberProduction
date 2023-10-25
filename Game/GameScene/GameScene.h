@@ -106,5 +106,6 @@ private: // モデル変数
 	std::shared_ptr <Texture2D> BButtomResources_;
 private: // 音源
 	std::unique_ptr<AudioInput> bgm_;
+	std::unique_ptr<AudioInput> select_;
 
 };

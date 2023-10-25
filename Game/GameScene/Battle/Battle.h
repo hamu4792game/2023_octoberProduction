@@ -157,6 +157,8 @@ private:
 	Vector3 titleStartPos_;
 	Vector3 titleEndPos_;
 
+	AudioInput* selectSE_;
+
 private:
 	//	カメラ移動用のパラメーターセット関数
 	void SetCameraMove();
@@ -188,4 +190,5 @@ public: // セッター
 	void SetBButtomTexture(Texture2D* texture) { BButtomTexture_ = texture; }
 	void SetPushBButtomTexture(Texture2D* texture) { pushBButtomTexture_ = texture; }
 	void SetUI(std::vector<Texture2D*> textures);
+	void SetSE(AudioInput* se) { selectSE_ = se; }
 };

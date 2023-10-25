@@ -72,6 +72,8 @@ void GameScene::Initialize() {
 
 	//	音源の生成とセット
 	bgm_ = std::make_unique<AudioInput>();
+	select_ = std::make_unique<AudioInput>();
+	select_->SoundLoadWave("./Resources/SE/select.wav");
 	////	ロード
 	//bgm_->SoundLoadWave("./Resources/loopBGM/drumloop1.wav");
 	////	音の再生
@@ -101,6 +103,9 @@ void GameScene::Initialize() {
 	battle->SetUI(textures);
 	battle->SetBButtomTexture(BButtomResources_.get());
 	battle->SetPushBButtomTexture(pushBButtomResources_.get());
+	battle->SetSE(select_.get());
+	result->SetSE(select_.get());
+
 
 	//	シーンの初期化
 	title->Initialize();

@@ -209,6 +209,10 @@ void Battle::Update() {
 		movepattern_ = MovePattern::Run;
 		SetCameraMove();
 		cameraTspeed_ = 0.02f;
+		loopBGMs_[2]->SoundStop();
+		selectSE_->SoundStop();
+		selectSE_->SoundPlayWave();
+		selectSE_->SetVolume(0.3f);
 		//	エフェクトの設定
 		MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 360.0f;
 		MultipathRendering::GetInstance()->cEffectParameters->type = 5;
@@ -228,6 +232,11 @@ void Battle::Update() {
 		}
 	}
 
+	if (!startFlag_) {
+		loopBGMs_[2]->SoundPlayWave(true);
+		loopBGMs_[2]->SetVolume(0.3f);
+	}
+	
 	//フラグを降ろす
 	MusicScore::isUpdateFlag_ = false;
 
@@ -357,12 +366,6 @@ void Battle::Update() {
 
 		}
 
-	}
-
-	else {
-		for (int i = 0; i < 5; i++) {
-			loopBGMs_[i]->SoundStop();
-		}
 	}
 
 	//	カメラ移動フラグが立ったら、移動
@@ -725,19 +728,21 @@ void Battle::Draw2D(const Matrix4x4& viewProjection) {
 
 		}
 
-	
-		/*if (!titleFlag_) {
-			if (changeCount_ < 30) {
-				Texture2D::TextureDraw(BButtomTrans_, viewProjection, 0xffffffff, BButtomTexture_);
+	}
+
+	if (!startFlag_) {
+		
+		if (changeCount_ < 30) {
+			Texture2D::TextureDraw(BButtomTrans_, viewProjection, 0xffffffff, BButtomTexture_);
+		}
+		else {
+			Texture2D::TextureDraw(BButtomTrans_, viewProjection, 0xffffffff, pushBButtomTexture_);
+			if (changeCount_ > 60) {
+				changeCount_ = 0;
 			}
-			else {
-				Texture2D::TextureDraw(BButtomTrans_, viewProjection, 0xffffffff, pushBButtomTexture_);
-				if (changeCount_ > 60) {
-					changeCount_ = 0;
-				}
-			}
-			changeCount_++;
-		}*/
+		}
+		changeCount_++;
+
 	}
 
 }
