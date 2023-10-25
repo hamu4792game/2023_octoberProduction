@@ -30,6 +30,9 @@ void Notes::UpdateFlag() {
 		//ノーツに触れる前に早めに押してしまったらミス(チュートリアルでは無効)
 		if (!isTutorialNotes_ && judgeFrame_ <= 15.0f && !isTouch_ && player_->GetIsTap()) {
 			isMiss_ = true;
+			notesSE_[2][0]->SoundStop();
+			notesSE_[2][0]->SoundPlayWave();
+			notesSE_[2][0]->SetVolume(0.5f);
 			Combo = 0;
 			player_->IsMiss();
 		}
@@ -191,6 +194,9 @@ void Notes::Update() {
 	//プレイヤーがノーツをスルーしたらミス
 	if (isTouch_ && judgeFrame_ <= -10.0f) {
 		isMiss_ = true;
+		notesSE_[2][0]->SoundStop();
+		notesSE_[2][0]->SoundPlayWave();
+		notesSE_[2][0]->SetVolume(0.5f);
 		Combo = 0;
 		player_->IsMiss();
 	}
@@ -472,7 +478,7 @@ void Notes::StaticInitialize() {
 	notesSE_[1][5]->SoundLoadWave("./Resources/notesSE/notes_e_mb4.wav");
 	notesSE_[1][6]->SoundLoadWave("./Resources/notesSE/notes_e_c5.wav");
 	notesSE_[1][7]->SoundLoadWave("./Resources/notesSE/notes_e_d5.wav");
-	notesSE_[2][0]->SoundLoadWave("./Resources/notesSE/notes_v_c3.wav");
+	notesSE_[2][0]->SoundLoadWave("./Resources/notesSE/notes_e_f1.wav");
 	notesSE_[2][1]->SoundLoadWave("./Resources/notesSE/notes_v_d3.wav");
 	notesSE_[2][2]->SoundLoadWave("./Resources/notesSE/notes_v_e3.wav");
 	notesSE_[2][3]->SoundLoadWave("./Resources/notesSE/notes_v_f3.wav");

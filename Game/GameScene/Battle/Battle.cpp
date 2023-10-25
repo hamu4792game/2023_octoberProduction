@@ -418,6 +418,14 @@ void Battle::UpdateObjects() {
 					//ミスした場合、カウントを多く下げる
 					if (note->GetIsMiss()) {
 
+						std::unique_ptr<NotesEffect> newEffect = std::make_unique<NotesEffect>();
+						newEffect->ModelLoad(notesEffectModel_);
+						newEffect->Initialize();
+						newEffect->SetPosition(battleAnimation_->GetHero()->GetTransform().translation_);
+						newEffect->SetColor(0x000000ff);
+						newEffect->SetIsMiss(true);
+						notesEffects_.push_back(std::move(newEffect));
+
 						//初期段階のみ緩く設定
 						if (currentStage_ == 0) {
 							currentNotesCount_ -= 1;

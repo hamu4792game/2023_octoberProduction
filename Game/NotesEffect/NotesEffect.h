@@ -31,6 +31,8 @@ public:
 
 	void SetColor(uint32_t color) { color_ = color; }
 
+	void SetIsMiss(bool flag) { isMiss_ = flag; }
+
 private:
 
 	Model* modelNotes_;
@@ -40,5 +42,9 @@ private:
 	uint32_t color_ = 0xffffffff;
 
 	bool isDead_ = false;
+
+	bool isMiss_ = false;
+
+	uint32_t count_ = 10;
 
 };
