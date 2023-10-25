@@ -63,6 +63,10 @@ void GameScene::Initialize() {
 	//	タイトルテクスチャの生成
 	titleResources_ = std::make_shared<Texture2D>();
 	
+	//Bボタン関連の生成
+	BButtomResources_ = std::make_shared<Texture2D>();
+	pushBButtomResources_ = std::make_shared<Texture2D>();
+
 	//	モデルのロード
 	ModelLoad();
 
@@ -95,6 +99,8 @@ void GameScene::Initialize() {
 	std::vector<Texture2D*> textures = { currentStage_.get(), totalStage_.get(), gauge_.get(), gaugeMax_.get(),
 		gaugeMinus_.get(),gaugeOver_.get(), gaugeFrame_.get() };
 	battle->SetUI(textures);
+	battle->SetBButtomTexture(BButtomResources_.get());
+	battle->SetPushBButtomTexture(pushBButtomResources_.get());
 
 	//	シーンの初期化
 	title->Initialize();
@@ -272,6 +278,9 @@ void GameScene::ModelLoad() {
 	gaugeMinus_->Texture("Resources/UI/gaugeminus.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	gaugeOver_->Texture("Resources/UI/gaugeover.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
+	//ボタン
+	BButtomResources_->Texture("Resources/hud/BButtom.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	pushBButtomResources_->Texture("Resources/hud/PushBButtom.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 }
 
 

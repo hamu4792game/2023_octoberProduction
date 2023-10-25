@@ -2,7 +2,8 @@
 #include "externals/imgui/imgui.h"
 #include"Engine/Easing/Ease.h"
 #include"Engine/Easing/Easing.h"
-
+#include"Engine/Input/KeyInput/KeyInput.h"
+#include"Game/GameScene/GameScene.h"
 
 Result::Result(Camera* camera){
 	camera_ = camera;
@@ -101,6 +102,10 @@ void Result::Update(){
 	titleTrans_.UpdateMatrix();
 	pressTrans_.UpdateMatrix();
 	BTrans_.UpdateMatrix();
+
+	if (KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B)){
+		GameScene::GetInstance()->sceneChangeFlag = true;
+	}
 }
 
 void Result::Draw3D(const Matrix4x4& viewProjection){
@@ -114,7 +119,7 @@ void Result::Draw3D(const Matrix4x4& viewProjection){
 void Result::Draw2D(const Matrix4x4& viewProjection){
 	Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleResources_.get());
 	Texture2D::TextureDraw(pressTrans_, viewProjection, pressColor, pressResources_.get());
-	Texture2D::TextureDraw(BTrans_, viewProjection, 0xaa0000ff, BResources_.get());
+	Texture2D::TextureDraw(BTrans_, viewProjection, 0x000000ff, BResources_.get());
 	for (auto& i : dustTrans_) {
 		Texture2D::TextureDraw(i, viewProjection, 0x0000ccaa, particleResources_.get());
 	}
@@ -129,7 +134,7 @@ void Result::TextureLoad(){
 	particleResources_->Texture("Resources/hud/particle.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	titleResources_->Texture("Resources/hud/GameClear.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 	pressResources_->Texture("Resources/hud/Press.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
-	BResources_->Texture("Resources/hud/B.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
+	BResources_->Texture("Resources/hud/BButtom.png", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl");
 
 }
 

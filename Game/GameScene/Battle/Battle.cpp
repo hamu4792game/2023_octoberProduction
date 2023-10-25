@@ -147,6 +147,11 @@ void Battle::Initialize() {
 	gaugeFrameTrans_.translation_ = { 0.0f,-300.0f,0.0f };
 	gaugeFrameTrans_.scale_.x = 5.0f;
 
+	//ボタンテクスチャ関連の初期化
+	changeCount_ = 0;
+	BButtomTrans_.scale_ = { 1.5f,1.5f,0.0f };
+	BButtomTrans_.translation_ = { 0.0f,-165.0f,0.0f };
+
 	MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(0.0f, 0.0f);
 	MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 0.0f;
 	MultipathRendering::GetInstance()->cEffectParameters->type = 0;
@@ -160,6 +165,10 @@ void Battle::Initialize() {
 		cameraT_ = 0.0f;
 		cameraTspeed_ = 0.0f;
 		movepattern_ = MovePattern::Run;
+
+		quadFrame_ = 15;
+		quadFlag_ = 0;
+		quadMoveFlag = false;
 	}
 
 }
@@ -185,6 +194,8 @@ void Battle::Update() {
 	ImGui::DragFloat("rate", &boxTrans_.cMono->rate, 1.0f);
 
 	ImGui::DragFloat3("titlescale", &titleTrans_.scale_.x, 0.1f);
+
+	ImGui::DragFloat3("buttomTranslate", &BButtomTrans_.translation_.x, 1.0f);
 	ImGui::End();
 #endif // _DEBUG
 	//	タイトル遷移用のフラグ
@@ -193,6 +204,7 @@ void Battle::Update() {
 		startFlag_ = true;
 		//	カメラのセット
 		cameraMoveFlag = true;
+		movepattern_ = MovePattern::Run;
 		SetCameraMove();
 		cameraTspeed_ = 0.02f;
 		//	エフェクトの設定
@@ -359,6 +371,9 @@ void Battle::Update() {
 			cameraT_ = 0.0f;
 			cameraMoveFlag = false;
 		}
+	}
+	else if (quadMoveFlag) {
+		QuadRangle();
 	}
 
 	//	クリアフラグ
@@ -586,6 +601,17 @@ void Battle::Draw2D(const Matrix4x4& viewProjection) {
 	/*currentMusicScore_->Draw2D(viewProjection);*/
 	if (isStop_) {
 		Texture2D::TextureDraw(boxTrans_, viewProjection, boxColor_, boxtexture_);
+
+		if (changeCount_<30){
+			Texture2D::TextureDraw(BButtomTrans_, viewProjection, 0xffffffff, BButtomTexture_);
+		}
+		else {
+			Texture2D::TextureDraw(BButtomTrans_, viewProjection, 0xffffffff, pushBButtomTexture_);
+			if (changeCount_>60){
+				changeCount_ = 0;
+			}
+		}
+		changeCount_++;
 	}
 	// ゲームが始まっていなければタイトルの表示
 	if (!player_->GetIsMove()) {
@@ -629,6 +655,19 @@ void Battle::Draw2D(const Matrix4x4& viewProjection) {
 		}
 
 	
+		if (!titleFlag_) {
+			if (changeCount_ < 30) {
+				Texture2D::TextureDraw(BButtomTrans_, viewProjection, 0xffffffff, BButtomTexture_);
+			}
+			else {
+				Texture2D::TextureDraw(BButtomTrans_, viewProjection, 0xffffffff, pushBButtomTexture_);
+				if (changeCount_ > 60) {
+					changeCount_ = 0;
+				}
+			}
+			changeCount_++;
+		}
+	}
 
 	}
 
@@ -662,18 +701,31 @@ void Battle::SetNextGoalNotes() {
 			default:
 			case 0:
 				goalNotesCount_ = 25;
+				quadMoveFlag = true;
 				break;
 			case 1:
 				goalNotesCount_ = 35;
+				//	カメラのセット
+				quadMoveFlag = false;
+				cameraMoveFlag = true;
+				movepattern_ = MovePattern::LeftSide;
+				SetCameraMove();
+				cameraTspeed_ = 0.02f;
 				break;
 			case 2:
 				goalNotesCount_ = 50;
+				
 				break;
 			case 3: 
 				goalNotesCount_ = 65;
 				break;
 			case 4:
 				goalNotesCount_ = 80;
+				//	カメラのセット
+				cameraMoveFlag = true;
+				movepattern_ = MovePattern::Stop;
+				SetCameraMove();
+				cameraTspeed_ = 0.03f;
 				break;
 
 			}
@@ -790,6 +842,32 @@ void Battle::SetNextGoalNotes() {
 
 		}
 
+	}
+
+}
+
+void Battle::QuadRangle() {
+	quadFrame_++;
+	if (quadFrame_ >= 30.0f) {
+		quadFrame_ = 0;
+		quadFlag_ ++;
+		if (quadFlag_ >= 4) {
+			quadFlag_ = 0;
+		}
+	}
+
+	if (quadFlag_ == 0) {
+		camera_->transform.translation_.x += 0.01f;
+	}
+	else if (quadFlag_ == 1) {
+		camera_->transform.translation_.y -= 0.01f;
+	}
+	else if (quadFlag_ == 2) {
+		camera_->transform.translation_.x -= 0.01f;
+	}
+	else if (quadFlag_ == 3) {
+		camera_->transform.translation_.y += 0.01f;
+	}
 		//レベルアップ
 		currentStage_++;
 
@@ -809,13 +887,17 @@ void Battle::SetCameraMove() {
 	cameraMoveStart = camera_->transform.translation_;
 	cameraRotateStart = camera_->transform.rotation_;
 	switch (movepattern_) {
-	case MovePattern::Run:
+	case MovePattern::Run: // 通常
 		cameraMoveEnd = Vector3(15.0f, 6.0f, -18.0f);
 		cameraRotateEnd = Vector3(0.105f, -0.472f, 0.0f);
 		break;
-	case MovePattern::Stop:
-		cameraMoveEnd = Vector3(35.0f, 30.0f, 90.0f);
-		cameraRotateEnd = Vector3(0.314f, -2.724f, 0.0f);
+	case MovePattern::LeftSide: // 左側視点
+		cameraMoveEnd = Vector3(-16.0f, 8.0f, -10.0f);
+		cameraRotateEnd = Vector3(AngleToRadian(12.0f), AngleToRadian(39.0f), 0.0f);
+		break;
+	case MovePattern::Stop: // playerの前側視点
+		cameraMoveEnd = Vector3(-27.0f, 19.0f, 35.0f);
+		cameraRotateEnd = Vector3(AngleToRadian(26.0f), AngleToRadian(124.0f), 0.0f);
 		break;
 	}
 }

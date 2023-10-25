@@ -111,6 +111,7 @@ private:
 
 	void SetNextGoalNotes();
 
+
 	//ゲームクリアフラグ
 	bool isGameClear_ = false;
 	//ゲームオーバーフラグ
@@ -140,6 +141,12 @@ private:
 	Texture2D* titleTexture_;
 	WorldTransform titleTrans_;
 
+	//ボタン
+	int changeCount_ = 0;
+	Texture2D* BButtomTexture_;
+	Texture2D* pushBButtomTexture_;
+	WorldTransform BButtomTrans_;
+
 	WorldTransform stageTrans_[6];
 	WorldTransform gaugeTrans_;
 	WorldTransform gaugeFrameTrans_;
@@ -161,6 +168,12 @@ private:
 	float cameraTspeed_ = 0.0f;
 	MovePattern movepattern_ = MovePattern::Run;
 
+	//	カメラを四角に回す
+	void QuadRangle();
+	int quadFrame_ = 0;
+	int quadFlag_ = 0;
+	bool quadMoveFlag = false;
+
 public: // セッター
 	void SetHeroModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetHeroModels(model); }
 	void SetBossModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetBossModels(model); }
@@ -169,5 +182,7 @@ public: // セッター
 	void SetBossBulletModel(Model* model) { battleAnimation_->SetBossBulletModel(model); }
 	void SetBoxTexture(Texture2D* texture) { boxtexture_ = texture; }
 	void SetTitleTexture(Texture2D* texture) { titleTexture_ = texture; }
+	void SetBButtomTexture(Texture2D* texture) { BButtomTexture_ = texture; }
+	void SetPushBButtomTexture(Texture2D* texture) { pushBButtomTexture_ = texture; }
 	void SetUI(std::vector<Texture2D*> textures);
 };

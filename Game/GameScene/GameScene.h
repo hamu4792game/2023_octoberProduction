@@ -101,6 +101,9 @@ private: // モデル変数
 	//	タイトルテキスト
 	std::shared_ptr <Texture2D> titleResources_;
 
+	//ボタンのテクスチャ
+	std::shared_ptr <Texture2D> pushBButtomResources_;
+	std::shared_ptr <Texture2D> BButtomResources_;
 private: // 音源
 	std::unique_ptr<AudioInput> bgm_;
 
