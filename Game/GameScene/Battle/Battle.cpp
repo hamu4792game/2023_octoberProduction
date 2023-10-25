@@ -233,6 +233,21 @@ void Battle::Update() {
 		
 		countMeasure_ = maxCountMeasure_;
 		
+		//目標ノーツ数を達成している場合、演出に向けての準備
+		if (loopCount_ == 7) {
+			if (currentNotesCount_ >= goalNotesCount_) {
+				for (size_t i = 0; const auto & score : musicScoreList_) {
+
+					//次に流れるノーツをリセット
+					if (i == 2) {
+						score->ClearNotes();
+					}
+
+					i++;
+
+				}
+			}
+		}
 
 		//音楽ループ継続
 		if (loopCount_ >= 8) {
@@ -330,8 +345,16 @@ void Battle::Update() {
 	//	クリアフラグ
 	if (isGameClear_) {
 		GameScene::GetInstance()->sceneChangeFlag = true;
+
+		for (int i = 0; i < 9; i++) {
+			loopBGMs_[i]->SoundStop();
+		}
+
 	}else if (isGameOver_) {
 		//GameScene::GetInstance()->sceneChangeFlag = true;
+		for (int i = 0; i < 9; i++) {
+			loopBGMs_[i]->SoundStop();
+		}
 	}
 
 }
@@ -471,6 +494,10 @@ void Battle::SetNextGoalNotes() {
 		
 		//ノルマを達成したら次のレベルに移行
 		if (currentNotesCount_ >= goalNotesCount_ && goalNotesCount_ != 0) {
+
+			//
+			//レベルアップの処理ここ
+			//
 
 			//現在のノーツカウントリセット
 			currentNotesCount_ = 0;

@@ -93,6 +93,18 @@ public:
 
 	static bool isStopAll;
 
+	//ノーツをリセットする
+	void ClearNotes() {
+
+		notes_.remove_if([](Notes* note) {
+
+			delete note;
+			return true;
+
+		});
+
+	}
+
 private:
 
 	Player* player_;
