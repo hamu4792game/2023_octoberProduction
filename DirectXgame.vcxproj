@@ -139,6 +139,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Ground\Ground.cpp" />
     <ClCompile Include="Game\MakeCatmull\MakeCatmull.cpp" />
     <ClCompile Include="Game\MusicScore\MusicScore.cpp" />
+    <ClCompile Include="Game\NotesEffect\NotesEffect.cpp" />
     <ClCompile Include="Game\Notes\Notes.cpp" />
     <ClCompile Include="Game\Player\Player.cpp" />
     <ClCompile Include="Game\Skydome\Skydome.cpp" />
@@ -195,6 +196,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Ground\Ground.h" />
     <ClInclude Include="Game\MakeCatmull\MakeCatmull.h" />
     <ClInclude Include="Game\MusicScore\MusicScore.h" />
+    <ClInclude Include="Game\NotesEffect\NotesEffect.h" />
     <ClInclude Include="Game\Notes\Notes.h" />
     <ClInclude Include="Game\PartsEnum.h" />
     <ClInclude Include="Game\Player\Player.h" />

@@ -21,6 +21,8 @@ public:
 
 	Boss* GetBoss() { return boss_.get(); }
 
+	bool isLoop_ = false;
+
 private:
 	std::unique_ptr<Hero> hero_;
 	std::unique_ptr<Boss> boss_;

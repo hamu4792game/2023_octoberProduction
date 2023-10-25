@@ -60,6 +60,56 @@ void Notes::UpdateFlag() {
 
 				}
 
+				switch ((num + (num * num2)) % 15)
+				{
+				default:
+				case 0:
+					color_ = 0x000000ff;
+					break;
+				case 1:
+					color_ = 0x883333ff;
+					break;
+				case 2:
+					color_ = 0x33bb33ff;
+					break;
+				case 3:
+					color_ = 0x333388ff;
+					break;
+				case 4:
+					color_ = 0x888833ff;
+					break;
+				case 5:
+					color_ = 0x883388ff;
+					break;
+				case 6:
+					color_ = 0x883333ff;
+					break;
+				case 7:
+					color_ = 0xaaffaaff;
+					break;
+				case 8:
+					color_ = 0xcc7777ff;
+					break;
+				case 9:
+					color_ = 0x77cc77ff;
+					break;
+				case 10:
+					color_ = 0x7777ccff;
+					break;
+				case 11:
+					color_ = 0xcccc77ff;
+					break;
+				case 12:
+					color_ = 0xcc77ccff;
+					break;
+				case 13:
+					color_ = 0x77ccccff;
+					break;
+				case 14:
+					color_ = 0xffffffff;
+					break;
+				}
+
 			}
 			else {
 
@@ -74,8 +124,37 @@ void Notes::UpdateFlag() {
 
 				}
 
+				switch (num % 8)
+				{
+				default:
+				case 0:
+					color_ = 0x888888ff;
+					break;
+				case 1:
+					color_ = 0xcc7777ff;
+					break;
+				case 2:
+					color_ = 0x77cc77ff;
+					break;
+				case 3:
+					color_ = 0x7777ccff;
+					break;
+				case 4:
+					color_ = 0xcccc77ff;
+					break;
+				case 5:
+					color_ = 0xcc77ccff;
+					break;
+				case 6:
+					color_ = 0x77ccccff;
+					break;
+				case 7:
+					color_ = 0xffffffff;
+					break;
+				}
+
 			}
-		
+
 			player_->IsHit();
 		}
 		//タッチしている間にプレイヤーがキーを押したらヒット判定(チュートリアルではコンボ無効)

@@ -103,6 +103,8 @@ public:
 	//チュートリアルノーツにする
 	void SetTutorialNotes() { isTutorialNotes_ = true; }
 
+	uint32_t GetColor() { return color_; }
+
 protected:
 
 	//ノーツのSE(全ノーツで共有)
@@ -158,6 +160,9 @@ protected:
 
 	//速度
 	Vector3 velocity_;
+
+	//エフェクトにセットする色
+	uint32_t color_ = 0xffffffff;
 
 	//ノーツを叩いたかどうか
 	bool isHit_ = false;

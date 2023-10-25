@@ -55,6 +55,7 @@ void BattleAnimation::Update() {
 			stageCount++;
 		}
 		hero_->SetPosition(Vector3(7.5f, 0.0f, 0.0f));
+		isLoop_ = true;
 	}
 
 	

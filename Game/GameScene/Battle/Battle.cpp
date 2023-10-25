@@ -208,6 +208,16 @@ void Battle::Update() {
 	//フラグを降ろす
 	MusicScore::isUpdateFlag_ = false;
 
+	notesEffects_.remove_if([](auto& effect) {
+
+		if (effect->GetIsDead()) {
+			return true;
+		}
+
+		return false;
+
+	});
+
 	if (isStop_) {
 		MusicScore::isStopAll = true;
 	}
@@ -371,6 +381,14 @@ void Battle::UpdateObjects() {
 					//叩いたらノーツカウント+
 					if (note->GetIsHit()) {
 						currentNotesCount_++;
+
+						std::unique_ptr<NotesEffect> newEffect = std::make_unique<NotesEffect>();
+						newEffect->ModelLoad(notesEffectModel_);
+						newEffect->Initialize();
+						newEffect->SetPosition(battleAnimation_->GetHero()->GetTransform().translation_);
+						newEffect->SetColor(note->GetColor());
+						notesEffects_.push_back(std::move(newEffect));
+
 					}
 
 					//ミスした場合、カウントを多く下げる
@@ -413,6 +431,14 @@ void Battle::UpdateObjects() {
 				if (note->GetIsHit()) {
 					isStop_ = false;
 					tutorialNotesCount_++;
+
+					std::unique_ptr<NotesEffect> newEffect = std::make_unique<NotesEffect>();
+					newEffect->ModelLoad(notesEffectModel_);
+					newEffect->Initialize();
+					newEffect->SetPosition(battleAnimation_->GetHero()->GetTransform().translation_);
+					newEffect->SetColor(note->GetColor());
+					notesEffects_.push_back(std::move(newEffect));
+
 				}
 
 			}
@@ -421,6 +447,16 @@ void Battle::UpdateObjects() {
 	}
 
 	player_->Update(makeCatmull_->GetControlPoints(), makeCatmull_->GetLastLinePass());
+
+	for (auto& effect : notesEffects_) {
+
+		if (battleAnimation_->isLoop_) {
+			effect->SubPosition({ 0.0f,0.0f,140.0f * 2.0f });
+		}
+		effect->Update();
+	}
+
+	battleAnimation_->isLoop_ = false;
 
 	ControlPoints_ = makeCatmull_->GetControlPoints();
 
@@ -457,7 +493,9 @@ void Battle::Draw3D(const Matrix4x4& viewProjection) {
 		}
 	}
 
-	
+	for (auto& effect : notesEffects_) {
+		effect->Draw(viewProjection);
+	}
 
 	//makeCatmull_->Draw(viewProjection);
 
@@ -498,6 +536,19 @@ void Battle::SetNextGoalNotes() {
 			//
 			//レベルアップの処理ここ
 			//
+
+			if (currentNotesCount_ >= goalNotesCount_) {
+				for (size_t i = 0; const auto & score : musicScoreList_) {
+
+					//次に流れるノーツをリセット
+					if (i == 1) {
+						score->ClearNotes();
+					}
+
+					i++;
+
+				}
+			}
 
 			//現在のノーツカウントリセット
 			currentNotesCount_ = 0;
@@ -666,7 +717,7 @@ void Battle::UpdateScores() {
 		else if(currentStage_ == 2){
 			musicScoreList_.back().get()->SetNotes(MusicScore::ScoreType(rand() % 15), makeCatmull_->GetControlPoints(), 3);
 		}
-		else {
+		else if(currentStage_ < 5){
 
 			// 3/4の確率で難しいノーツの配置に移行
 			int num = rand() % 4;
@@ -676,6 +727,19 @@ void Battle::UpdateScores() {
 			}
 			else {
 				musicScoreList_.back().get()->SetNotes(MusicScore::ScoreType(rand() % 10 + ((currentStage_ - 2) * 5)), makeCatmull_->GetControlPoints(), 3);
+			}
+
+		}
+		else {
+
+			// 4/5の確率で難しいノーツの配置に移行
+			int num = rand() % 5;
+
+			if (num == 0) {
+				musicScoreList_.back().get()->SetNotes(MusicScore::ScoreType(rand() % 5 + 5), makeCatmull_->GetControlPoints(), 3);
+			}
+			else {
+				musicScoreList_.back().get()->SetNotes(MusicScore::ScoreType(rand() % 10 + 10), makeCatmull_->GetControlPoints(), 3);
 			}
 
 		}

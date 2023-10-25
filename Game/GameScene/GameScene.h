@@ -78,6 +78,7 @@ private: // モデル変数
 	std::unique_ptr<Model> notesModelLong_;
 	std::unique_ptr<Model> notesModelDamage_;
 	std::unique_ptr<Model> notesModelHitLine_;
+	std::unique_ptr<Model> notesModelEffect_;
 	std::shared_ptr<Texture2D> hud_;
 	std::unique_ptr<Texture2D> hitLine_;
 

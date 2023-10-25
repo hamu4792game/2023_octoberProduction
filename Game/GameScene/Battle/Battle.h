@@ -5,6 +5,7 @@
 #include <vector>
 #include "Game/Skydome/Skydome.h"
 #include "Game/MusicScore/MusicScore.h"
+#include "Game/NotesEffect/NotesEffect.h"
 
 #include "Engine/Texture/Line/Line.h"
 
@@ -59,6 +60,10 @@ private:
 	std::unique_ptr<Skydome> skydome_;
 
 	std::vector<Model*> notesModels_;
+
+	Model* notesEffectModel_;
+
+	std::list<std::unique_ptr<NotesEffect>> notesEffects_;
 
 	std::vector<Texture2D*> noteTextures_;
 
@@ -154,6 +159,7 @@ public: // セッター
 	void SetHeroModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetHeroModels(model); }
 	void SetBossModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetBossModels(model); }
 	void SetStageModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetStageModels(model); }
+	void SetNotesEffectModel(Model* model) { notesEffectModel_ = model; }
 	void SetBossBulletModel(Model* model) { battleAnimation_->SetBossBulletModel(model); }
 	void SetBoxTexture(Texture2D* texture) { boxtexture_ = texture; }
 	void SetTitleTexture(Texture2D* texture) { titleTexture_ = texture; }

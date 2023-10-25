@@ -29,6 +29,7 @@ void GameScene::Initialize() {
 	notesModelLong_ = std::make_unique<Model>();
 	notesModelDamage_ = std::make_unique<Model>();
 	notesModelHitLine_ = std::make_unique<Model>();
+	notesModelEffect_ = std::make_unique<Model>();
 	hud_ = std::make_shared<Texture2D>();
 	hitLine_ = std::make_unique<Texture2D>();
 
@@ -81,6 +82,7 @@ void GameScene::Initialize() {
 	battle->SetBossModels(bossModel_);
 	battle->SetStageModels(stageModel_);
 	battle->SetBossBulletModel(noteModels.at(0));
+	battle->SetNotesEffectModel(notesModelEffect_.get());
 	battle->SetBoxTexture(box.get());
 	battle->SetTitleTexture(titleResources_.get());
 
@@ -212,6 +214,7 @@ void GameScene::ModelLoad() {
 	notesModelLong_->Texture("Resources/notes/notes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/long.png");
 	notesModelDamage_->Texture("Resources/plane/plane.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/notes/damage.png");
 	notesModelHitLine_->Texture("Resources/hitline/hitline.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/hitline/hitline.png");
+	notesModelEffect_->Texture("Resources/effectnotes/effectnotes.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/effectnotes/effectnotes.png");
 
 	boxModel_->Texture("Resources/box/box.obj", "./Resources/Shader/Texture2D.VS.hlsl", "./Resources/Shader/Texture2D.PS.hlsl", "Resources/uvChecker.png");
 
