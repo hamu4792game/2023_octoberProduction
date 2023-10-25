@@ -13,6 +13,7 @@
 
 #include "Game/BattleAnimation/BattleAnimation.h"
 #include "Engine/Camera/Camera.h"
+#include "Game/PartsEnum.h"
 
 
 class Battle {
@@ -138,6 +139,16 @@ private:
 	Vector3 titleStartPos_;
 	Vector3 titleEndPos_;
 
+private:
+	//	カメラ移動用のパラメーターセット関数
+	void SetCameraMove();
+	Camera* camera_ = nullptr;
+	bool cameraMoveFlag = false;
+	Vector3 cameraMoveStart; Vector3 cameraMoveEnd;
+	Vector3 cameraRotateStart; Vector3 cameraRotateEnd;
+	float cameraT_ = 0.0f;
+	float cameraTspeed_ = 0.0f;
+	MovePattern movepattern_ = MovePattern::Run;
 
 public: // セッター
 	void SetHeroModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetHeroModels(model); }

@@ -18,7 +18,7 @@ public:
 
 	void Update() override;
 
-	void Move(const int& pattern);
+	void Move();
 
 
 public:

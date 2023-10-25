@@ -8,6 +8,7 @@
 
 Battle::Battle(std::shared_ptr<Camera> camera)
 {
+	camera_ = camera.get();
 
 	player_ = std::make_unique<Player>();
 	player_->ModelLoad();
@@ -131,6 +132,7 @@ void Battle::Initialize() {
 
 	easeFrame_ = 0.0f;
 	titleTrans_.translation_ = Vector3(0.0f, 0.0f, 0.0f);
+	titleTrans_.scale_ = Vector3(1.5f, 1.5f, 0.0f);
 	titleStartPos_ = titleTrans_.translation_;
 	titleEndPos_ = Vector3(0.0f, 500.0f, 0.0f);
 	startFlag_ = false;
@@ -139,6 +141,17 @@ void Battle::Initialize() {
 	MultipathRendering::GetInstance()->cEffectParameters->centerPosition = Vector2(0.0f, 0.0f);
 	MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 0.0f;
 	MultipathRendering::GetInstance()->cEffectParameters->type = 0;
+
+	//	カメラの初期化
+	if (true) {
+		camera_->transform.translation_ = Vector3(36.0f, 14.0f, -11.0f);
+		camera_->transform.rotation_ = Vector3(AngleToRadian(12.0f), AngleToRadian(-54.0f), 0.0f);
+
+		cameraMoveFlag = false;
+		cameraT_ = 0.0f;
+		cameraTspeed_ = 0.0f;
+		movepattern_ = MovePattern::Run;
+	}
 
 }
 
@@ -161,24 +174,30 @@ void Battle::Update() {
 	ImGui::DragFloat3("scale", &boxTrans_.scale_.x, 0.1f);
 	ImGui::DragFloat2("pibot", &boxTrans_.cMono->pibot.x, 1.0f);
 	ImGui::DragFloat("rate", &boxTrans_.cMono->rate, 1.0f);
+
+	ImGui::DragFloat3("titlescale", &titleTrans_.scale_.x, 0.1f);
 	ImGui::End();
 #endif // _DEBUG
 	//	タイトル遷移用のフラグ
 	if ((KeyInput::PushKey(DIK_SPACE) || KeyInput::GetInstance()->GetPadButtonDown(XINPUT_GAMEPAD_B)) && !startFlag_) {
 		titleFlag_ = true;
 		startFlag_ = true;
-		
-		MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 250.0f;
+		//	カメラのセット
+		cameraMoveFlag = true;
+		SetCameraMove();
+		cameraTspeed_ = 0.02f;
+		//	エフェクトの設定
+		MultipathRendering::GetInstance()->cEffectParameters->parameterRate = 360.0f;
 		MultipathRendering::GetInstance()->cEffectParameters->type = 5;
 	}
 	//	タイトルの遷移
 	if (titleFlag_) {
 		easeFrame_++;
-		titleTrans_.translation_ = Ease::UseEase(titleStartPos_, titleEndPos_, easeFrame_, 180.0f, Ease::EaseInOut);
+		titleTrans_.translation_ = Ease::UseEase(titleStartPos_, titleEndPos_, easeFrame_, 120.0f, Ease::EaseInOut);
 		titleTrans_.UpdateMatrix();
 		MultipathRendering::GetInstance()->cEffectParameters->centerPosition.x = 640.0f + titleTrans_.translation_.x;
 		MultipathRendering::GetInstance()->cEffectParameters->centerPosition.y = 360.0f - titleTrans_.translation_.y;
-		if (easeFrame_ >= 180.0f) {
+		if (easeFrame_ >= 120.0f) {
 			easeFrame_ = 0.0f;
 			titleFlag_ = false;
 			player_->SetIsMove(true);
@@ -298,10 +317,21 @@ void Battle::Update() {
 		}
 	}
 
+	//	カメラ移動フラグが立ったら、移動
+	if (cameraMoveFlag) {
+		cameraT_ += cameraTspeed_;
+		//	移動が終わったら
+		if (!camera_->CameraWork(cameraMoveStart, cameraMoveEnd, cameraRotateStart, cameraRotateEnd, cameraT_)) {
+			cameraT_ = 0.0f;
+			cameraMoveFlag = false;
+		}
+	}
+
+	//	クリアフラグ
 	if (isGameClear_) {
 		GameScene::GetInstance()->sceneChangeFlag = true;
 	}else if (isGameOver_) {
-		GameScene::GetInstance()->sceneChangeFlag = true;
+		//GameScene::GetInstance()->sceneChangeFlag = true;
 	}
 
 }
@@ -421,7 +451,10 @@ void Battle::Draw2D(const Matrix4x4& viewProjection) {
 	if (isStop_) {
 		Texture2D::TextureDraw(boxTrans_, viewProjection, boxColor_, boxtexture_);
 	}
-	Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleTexture_);
+	// ゲームが始まっていなければタイトルの表示
+	if (!player_->GetIsMove()) {
+		Texture2D::TextureDraw(titleTrans_, viewProjection, 0xffffffff, titleTexture_);
+	}
 
 }
 
@@ -570,6 +603,21 @@ void Battle::SetNextGoalNotes() {
 
 	}
 
+}
+
+void Battle::SetCameraMove() {
+	cameraMoveStart = camera_->transform.translation_;
+	cameraRotateStart = camera_->transform.rotation_;
+	switch (movepattern_) {
+	case MovePattern::Run:
+		cameraMoveEnd = Vector3(15.0f, 6.0f, -18.0f);
+		cameraRotateEnd = Vector3(0.105f, -0.472f, 0.0f);
+		break;
+	case MovePattern::Stop:
+		cameraMoveEnd = Vector3(35.0f, 30.0f, 90.0f);
+		cameraRotateEnd = Vector3(0.314f, -2.724f, 0.0f);
+		break;
+	}
 }
 
 void Battle::UpdateScores() {
