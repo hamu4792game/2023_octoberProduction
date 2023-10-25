@@ -109,6 +109,7 @@ private:
 
 	void SetNextGoalNotes();
 
+
 	//ゲームクリアフラグ
 	bool isGameClear_ = false;
 	//ゲームオーバーフラグ
@@ -160,6 +161,12 @@ private:
 	float cameraT_ = 0.0f;
 	float cameraTspeed_ = 0.0f;
 	MovePattern movepattern_ = MovePattern::Run;
+
+	//	カメラを四角に回す
+	void QuadRangle();
+	int quadFrame_ = 0;
+	int quadFlag_ = 0;
+	bool quadMoveFlag = false;
 
 public: // セッター
 	void SetHeroModels(std::vector<std::shared_ptr<Model>> model) { battleAnimation_->SetHeroModels(model); }
